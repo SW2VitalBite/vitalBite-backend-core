@@ -1,30 +1,94 @@
 # Pantalla de citas
 
+## Ruta
+
+- `/appointments`
+
+## Actor principal
+
+- Nutricionista.
+- Administrador.
+
 ## Objetivo
 
-Administrar agenda nutricional y estado de consultas.
+Administrar la agenda nutricional, el calendario de consultas y los cambios de estado de citas.
 
-## Vistas
+## Layout sugerido
 
-- Calendario.
-- Lista de citas.
-- Formulario de agendamiento.
-- Modal de reprogramación o cancelación.
+- Header con título `Citas`, rango de fechas y botón `Nueva cita`.
+- Vista principal con calendario.
+- Vista alternativa en tabla/lista.
+- Panel lateral o modal para crear, reprogramar o cancelar cita.
 
-## Estados
+## Secciones visibles
 
-- Programada.
-- Confirmada.
-- Completada.
-- Cancelada.
-- Reprogramada.
-- No asistió.
+- Calendario diario, semanal o mensual.
+- Filtros por nutricionista, paciente, estado y rango de fechas.
+- Lista de próximas citas.
+- Resumen de citas del día.
+- Modales de confirmación para cambios críticos.
+
+## Tabla y columnas
+
+- Fecha y hora.
+- Paciente.
+- Nutricionista.
+- Duración.
+- Motivo.
+- Estado.
+- Acciones.
+
+## Formulario de cita
+
+Campos:
+
+- Paciente.
+- Nutricionista.
+- Fecha.
+- Hora.
+- Duración en minutos.
+- Motivo.
+- Observaciones.
+
+Validaciones:
+
+- Paciente obligatorio.
+- Nutricionista obligatorio.
+- Fecha y hora obligatorias.
+- Duración mayor a cero.
+- No permitir fechas inválidas.
+
+## Acciones principales
+
+- Agendar cita.
+- Confirmar cita.
+- Reprogramar cita.
+- Cancelar cita.
+- Marcar como completada.
+- Marcar inasistencia.
+- Ver detalle del paciente.
+
+## Estados UI
+
+- Cargando calendario.
+- Sin citas en el rango seleccionado.
+- Error al cargar agenda.
+- Cita guardada.
+- Cambio de estado exitoso.
+- Sin permisos para modificar.
+
+## Permisos
+
+- Administrador: consulta agenda del tenant.
+- Nutricionista: gestiona su agenda y pacientes asignados.
+- Paciente: no accede a la Web.
 
 ## GraphQL
 
 - `appointments(filter)`.
-- `appointmentsCalendar(filter)`.
+- `appointmentById(id)`.
 - `appointmentsByPatient(patientId)`.
+- `appointmentsCalendar(filter)`.
 - `createAppointment(input)`.
 - `confirmAppointment(id)`.
 - `rescheduleAppointment(id, input)`.
@@ -32,8 +96,10 @@ Administrar agenda nutricional y estado de consultas.
 - `completeAppointment(id, input)`.
 - `markAppointmentNoShow(id)`.
 
-## Reglas
+## Criterios para wireframe
 
-- Nutricionista gestiona su agenda.
-- Administrador puede ver calendario del tenant.
-- Cambios importantes generan eventos auditables en el backend.
+- El calendario debe ser el elemento visual dominante.
+- Los estados deben distinguirse con etiquetas visuales.
+- Reprogramar y cancelar deben abrir modal.
+- El formulario debe permitir seleccionar paciente desde búsqueda.
+- La vista lista debe servir para escaneo rápido y filtros.
