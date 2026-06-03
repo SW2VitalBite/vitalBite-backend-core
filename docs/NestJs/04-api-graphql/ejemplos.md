@@ -227,6 +227,189 @@ mutation {
 }
 ```
 
+## Crear alimento de catálogo
+
+```graphql
+mutation {
+  createFoodCatalogItem(input: {
+    name: "Avena"
+    foodGroup: "Cereal"
+    basePortion: "50g"
+    calories: 190
+    proteins: 6
+    carbs: 32
+    fats: 4
+    micronutrients: [
+      { name: "Fibra", amount: 5, unit: "g" }
+    ]
+  }) {
+    id
+    name
+    calories
+  }
+}
+```
+
+## Crear receta
+
+```graphql
+mutation {
+  createRecipe(input: {
+    name: "Avena con fruta"
+    description: "Desayuno base"
+    items: [
+      { foodCatalogItemId: "food-id", quantity: 50, unit: "g" }
+    ]
+  }) {
+    id
+    name
+    totalCalories
+  }
+}
+```
+
+## Calcular dieta
+
+```graphql
+query {
+  calculateDietNutrition(input: {
+    dietId: "diet-id"
+  }) {
+    totalCalories
+    totalProteins
+    totalCarbs
+    totalFats
+    micronutrients {
+      name
+      amount
+      unit
+    }
+  }
+}
+```
+
+## Crear plantilla de dieta
+
+```graphql
+mutation {
+  createDietTemplate(input: {
+    name: "Plantilla hipocalórica"
+    objective: "Reducir grasa corporal"
+    status: ACTIVE
+    meals: [
+      {
+        name: "Desayuno"
+        time: "08:00"
+        order: 1
+        items: [
+          {
+            foodCatalogItemId: "food-id"
+            portion: "50g"
+          }
+        ]
+      }
+    ]
+  }) {
+    id
+    name
+    status
+  }
+}
+```
+
+## Registrar seguimiento diario
+
+```graphql
+mutation {
+  createDailyTrackingEntry(input: {
+    patientId: "patient-id"
+    dietId: "diet-id"
+    trackedAt: "2026-06-03T12:00:00Z"
+    adherencePercentage: 85
+    mood: "Motivada"
+    patientNotes: "Cumplí desayuno y almuerzo"
+  }) {
+    id
+    adherencePercentage
+    mood
+  }
+}
+```
+
+## Solicitar carga de foto diaria
+
+```graphql
+mutation {
+  requestDailyFoodPhotoUpload(input: {
+    dailyTrackingEntryId: "daily-tracking-id"
+    fileName: "almuerzo.jpg"
+    mimeType: "image/jpeg"
+    mealName: "Almuerzo"
+  }) {
+    documentMetadataId
+    uploadUrl
+    expiresAt
+  }
+}
+```
+
+Después de subir el archivo a S3 con la URL prefirmada, la app móvil vincula el metadato al seguimiento:
+
+```graphql
+mutation {
+  addDailyFoodPhoto(input: {
+    dailyTrackingEntryId: "daily-tracking-id"
+    documentMetadataId: "document-id"
+    mealName: "Almuerzo"
+    description: "Pollo con arroz y ensalada"
+    capturedAt: "2026-06-03T12:30:00Z"
+  }) {
+    id
+    mealName
+    documentMetadataId
+  }
+}
+```
+
+## Crear meta del paciente
+
+```graphql
+mutation {
+  createPatientGoal(input: {
+    patientId: "patient-id"
+    title: "Cumplir 5 días de adherencia"
+    targetDate: "2026-06-10T00:00:00Z"
+  }) {
+    id
+    title
+    status
+  }
+}
+```
+
+## Registrar antropometría avanzada
+
+```graphql
+mutation {
+  createAnthropometryMeasurement(input: {
+    patientId: "patient-id"
+    bodyMeasurementId: "measurement-id"
+    measuredAt: "2026-06-03T14:00:00Z"
+    tricepsSkinfoldMm: 18
+    subscapularSkinfoldMm: 20
+    suprailiacSkinfoldMm: 22
+    calfSkinfoldMm: 16
+    humerusDiameterCm: 6.5
+    femurDiameterCm: 9.2
+    contractedArmCircumferenceCm: 29
+    calfCircumferenceCm: 36
+  }) {
+    id
+    measuredAt
+  }
+}
+```
+
 ## Solicitar PDF de dieta
 
 ```graphql

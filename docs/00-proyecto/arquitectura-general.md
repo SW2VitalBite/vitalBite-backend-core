@@ -11,6 +11,9 @@ Aplicación para nutricionistas y administradores.
 Responsabilidades:
 
 - Gestionar pacientes, citas, medidas corporales y dietas.
+- Consultar dietocálculo / cálculo nutricional de planes alimenticios.
+- Administrar catálogo de alimentos, recetas y plantillas de dietas reutilizables.
+- Revisar seguimiento diario, adherencia y evolución antropométrica.
 - Generar y consultar reportes nutricionales.
 - Administrar usuarios, roles, planes SaaS y pagos.
 - Visualizar dashboard administrativo y BI.
@@ -24,7 +27,9 @@ Responsabilidades:
 
 - Consultar dieta asignada y progreso nutricional.
 - Consultar, confirmar o solicitar citas.
-- Subir fotos o información desde el celular.
+- Registrar seguimiento diario del paciente.
+- Subir fotos de alimentos o información desde el celular.
+- Registrar actividad física, estado de ánimo, metas y adherencia.
 - Usar cámara para etiquetas nutricionales o fotografías de alimentos.
 - Usar huella/autenticación biométrica y notificaciones push.
 
@@ -32,7 +37,7 @@ Responsabilidades:
 
 | Microservicio | Tecnología | Nube sugerida | Responsabilidad principal |
 |---|---|---|---|
-| Core empresarial | NestJS + GraphQL | AWS | Usuarios, roles, tenants, pacientes, citas, medidas, dietas, seguimiento, orquestación y BI |
+| Core empresarial | NestJS + GraphQL | AWS | Usuarios, roles, tenants, pacientes, citas, medidas, dietas, catálogo nutricional, seguimiento, orquestación y BI |
 | Documental y auditoría | Spring Boot | Google Cloud | PDFs, reportes, gestión documental, almacenamiento S3, bitácora y blockchain |
 | IA / ML / DL | FastAPI | Digital Ocean | OCR, Deep Learning, Random Forest, K-means y procesamiento de imágenes |
 | Pagos y suscripciones | .NET / C# | Azure | Planes SaaS, pagos, facturación, renovaciones, DynamoDB y eventos financieros |
@@ -45,6 +50,8 @@ Responsabilidades:
 
 - Autenticación, autorización, roles y multi-tenant.
 - Gestión de pacientes, citas, medidas corporales, dietas y seguimiento.
+- Gestión de dietocálculo / cálculo nutricional, catálogo de alimentos y recetas, plantillas de dietas reutilizables y seguimiento diario del paciente.
+- Registro de datos para somatocarta / antropometría avanzada.
 - Consulta de indicadores BI generados desde eventos y métricas.
 - Orquestación con Documental, IA/ML/DL y Pagos.
 - Publicación de datos necesarios para dashboard web y app móvil.
@@ -69,6 +76,7 @@ Responsabilidades:
 
 - Procesar imágenes capturadas desde la app móvil.
 - Aplicar Deep Learning/OCR para leer etiquetas nutricionales.
+- Apoyar el análisis visual de alimentos registrados por pacientes.
 - Usar Random Forest para predecir riesgo nutricional.
 - Usar K-means para segmentar pacientes por patrones.
 - Entregar resultados al Core para consulta desde GraphQL o dashboard BI.
@@ -93,20 +101,22 @@ Las integraciones REST pueden existir únicamente como comunicación especializa
 
 Flujo base:
 
-1. Angular o React Native consulta el Core mediante GraphQL.
-2. El Core resuelve datos transaccionales empresariales desde PostgreSQL/Supabase.
-3. El Core consulta al microservicio .NET para validar estado de suscripción, plan y límites del tenant.
-4. El microservicio .NET persiste pagos, planes, facturas y suscripciones en DynamoDB.
-5. El Core consulta o envía eventos a DynamoDB para BI, métricas e indicadores financieros.
-6. El Core invoca servicios especializados cuando necesita PDF, IA/ML/DL o estado financiero.
-7. El servicio Documental genera URLs prefirmadas de S3 para descarga de archivos.
+1. Angular consulta el Core mediante GraphQL para pacientes, dietas, catálogo nutricional, seguimiento, medidas y dashboard BI.
+2. React Native consulta y registra mediante GraphQL dietas, citas, progreso y seguimiento diario del paciente.
+3. El Core resuelve datos transaccionales empresariales desde PostgreSQL/Supabase.
+4. El Core invoca FastAPI cuando necesita OCR, análisis visual de alimentos, Random Forest o K-means.
+5. El Core consulta al microservicio .NET para validar estado de suscripción, plan y límites del tenant.
+6. El microservicio .NET persiste pagos, planes, facturas y suscripciones en DynamoDB.
+7. El Core consulta o envía eventos a DynamoDB para BI, métricas e indicadores financieros.
+8. El Core invoca servicios especializados cuando necesita PDF, IA/ML/DL o estado financiero.
+9. El servicio Documental genera URLs prefirmadas de S3 para descarga de archivos.
 
 ## Datos y almacenamiento
 
 | Recurso | Tipo | Uso dentro del sistema |
 |---|---|---|
-| PostgreSQL/Supabase | Base principal relacional del Core | Usuarios, tenants, pacientes, citas, medidas, dietas, seguimiento y documentos como metadatos |
-| DynamoDB | Base secundaria NoSQL del sistema y principal de Pagos .NET | Planes SaaS, pagos, facturas, renovaciones, estados de suscripción, límites por tenant, eventos BI, métricas de alto volumen, tendencias e indicadores financieros |
+| PostgreSQL/Supabase | Base principal relacional del Core | Usuarios, tenants, pacientes, citas, medidas, dietas, catálogo nutricional, plantillas, seguimiento y documentos como metadatos |
+| DynamoDB | Base secundaria NoSQL del sistema y principal de Pagos .NET | Planes SaaS, pagos, facturas, renovaciones, estados de suscripción, límites por tenant, eventos BI, métricas de alto volumen, tendencias, adherencia e indicadores financieros |
 | Amazon S3 | Almacenamiento de objetos | PDFs, reportes, imágenes OCR temporales y documentos generados |
 
 S3 no reemplaza a PostgreSQL ni a DynamoDB; se usa como almacenamiento documental y de archivos. PostgreSQL/Supabase conserva el Core empresarial y DynamoDB conserva el dominio financiero del microservicio .NET junto con datos analíticos.

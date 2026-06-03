@@ -31,6 +31,9 @@ Este documento funciona como checklist de cumplimiento de los requisitos del exa
 - El sistema mantiene separación por microservicios y responsabilidades.
 - La arquitectura debe poder explicarse como multi-cloud.
 - IA, ML, BI, blockchain y n8n deben aparecer integrados al flujo empresarial, no como elementos aislados.
+- Las funciones de dietocálculo, catálogo de alimentos y recetas, plantillas de dietas reutilizables, seguimiento diario del paciente y somatocarta / antropometría avanzada refuerzan los módulos core existentes.
+- Estas funciones no agregan microservicios nuevos ni cambian las tecnologías principales definidas para el examen.
+- FastAPI puede apoyar análisis visual de alimentos, pero no reemplaza el dietocálculo / cálculo nutricional del Core.
 
 ## Evidencia documental
 
@@ -38,4 +41,5 @@ Este documento funciona como checklist de cumplimiento de los requisitos del exa
 - La arquitectura general explica microservicios, nubes, datos, almacenamiento y comunicación.
 - Las decisiones técnicas justifican cada tecnología elegida.
 - Los módulos core muestran actores, datos y microservicios responsables.
+- Los documentos generales incluyen capacidades nutricionales avanzadas: dietocálculo, catálogo de alimentos y recetas, plantillas de dietas reutilizables, seguimiento diario del paciente y somatocarta / antropometría avanzada.
 - Este checklist valida el cumplimiento directo de cada requisito del examen.

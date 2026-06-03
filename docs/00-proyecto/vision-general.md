@@ -2,18 +2,18 @@
 
 VitalBite es una plataforma empresarial SaaS de nutrición y salud orientada a consultorios, nutricionistas, administradores y pacientes. El sistema permite gestionar pacientes, citas, medidas corporales, planes alimenticios, seguimiento nutricional, reportes, pagos, suscripciones, inteligencia de negocio y auditoría.
 
-La propuesta principal es centralizar el trabajo operativo del nutricionista y, al mismo tiempo, entregar al paciente una aplicación móvil para consultar su plan, registrar información, confirmar citas y usar capacidades nativas del dispositivo.
+La propuesta principal es centralizar el trabajo operativo del nutricionista y, al mismo tiempo, entregar al paciente una aplicación móvil para consultar su plan, registrar información, confirmar citas y usar capacidades nativas del dispositivo. Además, VitalBite fortalece el dominio nutricional mediante dietocálculo, catálogo de alimentos y recetas, plantillas de dietas reutilizables, seguimiento diario del paciente y somatocarta / antropometría avanzada.
 
 ## Actores principales
 
 - **Administrador:** gestiona usuarios, roles, tenants, planes SaaS, pagos, dashboard BI y auditoría.
-- **Nutricionista:** registra pacientes, agenda citas, toma medidas, crea dietas, revisa progreso y genera reportes.
-- **Paciente:** consulta dietas, revisa citas, confirma asistencia, visualiza progreso y sube información desde la app móvil.
+- **Nutricionista:** registra pacientes, agenda citas, toma medidas, crea dietas, consulta dietocálculo, usa plantillas nutricionales, revisa progreso y genera reportes.
+- **Paciente:** consulta dietas, revisa citas, confirma asistencia, visualiza progreso y registra seguimiento diario desde la app móvil.
 
 ## Canales del sistema
 
-- **Aplicación web Angular:** panel administrativo para nutricionistas y administradores.
-- **Aplicación móvil React Native:** app para pacientes con cámara, autenticación biométrica, notificaciones y carga de imágenes.
+- **Aplicación web Angular:** panel administrativo para nutricionistas y administradores, con gestión de dietas, catálogo nutricional, seguimiento y evolución antropométrica.
+- **Aplicación móvil React Native:** app para pacientes con cámara, autenticación biométrica, notificaciones, carga de imágenes, registro de comidas, actividad física, estado de ánimo, metas y adherencia.
 - **Backend por microservicios:** servicios independientes desplegados en diferentes nubes.
 
 ## Capacidades empresariales
@@ -26,6 +26,11 @@ Además de la gestión empresarial básica, VitalBite incorpora:
 - **PostgreSQL/Supabase** como base de datos transaccional principal del Core empresarial.
 - **DynamoDB** como base secundaria del sistema y store principal del microservicio .NET para pagos, planes, suscripciones, eventos, métricas y BI.
 - **Amazon S3** para almacenamiento de PDFs, documentos e imágenes temporales.
+- **Dietocálculo / cálculo nutricional** para estimar calorías, macronutrientes y micronutrientes de planes alimenticios.
+- **Catálogo de alimentos y recetas** para reutilizar alimentos, preparaciones y combinaciones frecuentes en dietas.
+- **Plantillas de dietas reutilizables** para acelerar la creación de planes personalizados.
+- **Seguimiento diario del paciente** con fotos de alimentos, actividad física, estado de ánimo, metas y adherencia.
+- **Somatocarta / antropometría avanzada** para evaluación corporal, pliegues, diámetros y somatotipo.
 - **Deep Learning** para lectura de etiquetas nutricionales y procesamiento de imágenes.
 - **Random Forest** para predicción de riesgo nutricional.
 - **K-means** para segmentación de pacientes.

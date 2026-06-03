@@ -6,6 +6,8 @@ Este documento registra las decisiones principales del proyecto y su justificaci
 
 Se trabaja sobre el dominio de nutrición y salud porque permite cubrir procesos empresariales reales: gestión de pacientes, citas, seguimiento corporal, planes alimenticios, reportes, pagos, inteligencia de negocio y auditoría.
 
+También se fortalece el dominio nutricional operativo con dietocálculo / cálculo nutricional, catálogo de alimentos y recetas, plantillas de dietas reutilizables, seguimiento diario del paciente y somatocarta / antropometría avanzada. Estas capacidades hacen que el sistema no sea solo administrativo, sino una herramienta de consulta nutricional.
+
 ## Tipo de sistema
 
 El sistema será una plataforma SaaS para consultorios y profesionales de nutrición.
@@ -25,6 +27,7 @@ Justificación:
 - Angular es adecuado para paneles administrativos empresariales.
 - Permite organizar módulos, rutas, formularios y dashboards.
 - Facilita la gestión de pacientes, citas, dietas, pagos, BI y auditoría desde un entorno web.
+- Permite a la nutricionista consultar dietocálculo, usar plantillas de dietas reutilizables, revisar catálogo de alimentos y recetas, y analizar evolución antropométrica.
 
 ## Aplicación móvil
 
@@ -35,6 +38,7 @@ Justificación:
 - Permite usar componentes nativos como cámara, huella/autenticación biométrica y notificaciones.
 - Permite al paciente consultar su dieta, citas y progreso desde el celular.
 - Facilita la captura de imágenes para análisis nutricional mediante IA.
+- Permite registrar seguimiento diario con fotos de alimentos, actividad física, estado de ánimo, metas y adherencia.
 
 ## Comunicación principal
 
@@ -73,6 +77,27 @@ PostgreSQL y DynamoDB no son alternativas excluyentes. PostgreSQL es la base pri
 
 La elección de DynamoDB para pagos y suscripciones permite consultas rápidas por tenant, estado de suscripción, plan activo, facturas y eventos de renovación, además de escalar registros financieros y métricas sin acoplarlos al modelo relacional del Core.
 
+El Core NestJS mantiene como datos transaccionales las dietas, el catálogo nutricional, las plantillas reutilizables, el seguimiento diario y las medidas corporales. FastAPI se mantiene como microservicio especializado para IA/ML/DL y no reemplaza el cálculo nutricional base del Core.
+
+## Capacidades nutricionales del Core
+
+El Core empresarial incluye capacidades propias del trabajo nutricional diario.
+
+Uso definido:
+
+- **Dietocálculo / cálculo nutricional:** estimar calorías, macronutrientes y micronutrientes de dietas y comidas.
+- **Catálogo de alimentos y recetas:** registrar alimentos, recetas y preparaciones reutilizables.
+- **Plantillas de dietas reutilizables:** crear planes base que la nutricionista puede adaptar a cada paciente.
+- **Seguimiento diario del paciente:** recibir desde la app móvil fotos de alimentos, actividad física, estado de ánimo, metas y adherencia.
+- **Somatocarta / antropometría avanzada:** complementar medidas corporales con pliegues, diámetros y somatotipo.
+
+Justificación:
+
+- Aumenta la utilidad clínica de la plataforma para nutricionistas.
+- Evita que el sistema sea solo administrativo.
+- Mantiene GraphQL como canal principal para consultar y registrar estas funciones.
+- Permite alimentar BI, Random Forest y K-means con datos nutricionales más completos.
+
 ## Inteligencia artificial y Deep Learning
 
 Se usará IA aplicada a imágenes capturadas desde la app móvil.
@@ -82,6 +107,9 @@ Caso principal:
 - Lectura de etiquetas nutricionales mediante OCR y Deep Learning.
 - Extracción de calorías, macronutrientes, ingredientes y datos relevantes.
 - Apoyo al paciente para validar alimentos contra restricciones o recomendaciones.
+- Análisis visual de alimentos registrados en el seguimiento diario.
+
+La IA complementa el proceso nutricional, pero el dietocálculo / cálculo nutricional base pertenece al Core empresarial para mantener trazabilidad transaccional.
 
 ## Machine Learning
 
@@ -125,6 +153,9 @@ Indicadores esperados:
 - Citas realizadas y canceladas.
 - Cumplimiento de dietas.
 - Evolución promedio de pacientes.
+- Adherencia diaria y seguimiento del paciente.
+- Evolución antropométrica y somatocarta.
+- Indicadores derivados del dietocálculo.
 - Ingresos por suscripción.
 - Riesgo nutricional por paciente o grupo.
 - Segmentación K-means.

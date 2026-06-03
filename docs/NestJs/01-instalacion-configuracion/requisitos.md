@@ -6,6 +6,8 @@
 - npm o yarn.
 - NestJS CLI.
 - PostgreSQL o acceso a Supabase.
+- Prisma ORM.
+- Paquetes `prisma` y `@prisma/client`.
 - Cliente GraphQL para pruebas.
 - Git.
 
@@ -22,5 +24,6 @@
 - NestJS.
 - GraphQL.
 - PostgreSQL.
+- Prisma y migraciones.
 - Autenticación JWT.
 - Arquitectura modular y microservicios.

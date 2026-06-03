@@ -14,6 +14,12 @@ El modelo PostgreSQL del Core cubre:
 - Composición corporal.
 - Seguimiento nutricional.
 - Dietas, comidas e ítems.
+- Catálogo nutricional.
+- Recetas.
+- Plantillas de dietas.
+- Dietocálculo.
+- Seguimiento diario del paciente.
+- Antropometría avanzada y somatocarta.
 - Reportes y metadatos documentales.
 
 ## Fuera del modelo del Core
@@ -34,6 +40,8 @@ Estos datos pertenecen al microservicio `.NET + DynamoDB`. El Core solo consulta
 - Todas las entidades del negocio deben tener `tenant_id`.
 - Las relaciones no deben cruzar tenants.
 - Los registros clínicos e históricos deben usar eliminación lógica.
+- Las dietas finales deben guardar snapshot nutricional para no depender dinámicamente del catálogo.
+- Los ítems alimenticios deben tener una sola fuente: catálogo, receta o entrada manual.
 - Las operaciones críticas deben dejar trazabilidad mediante eventos auditables.
 - Los documentos solo se almacenan como metadatos; los archivos viven en S3 mediante Spring Boot.
 - Prisma será la herramienta documentada para schema, migraciones y acceso a PostgreSQL/Supabase.
@@ -61,6 +69,11 @@ Estos datos pertenecen al microservicio `.NET + DynamoDB`. El Core solo consulta
 | Composición corporal | `body_compositions` |
 | Seguimiento nutricional | `nutrition_tracking` |
 | Dietas | `diets`, `diet_meals`, `diet_items` |
+| Catálogo nutricional | `food_catalog_items`, `recipes`, `recipe_items` |
+| Plantillas de dietas | `diet_templates`, `diet_template_meals`, `diet_template_items` |
+| Dietocálculo | `nutrition_calculations` |
+| Seguimiento diario | `daily_tracking_entries`, `daily_tracking_food_photos`, `physical_activity_entries`, `patient_goals` |
+| Antropometría avanzada | `anthropometry_measurements`, `somatotype_results` |
 | Reportes | `reports`, `document_metadata` |
 
 ## Índices generales recomendados
@@ -74,6 +87,10 @@ Estos datos pertenecen al microservicio `.NET + DynamoDB`. El Core solo consulta
 - `patient_id + measured_at`
 - `patient_id + tracked_at`
 - `patient_id + status`
+- `diet_id`
+- `food_group`
+- `tracked_at`
+- `measured_at`
 
 ## Regla multi-tenant
 

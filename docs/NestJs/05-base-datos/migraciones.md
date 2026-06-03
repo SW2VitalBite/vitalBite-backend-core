@@ -8,6 +8,16 @@ Las migraciones del Core se documentan con enfoque Prisma. Cada cambio estructur
 - PostgreSQL/Supabase.
 - Migraciones con `prisma migrate`.
 
+## Preparación previa
+
+Antes de ejecutar migraciones del Core, el proyecto debe tener:
+
+- Dependencias `prisma` y `@prisma/client`.
+- Carpeta `prisma/`.
+- Archivo `prisma/schema.prisma`.
+- Variable `DATABASE_URL` configurada.
+- `PrismaService` creado en NestJS para acceso a PostgreSQL/Supabase.
+
 ## Orden implementable
 
 ### 1. Tenants
@@ -117,8 +127,107 @@ Crear:
 - `diets(tenant_id, start_date)`.
 - `diet_meals(diet_id, order)`.
 - `diet_items(diet_meal_id)`.
+- `diet_items(food_catalog_item_id)`.
+- `diet_items(recipe_id)`.
 
-### 9. Reportes y documentos
+Reglas de estructura:
+
+- `diet_items` debe incluir `source_type`, `food_catalog_item_id`, `recipe_id`, `manual_food_name`, `micronutrients` y `nutrition_snapshot`.
+- Cada ítem debe tener exactamente una fuente: catálogo, receta o entrada manual.
+- El snapshot nutricional conserva el valor histórico aunque cambie el catálogo.
+
+### 9. Catálogo nutricional
+
+Crear:
+
+- `food_catalog_items`
+- `recipes`
+- `recipe_items`
+
+Índices:
+
+- `food_catalog_items(tenant_id, name)`.
+- `food_catalog_items(tenant_id, food_group)`.
+- `food_catalog_items(tenant_id, created_by_id)`.
+- `recipes(tenant_id, name)`.
+- `recipes(tenant_id, created_by_id)`.
+- `recipe_items(recipe_id)`.
+- `recipe_items(food_catalog_item_id)`.
+
+### 10. Plantillas de dietas
+
+Crear:
+
+- `diet_templates`
+- `diet_template_meals`
+- `diet_template_items`
+- Enum `DietTemplateStatus`
+
+Índices:
+
+- `diet_templates(tenant_id, nutritionist_id)`.
+- `diet_templates(tenant_id, status)`.
+- `diet_templates(tenant_id, name)`.
+- `diet_template_meals(diet_template_id, order)`.
+- `diet_template_items(diet_template_meal_id)`.
+- `diet_template_items(food_catalog_item_id)`.
+- `diet_template_items(recipe_id)`.
+
+Reglas de estructura:
+
+- `diet_template_items` debe incluir `source_type`, `food_catalog_item_id`, `recipe_id`, `manual_food_name` y `nutrition_snapshot`.
+- Cada ítem de plantilla debe tener exactamente una fuente: catálogo, receta o entrada manual.
+
+### 11. Dietocálculo
+
+Crear:
+
+- `nutrition_calculations`
+
+Índices:
+
+- `nutrition_calculations(tenant_id, patient_id, calculated_at)`.
+- `nutrition_calculations(diet_id)`.
+
+Reglas de estructura:
+
+- `diet_id` y `patient_id` son obligatorios para cálculos persistidos.
+- No crear registros de dietocálculo huérfanos.
+
+### 12. Seguimiento diario
+
+Crear:
+
+- `daily_tracking_entries`
+- `daily_tracking_food_photos`
+- `physical_activity_entries`
+- `patient_goals`
+- Enum `GoalStatus`
+
+Índices:
+
+- `daily_tracking_entries(tenant_id, patient_id, tracked_at)`.
+- `daily_tracking_entries(diet_id)`.
+- `daily_tracking_food_photos(daily_tracking_entry_id)`.
+- `daily_tracking_food_photos(document_metadata_id)`.
+- `physical_activity_entries(daily_tracking_entry_id)`.
+- `patient_goals(tenant_id, patient_id, status)`.
+
+### 13. Antropometría avanzada
+
+Crear:
+
+- `anthropometry_measurements`
+- `somatotype_results`
+
+Índices:
+
+- `anthropometry_measurements(tenant_id, patient_id, measured_at)`.
+- `anthropometry_measurements(body_measurement_id)`.
+- `somatotype_results(tenant_id, patient_id, calculated_at)`.
+- `somatotype_results(anthropometry_measurement_id)`.
+
+### 14. Reportes y documentos
 
 Crear:
 

@@ -120,6 +120,69 @@ Filtros sugeridos:
 - `startDate`
 - `endDate`
 
+## Catálogo nutricional
+
+| Query | Descripción | Acceso |
+|---|---|---|
+| `foodCatalog(filter)` | Lista alimentos del catálogo | Administrador, nutricionista |
+| `foodCatalogItemById(id)` | Obtiene un alimento del catálogo | Administrador, nutricionista |
+| `recipes(filter)` | Lista recetas reutilizables | Administrador, nutricionista |
+| `recipeById(id)` | Obtiene una receta | Administrador, nutricionista |
+
+Filtros sugeridos:
+
+- `search`
+- `foodGroup`
+- `createdById`
+
+## Plantillas de dietas
+
+| Query | Descripción | Acceso |
+|---|---|---|
+| `dietTemplates(filter)` | Lista plantillas de dietas | Administrador, nutricionista |
+| `dietTemplateById(id)` | Obtiene una plantilla completa | Administrador, nutricionista |
+
+Filtros sugeridos:
+
+- `nutritionistId`
+- `status`
+- `objective`
+- `search`
+
+## Dietocálculo
+
+| Query | Descripción | Acceso |
+|---|---|---|
+| `calculateDietNutrition(input)` | Calcula nutrientes de una dieta o comidas enviadas | Administrador, nutricionista |
+| `nutritionCalculationByDiet(dietId)` | Obtiene último cálculo de una dieta | Administrador, nutricionista, paciente dueño |
+| `nutritionCalculationsByPatient(patientId)` | Lista cálculos asociados al paciente | Administrador, nutricionista, paciente dueño |
+
+Reglas:
+
+- `calculateDietNutrition(input)` solo calcula y no persiste resultados.
+- Los resultados persistidos se crean mediante `saveNutritionCalculation(input)`.
+- Un cálculo persistido debe tener `dietId`; no se guardan cálculos huérfanos.
+
+## Seguimiento diario
+
+| Query | Descripción | Acceso |
+|---|---|---|
+| `dailyTrackingByPatient(patientId, filter)` | Lista registros diarios del paciente | Administrador, nutricionista, paciente dueño |
+| `patientGoals(patientId)` | Lista metas del paciente | Administrador, nutricionista, paciente dueño |
+
+Filtros sugeridos:
+
+- `dateFrom`
+- `dateTo`
+- `dietId`
+
+## Antropometría avanzada
+
+| Query | Descripción | Acceso |
+|---|---|---|
+| `anthropometryByPatient(patientId)` | Lista mediciones antropométricas | Administrador, nutricionista, paciente dueño |
+| `latestSomatotype(patientId)` | Obtiene último somatotipo calculado | Administrador, nutricionista, paciente dueño |
+
 ## Reportes y documentos
 
 | Query | Descripción | Acceso |

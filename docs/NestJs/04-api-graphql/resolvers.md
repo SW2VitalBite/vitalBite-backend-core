@@ -13,6 +13,12 @@ Los resolvers conectan el schema GraphQL con los servicios del Core. En NestJS C
 | `BodyMeasurementsResolver` | `body-measurements` | Gestionar medidas corporales |
 | `BodyCompositionResolver` | `body-composition` | Gestionar composición corporal |
 | `DietsResolver` | `diets` | Gestionar dietas y planes alimenticios |
+| `NutritionCatalogResolver` | `nutrition-catalog` | Gestionar alimentos y recetas |
+| `DietTemplatesResolver` | `diet-templates` | Gestionar plantillas reutilizables |
+| `NutritionCalculationResolver` | `nutrition-calculation` | Calcular y consultar dietocálculo |
+| `DailyTrackingResolver` | `daily-tracking` | Gestionar seguimiento diario del paciente |
+| `PatientGoalsResolver` | `daily-tracking` | Gestionar metas del paciente |
+| `AdvancedAnthropometryResolver` | `advanced-anthropometry` | Gestionar antropometría avanzada y somatocarta |
 | `ReportsResolver` | `reports` | Solicitar reportes y consultar documentos |
 
 ## Patrón por resolver
@@ -43,6 +49,12 @@ Cada resolver debe seguir este patrón:
 | `BodyMeasurementsService` | Mediciones e IMC |
 | `BodyCompositionService` | Bioimpedancia y composición |
 | `DietsService` | Dietas, comidas e ítems |
+| `NutritionCatalogService` | Alimentos, recetas y preparaciones |
+| `DietTemplatesService` | Plantillas y generación de dietas |
+| `NutritionCalculationService` | Cálculo nutricional del Core |
+| `DailyTrackingService` | Registros diarios, fotos y actividad física |
+| `PatientGoalsService` | Metas del paciente y cambios de estado |
+| `AdvancedAnthropometryService` | Pliegues, diámetros y somatotipo |
 | `ReportsService` | Solicitud documental y metadatos |
 | `PaymentsIntegrationService` | Consulta de plan/suscripción a `.NET + DynamoDB` |
 

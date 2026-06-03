@@ -13,6 +13,11 @@ El schema debe alinearse con los módulos reales del proyecto:
 - `body-measurements`
 - `body-composition`
 - `diets`
+- `nutrition-catalog`
+- `diet-templates`
+- `nutrition-calculation`
+- `daily-tracking`
+- `advanced-anthropometry`
 - `reports`
 
 ## Tipos base
@@ -201,13 +206,284 @@ Campos:
 
 - `id: ID!`
 - `dietMealId: ID!`
+- `sourceType: DietItemSourceType!`
+- `foodCatalogItemId: ID`
+- `recipeId: ID`
+- `manualFoodName: String`
 - `foodName: String!`
 - `portion: String!`
 - `calories: Float`
 - `proteins: Float`
 - `carbs: Float`
 - `fats: Float`
+- `micronutrients: [NutrientValue!]!`
+- `nutritionSnapshot: NutritionSnapshot`
 - `notes: String`
+
+### `FoodCatalogItem`
+
+Representa un alimento reutilizable del catálogo nutricional.
+
+Campos:
+
+- `id: ID!`
+- `tenantId: ID!`
+- `name: String!`
+- `foodGroup: String`
+- `basePortion: String`
+- `calories: Float`
+- `proteins: Float`
+- `carbs: Float`
+- `fats: Float`
+- `micronutrients: [NutrientValue!]!`
+- `notes: String`
+- `createdAt: DateTime!`
+- `updatedAt: DateTime!`
+
+### `Recipe`
+
+Representa una receta o preparación reutilizable.
+
+Campos:
+
+- `id: ID!`
+- `tenantId: ID!`
+- `name: String!`
+- `description: String`
+- `items: [RecipeItem!]!`
+- `totalCalories: Float`
+- `totalProteins: Float`
+- `totalCarbs: Float`
+- `totalFats: Float`
+- `createdAt: DateTime!`
+- `updatedAt: DateTime!`
+
+### `RecipeItem`
+
+Representa un alimento dentro de una receta.
+
+Campos:
+
+- `id: ID!`
+- `recipeId: ID!`
+- `foodCatalogItemId: ID!`
+- `quantity: Float`
+- `unit: String`
+
+### `DietTemplate`
+
+Representa una plantilla reutilizable para crear dietas.
+
+Campos:
+
+- `id: ID!`
+- `tenantId: ID!`
+- `nutritionistId: ID!`
+- `name: String!`
+- `objective: String!`
+- `status: DietTemplateStatus!`
+- `meals: [DietTemplateMeal!]!`
+- `createdAt: DateTime!`
+- `updatedAt: DateTime!`
+
+### `DietTemplateMeal`
+
+Representa un tiempo de comida dentro de una plantilla.
+
+Campos:
+
+- `id: ID!`
+- `dietTemplateId: ID!`
+- `name: String!`
+- `time: String`
+- `order: Int!`
+- `items: [DietTemplateItem!]!`
+
+### `DietTemplateItem`
+
+Representa un alimento, receta o instrucción de una plantilla.
+
+Campos:
+
+- `id: ID!`
+- `dietTemplateMealId: ID!`
+- `sourceType: DietItemSourceType!`
+- `foodCatalogItemId: ID`
+- `recipeId: ID`
+- `manualFoodName: String`
+- `portion: String!`
+- `nutritionSnapshot: NutritionSnapshot`
+- `notes: String`
+
+### `NutritionCalculation`
+
+Representa el resultado del dietocálculo.
+
+Campos:
+
+- `id: ID!`
+- `tenantId: ID!`
+- `patientId: ID!`
+- `dietId: ID!`
+- `totalCalories: Float`
+- `totalProteins: Float`
+- `totalCarbs: Float`
+- `totalFats: Float`
+- `micronutrients: [NutrientValue!]!`
+- `calculatedAt: DateTime!`
+
+### `NutrientValue`
+
+Representa un nutriente calculado o registrado.
+
+Campos:
+
+- `name: String!`
+- `amount: Float!`
+- `unit: String!`
+
+### `NutritionSnapshot`
+
+Representa la foto nutricional de un ítem al momento de crear o actualizar una dieta.
+
+Campos:
+
+- `foodName: String!`
+- `portion: String!`
+- `calories: Float`
+- `proteins: Float`
+- `carbs: Float`
+- `fats: Float`
+- `micronutrients: [NutrientValue!]!`
+
+Reglas:
+
+- La dieta final debe guardar esta foto nutricional aunque el ítem venga de catálogo o receta.
+- Cambios posteriores en catálogo o receta no deben modificar dietas históricas.
+- Cada ítem debe tener exactamente una fuente: `foodCatalogItemId`, `recipeId` o `manualFoodName`.
+
+### `DailyTrackingEntry`
+
+Representa un registro diario del paciente.
+
+Campos:
+
+- `id: ID!`
+- `tenantId: ID!`
+- `patientId: ID!`
+- `dietId: ID`
+- `trackedAt: DateTime!`
+- `adherencePercentage: Float`
+- `mood: String`
+- `patientNotes: String`
+- `foodPhotos: [DailyTrackingFoodPhoto!]!`
+- `physicalActivities: [PhysicalActivityEntry!]!`
+- `createdAt: DateTime!`
+
+### `DailyTrackingFoodPhoto`
+
+Representa la referencia documental de una foto de alimento.
+
+Campos:
+
+- `id: ID!`
+- `dailyTrackingEntryId: ID!`
+- `documentMetadataId: ID`
+- `mealName: String`
+- `description: String`
+- `capturedAt: DateTime!`
+
+Regla:
+
+- `documentMetadataId` debe generarse previamente mediante `requestDailyFoodPhotoUpload(input)`.
+- El archivo binario vive en S3 mediante el servicio Documental.
+
+### `DailyFoodPhotoUploadRequest`
+
+Representa la respuesta para subir una foto de alimento desde la app móvil.
+
+Campos:
+
+- `documentMetadataId: ID!`
+- `uploadUrl: String!`
+- `expiresAt: DateTime!`
+
+Regla:
+
+- El Core solicita esta URL al servicio Documental y no almacena el archivo binario.
+
+### `PhysicalActivityEntry`
+
+Representa actividad física registrada por el paciente.
+
+Campos:
+
+- `id: ID!`
+- `dailyTrackingEntryId: ID!`
+- `activityType: String!`
+- `durationMinutes: Int`
+- `intensity: String`
+- `caloriesBurned: Float`
+
+### `PatientGoal`
+
+Representa una meta declarada por el paciente o nutricionista.
+
+Campos:
+
+- `id: ID!`
+- `tenantId: ID!`
+- `patientId: ID!`
+- `title: String!`
+- `status: GoalStatus!`
+- `targetDate: DateTime`
+- `createdAt: DateTime!`
+
+### `AnthropometryMeasurement`
+
+Representa una medición de antropometría avanzada.
+
+Campos:
+
+- `id: ID!`
+- `tenantId: ID!`
+- `patientId: ID!`
+- `bodyMeasurementId: ID`
+- `measuredAt: DateTime!`
+- `tricepsSkinfoldMm: Float`
+- `subscapularSkinfoldMm: Float`
+- `suprailiacSkinfoldMm: Float`
+- `calfSkinfoldMm: Float`
+- `humerusDiameterCm: Float`
+- `femurDiameterCm: Float`
+- `contractedArmCircumferenceCm: Float`
+- `calfCircumferenceCm: Float`
+- `createdAt: DateTime!`
+
+### `SomatotypeResult`
+
+Representa el resultado de somatotipo y somatocarta.
+
+Campos:
+
+- `id: ID!`
+- `tenantId: ID!`
+- `patientId: ID!`
+- `anthropometryMeasurementId: ID!`
+- `endomorphy: Float`
+- `mesomorphy: Float`
+- `ectomorphy: Float`
+- `somatochartX: Float`
+- `somatochartY: Float`
+- `calculatedAt: DateTime!`
+
+Reglas:
+
+- La fórmula de referencia será Heath-Carter.
+- Pliegues se expresan en mm.
+- Perímetros y diámetros se expresan en cm.
+- Peso se expresa en kg y talla en cm desde la medición corporal asociada.
+- Si faltan datos mínimos, `calculateSomatotype` debe devolver error controlado y no crear resultado.
 
 ### `Report`
 
@@ -248,7 +524,10 @@ Campos:
 - `PatientStatus`: `ACTIVE`, `INACTIVE`, `ARCHIVED`
 - `AppointmentStatus`: `SCHEDULED`, `CONFIRMED`, `COMPLETED`, `CANCELLED`, `RESCHEDULED`, `NO_SHOW`
 - `DietStatus`: `DRAFT`, `ACTIVE`, `COMPLETED`, `CANCELLED`
+- `DietTemplateStatus`: `DRAFT`, `ACTIVE`, `ARCHIVED`
+- `DietItemSourceType`: `CATALOG_ITEM`, `RECIPE`, `MANUAL`
 - `ProgressStatus`: `IMPROVING`, `STABLE`, `AT_RISK`, `CRITICAL`
+- `GoalStatus`: `ACTIVE`, `COMPLETED`, `CANCELLED`
 - `ReportType`: `DIET_PDF`, `NUTRITION_PROGRESS`, `BODY_EVOLUTION`, `PATIENT_SUMMARY`
 - `ReportStatus`: `REQUESTED`, `GENERATING`, `READY`, `FAILED`
 - `DocumentType`: `DIET`, `REPORT`, `PATIENT_FILE`, `IMAGE`

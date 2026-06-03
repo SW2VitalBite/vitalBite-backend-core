@@ -53,9 +53,17 @@ Registra la evolución física y nutricional del paciente.
 
 - **Actor principal:** Nutricionista.
 - **Microservicio dueño:** Core empresarial NestJS + GraphQL.
-- **Datos principales:** peso, talla, IMC, perímetros, grasa corporal, masa muscular, agua corporal y bioimpedancia.
+- **Datos principales:** peso, talla, IMC, perímetros, pliegues, diámetros, grasa corporal, masa muscular, agua corporal, bioimpedancia, somatotipo y somatocarta / antropometría avanzada.
 - **Base de datos:** PostgreSQL/Supabase.
 - **Relación con el sistema:** alimenta seguimiento, reportes, Random Forest, K-means y dashboard BI.
+
+Incluye:
+
+- Registro de medidas básicas y composición corporal.
+- Registro de pliegues y diámetros para análisis antropométrico.
+- Cálculo o visualización de somatotipo cuando existan datos suficientes.
+- Somatocarta para pacientes deportivos o seguimiento avanzado.
+- Comparación histórica de evolución corporal.
 
 ## 5. Seguimiento Nutricional
 
@@ -63,7 +71,7 @@ Permite controlar la evolución del paciente a lo largo del tiempo.
 
 - **Actor principal:** Nutricionista y paciente.
 - **Microservicio dueño:** Core empresarial NestJS + GraphQL.
-- **Datos principales:** progreso, cumplimiento de dieta, observaciones, alertas e indicadores.
+- **Datos principales:** progreso, cumplimiento de dieta, observaciones, alertas, fotos de alimentos, actividad física, estado de ánimo, metas, adherencia e indicadores.
 - **Base de datos:** PostgreSQL/Supabase y métricas en DynamoDB.
 - **Relación con el sistema:** muestra gráficos en web/móvil y genera información para BI.
 
@@ -71,6 +79,11 @@ Incluye:
 
 - Historial de progreso.
 - Comparación de medidas.
+- Seguimiento diario del paciente desde la app móvil.
+- Registro fotográfico de alimentos consumidos.
+- Registro de actividad física.
+- Estado de ánimo o motivación del paciente.
+- Metas personales y adherencia al plan.
 - Observaciones del nutricionista.
 - Cumplimiento de dieta.
 - Alertas de bajo progreso.
@@ -82,13 +95,16 @@ Permite crear y asignar planes alimenticios personalizados.
 
 - **Actor principal:** Nutricionista.
 - **Microservicio dueño:** Core empresarial NestJS + GraphQL.
-- **Datos principales:** plan alimenticio, comidas, alimentos, porciones, restricciones, objetivo y vigencia.
+- **Datos principales:** plan alimenticio, comidas, alimentos, recetas, porciones, restricciones, objetivo, vigencia, calorías, macronutrientes, micronutrientes y plantillas reutilizables.
 - **Base de datos:** PostgreSQL/Supabase.
-- **Relación con el sistema:** puede generar PDFs mediante Documental y ser consultado desde la app móvil.
+- **Relación con el sistema:** puede generar PDFs mediante Documental, ser consultado desde la app móvil y alimentar seguimiento, BI y recomendaciones.
 
 Incluye:
 
 - Creación de dietas.
+- Dietocálculo / cálculo nutricional de calorías, macronutrientes y micronutrientes.
+- Catálogo de alimentos y recetas.
+- Plantillas de dietas reutilizables.
 - Comidas por día.
 - Alimentos permitidos.
 - Alimentos restringidos.
@@ -142,7 +158,7 @@ Permite visualizar indicadores del negocio y del proceso nutricional.
 - **Microservicio dueño:** Core empresarial NestJS + GraphQL.
 - **Datos principales:** eventos, métricas, indicadores, tendencias y resultados de modelos.
 - **Base de datos:** DynamoDB para métricas, analítica e indicadores financieros; PostgreSQL/Supabase para datos transaccionales del Core empresarial.
-- **Relación con el sistema:** muestra resultados de Random Forest, K-means, citas, ingresos y evolución de pacientes.
+- **Relación con el sistema:** muestra resultados de Random Forest, K-means, citas, ingresos, dietocálculo, adherencia, seguimiento diario y evolución de pacientes.
 
 Indicadores:
 
@@ -151,6 +167,10 @@ Indicadores:
 - Citas canceladas.
 - Cumplimiento de dietas.
 - Evolución promedio de pacientes.
+- Evolución antropométrica y composición corporal.
+- Adherencia diaria al plan alimenticio.
+- Tendencias de actividad física, estado de ánimo y metas.
+- Resumen de dietocálculo por paciente o grupo.
 - Ingresos por suscripción.
 - Indicadores de riesgo nutricional.
 - Segmentación de pacientes.
@@ -179,7 +199,7 @@ Incluye:
 
 Aunque no forman parte del Core transaccional tradicional, estos componentes complementan los módulos empresariales:
 
-- **IA / Deep Learning:** lectura de etiquetas nutricionales e imágenes desde la app móvil.
+- **IA / Deep Learning:** lectura de etiquetas nutricionales e imágenes desde la app móvil; apoya el análisis visual de alimentos, pero no reemplaza el dietocálculo / cálculo nutricional del Core.
 - **Random Forest:** predicción de riesgo nutricional con datos de pacientes, medidas y hábitos.
 - **K-means:** segmentación de pacientes para BI y recomendaciones.
 - **n8n:** automatización de recordatorios y confirmaciones mediante WhatsApp → Core/Sistema → Email o notificación.

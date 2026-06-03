@@ -113,7 +113,103 @@ Input mínimo:
 
 - `CreateDietInput`: `patientId`, `name`, `objective`, `startDate`, `endDate`, `meals`
 - `CreateDietMealInput`: `name`, `time`, `order`, `items`
-- `CreateDietItemInput`: `foodName`, `portion`, `calories`, `proteins`, `carbs`, `fats`, `notes`
+- `CreateDietItemInput`: `sourceType`, `foodCatalogItemId`, `recipeId`, `manualFoodName`, `portion`, `nutritionSnapshot`, `notes`
+
+Reglas:
+
+- Cada `DietItem` debe tener exactamente una fuente: `foodCatalogItemId`, `recipeId` o `manualFoodName`.
+- La dieta final debe guardar una foto nutricional (`nutritionSnapshot`) para conservar historial.
+- Cambios posteriores en catálogo o receta no deben modificar dietas ya creadas.
+
+## Catálogo nutricional
+
+| Mutation | Descripción | Acceso |
+|---|---|---|
+| `createFoodCatalogItem(input)` | Crea alimento del catálogo | Administrador, nutricionista |
+| `updateFoodCatalogItem(id, input)` | Actualiza alimento del catálogo | Administrador, nutricionista |
+| `createRecipe(input)` | Crea receta reutilizable | Administrador, nutricionista |
+| `updateRecipe(id, input)` | Actualiza receta | Administrador, nutricionista |
+
+Inputs mínimos:
+
+- `CreateFoodCatalogItemInput`: `name`, `foodGroup`, `basePortion`, `calories`, `proteins`, `carbs`, `fats`, `micronutrients`, `notes`
+- `CreateRecipeInput`: `name`, `description`, `items`
+- `CreateRecipeItemInput`: `foodCatalogItemId`, `quantity`, `unit`
+
+## Plantillas de dietas
+
+| Mutation | Descripción | Acceso |
+|---|---|---|
+| `createDietTemplate(input)` | Crea plantilla de dieta | Nutricionista |
+| `updateDietTemplate(id, input)` | Actualiza plantilla | Nutricionista |
+| `createDietFromTemplate(templateId, patientId, input)` | Genera dieta para paciente desde plantilla | Nutricionista |
+
+Inputs mínimos:
+
+- `CreateDietTemplateInput`: `name`, `objective`, `status`, `meals`
+- `CreateDietFromTemplateInput`: `startDate`, `endDate`, `adjustments`
+
+Regla:
+
+- Cada ítem de plantilla debe tener exactamente una fuente: `foodCatalogItemId`, `recipeId` o `manualFoodName`.
+
+## Dietocálculo
+
+| Mutation | Descripción | Acceso |
+|---|---|---|
+| `saveNutritionCalculation(input)` | Guarda resultado de cálculo nutricional | Nutricionista |
+
+Input mínimo:
+
+- `SaveNutritionCalculationInput`: `dietId`, `totalCalories`, `totalProteins`, `totalCarbs`, `totalFats`, `micronutrients`
+
+Reglas:
+
+- `saveNutritionCalculation(input)` persiste historial.
+- `dietId` es obligatorio.
+- `patientId` se deriva desde la dieta asociada.
+- No se permiten cálculos persistidos sin dieta.
+
+## Seguimiento diario
+
+| Mutation | Descripción | Acceso |
+|---|---|---|
+| `createDailyTrackingEntry(input)` | Registra seguimiento diario | Paciente dueño |
+| `requestDailyFoodPhotoUpload(input)` | Solicita URL prefirmada para foto de alimento | Paciente dueño |
+| `addDailyFoodPhoto(input)` | Agrega foto de alimento al seguimiento | Paciente dueño |
+| `addPhysicalActivityEntry(input)` | Agrega actividad física al seguimiento | Paciente dueño |
+| `createPatientGoal(input)` | Crea meta del paciente | Paciente dueño, nutricionista asignado |
+| `updatePatientGoal(id, input)` | Actualiza meta del paciente | Paciente dueño, nutricionista asignado |
+| `completePatientGoal(id)` | Marca meta como completada | Paciente dueño, nutricionista asignado |
+| `cancelPatientGoal(id)` | Cancela meta del paciente | Paciente dueño, nutricionista asignado |
+
+Inputs mínimos:
+
+- `CreateDailyTrackingEntryInput`: `patientId`, `dietId`, `trackedAt`, `adherencePercentage`, `mood`, `patientNotes`
+- `RequestDailyFoodPhotoUploadInput`: `dailyTrackingEntryId`, `fileName`, `mimeType`, `mealName`
+- `AddDailyFoodPhotoInput`: `dailyTrackingEntryId`, `documentMetadataId`, `mealName`, `description`, `capturedAt`
+- `AddPhysicalActivityEntryInput`: `dailyTrackingEntryId`, `activityType`, `durationMinutes`, `intensity`, `caloriesBurned`
+- `CreatePatientGoalInput`: `patientId`, `title`, `targetDate`
+- `UpdatePatientGoalInput`: `title`, `targetDate`, `status`
+
+Flujo documental de fotos:
+
+1. `requestDailyFoodPhotoUpload(input)` solicita al servicio Documental una URL prefirmada y crea metadato.
+2. La app móvil sube el binario a S3 usando la URL prefirmada.
+3. `addDailyFoodPhoto(input)` vincula `documentMetadataId` al seguimiento diario.
+4. El Core guarda solo metadatos y referencias; el binario vive en S3.
+
+## Antropometría avanzada
+
+| Mutation | Descripción | Acceso |
+|---|---|---|
+| `createAnthropometryMeasurement(input)` | Registra pliegues y diámetros | Nutricionista |
+| `calculateSomatotype(input)` | Calcula o registra somatotipo | Nutricionista |
+
+Inputs mínimos:
+
+- `CreateAnthropometryMeasurementInput`: `patientId`, `bodyMeasurementId`, `measuredAt`, `tricepsSkinfoldMm`, `subscapularSkinfoldMm`, `suprailiacSkinfoldMm`, `calfSkinfoldMm`, `humerusDiameterCm`, `femurDiameterCm`, `contractedArmCircumferenceCm`, `calfCircumferenceCm`
+- `CalculateSomatotypeInput`: `patientId`, `anthropometryMeasurementId`
 
 ## Reportes y documentos
 
