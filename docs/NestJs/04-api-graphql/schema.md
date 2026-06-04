@@ -108,8 +108,12 @@ Campos:
 - `scheduledAt: DateTime!`
 - `durationMinutes: Int!`
 - `status: AppointmentStatus!`
+- `mode: AppointmentMode!`
 - `reason: String`
 - `notes: String`
+- `cancelReason: String`
+- `patientFullName: String!`
+- `nutritionistFullName: String!`
 - `createdAt: DateTime!`
 - `updatedAt: DateTime!`
 
@@ -130,6 +134,7 @@ Campos:
 - `waistCm: Float`
 - `hipCm: Float`
 - `createdAt: DateTime!`
+- `updatedAt: DateTime!`
 
 ### `BodyComposition`
 
@@ -148,6 +153,8 @@ Campos:
 - `boneMassKg: Float`
 - `metabolicAge: Int`
 - `measuredAt: DateTime!`
+- `createdAt: DateTime!`
+- `updatedAt: DateTime!`
 
 ### `NutritionTracking`
 

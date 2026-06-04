@@ -36,15 +36,34 @@ Registrar y consultar la evolución corporal del paciente.
 
 ## Operaciones GraphQL esperadas
 
-- `bodyMeasuresByPatient`
-- `createBodyMeasure`
-- `updateBodyMeasure`
-- `deleteBodyMeasure`
-- `anthropometryByPatient`
-- `createAnthropometryMeasurement`
-- `calculateSomatotype`
-- `latestSomatotype`
+- `bodyMeasurementsByPatient`
+- `bodyMeasurementById`
+- `createBodyMeasurement`
+- `updateBodyMeasurement`
+- `deleteBodyMeasurement`
+- `bodyCompositionByPatient`
+- `latestBodyComposition`
+- `createBodyComposition`
+- `updateBodyComposition`
+- `deleteBodyComposition`
 
 ## Submódulo relacionado
 
 - `antropometria-avanzada`: amplía las medidas corporales con pliegues, diámetros, somatotipo y somatocarta.
+
+## Estado implementado
+
+El tercer slice funcional del Core ya implementa medidas corporales y
+composición corporal con PostgreSQL, Prisma y GraphQL Code First.
+
+Incluye:
+
+- Modelo `BodyMeasurement` para peso, talla, IMC, cintura y cadera.
+- Modelo `BodyComposition` para grasa corporal, masa muscular, agua, grasa visceral, masa ósea y edad metabólica.
+- Cálculo automático de `bmi` cuando existe talla.
+- Consultas por paciente, detalle de medición y última composición corporal.
+- Mutaciones de creación, actualización y eliminación lógica.
+- Seed demo con evolución histórica para los cinco pacientes de prueba.
+
+No incluye todavía antropometría avanzada, pliegues, diámetros, somatotipo ni
+somatocarta.

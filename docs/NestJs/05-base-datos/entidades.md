@@ -134,6 +134,7 @@ Campos:
 - `scheduledAt: DateTime`
 - `durationMinutes: Int`
 - `status: AppointmentStatus`
+- `mode: AppointmentMode`
 - `reason: String?`
 - `notes: String?`
 - `cancelReason: String?`

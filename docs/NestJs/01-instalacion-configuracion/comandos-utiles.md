@@ -3,47 +3,47 @@
 ## Desarrollo
 
 ```bash
-npm run start:dev
+pnpm run start:dev
 ```
 
 ## Compilación
 
 ```bash
-npm run build
+pnpm run build
 ```
 
 ## Pruebas
 
 ```bash
-npm run test
+pnpm run test
 ```
 
 ## Pruebas end-to-end
 
 ```bash
-npm run test:e2e
+pnpm run test:e2e
 ```
 
 ## Lint
 
 ```bash
-npm run lint
+pnpm run lint
 ```
 
 ## Formato
 
 ```bash
-npm run format
+pnpm run format
 ```
 
 ## Prisma esperado
 
 ```bash
-npm install @prisma/client
-npm install prisma --save-dev
-npx prisma init
-npx prisma migrate dev --name init_core_schema
-npx prisma generate
+pnpm add @prisma/client
+pnpm add -D prisma
+pnpm exec prisma init
+pnpm exec prisma migrate dev --name init_core_schema
+pnpm exec prisma generate
 ```
 
 Los comandos exactos pueden ajustarse según el `package.json` real del microservicio.

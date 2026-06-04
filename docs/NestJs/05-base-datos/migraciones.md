@@ -68,6 +68,7 @@ Crear:
 
 - `appointments`
 - Enum `AppointmentStatus`
+- Enum `AppointmentMode`
 
 Índices:
 
@@ -267,9 +268,17 @@ Estas estructuras pertenecen al microservicio `.NET + DynamoDB`.
 ## Comandos esperados
 
 ```bash
-npx prisma migrate dev --name init_core_schema
-npx prisma migrate dev --name add_appointments
-npx prisma migrate deploy
+pnpm exec prisma migrate dev --name init_core_schema
+pnpm exec prisma migrate dev --name add_appointments
+pnpm exec prisma migrate deploy
 ```
+
+## Migraciones implementadas
+
+| Migracion                                              | Alcance                                                |
+| ------------------------------------------------------ | ------------------------------------------------------ |
+| `20260604130000_init_patients_core`                    | Tenants, usuarios demo y pacientes                     |
+| `20260604143000_add_appointments`                      | Citas, estados, modalidad e indices de agenda          |
+| `20260604153000_add_body_measurements_and_composition` | Medidas corporales, composición corporal e indicadores |
 
 Los nombres exactos de migración deben reflejar el cambio realizado.

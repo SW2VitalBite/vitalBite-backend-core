@@ -103,3 +103,10 @@ Validaciones:
 - Reprogramar y cancelar deben abrir modal.
 - El formulario debe permitir seleccionar paciente desde búsqueda.
 - La vista lista debe servir para escaneo rápido y filtros.
+
+## Backend disponible
+
+El Core NestJS ya expone el contrato GraphQL necesario para esta pantalla.
+La respuesta de `Appointment` incluye `patientFullName` y
+`nutritionistFullName` para componer calendario, tabla y modal sin consultas
+adicionales en el primer prototipo Angular.

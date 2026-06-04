@@ -104,6 +104,7 @@ Validaciones:
 - `deleteBodyMeasurement(id)`.
 - `createBodyComposition(input)`.
 - `updateBodyComposition(id, input)`.
+- `deleteBodyComposition(id)`.
 
 ## Criterios para wireframe
 
@@ -111,3 +112,9 @@ Validaciones:
 - Los gráficos deben estar encima del historial.
 - El formulario debe separar medición básica y composición corporal.
 - El historial debe permitir comparar fechas.
+
+## Backend disponible
+
+El Core NestJS ya expone el contrato GraphQL de medidas y composición
+corporal. La medición calcula `bmi` automáticamente cuando se registra talla,
+y la composición puede vincularse a una medición corporal del mismo paciente.
