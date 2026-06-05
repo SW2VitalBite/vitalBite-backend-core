@@ -48,6 +48,19 @@ query {
 }
 ```
 
+Usuario demo Super Admin:
+
+- Email: `super.admin@vitalbite.com`
+- Password: `demo1234`
+- Ruta inicial: `/super-admin/tenants`
+
+Usuario demo plan individual:
+
+- Email: `andrea.morales@vitalbite.com`
+- Password: `demo1234`
+- Tenant: `Consulta Individual Andrea`
+- Plan: `Nutricionista individual` (`$15/mes`)
+
 ## Scripts
 
 | Comando | Descripción |

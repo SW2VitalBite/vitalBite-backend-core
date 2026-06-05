@@ -29,8 +29,52 @@ async function main() {
   await prisma.tenant.deleteMany({
     where: {
       slug: {
-        not: 'clinica-central',
+        notIn: [
+          'clinica-central',
+          'consulta-individual-andrea',
+          'vitalbite-system',
+        ],
       },
+    },
+  });
+
+  const systemTenant = await prisma.tenant.upsert({
+    where: { slug: 'vitalbite-system' },
+    update: {
+      name: 'VitalBite Admin',
+      status: TenantStatus.ACTIVE,
+      deletedAt: null,
+    },
+    create: {
+      name: 'VitalBite Admin',
+      slug: 'vitalbite-system',
+      status: TenantStatus.ACTIVE,
+    },
+  });
+
+  await prisma.user.upsert({
+    where: {
+      tenantId_email: {
+        tenantId: systemTenant.id,
+        email: 'super.admin@vitalbite.com',
+      },
+    },
+    update: {
+      firstName: 'Super',
+      lastName: 'Admin',
+      passwordHash: hashSync('demo1234', 10),
+      status: UserStatus.ACTIVE,
+      roleCode: 'SUPER_ADMIN',
+      deletedAt: null,
+    },
+    create: {
+      tenantId: systemTenant.id,
+      email: 'super.admin@vitalbite.com',
+      passwordHash: hashSync('demo1234', 10),
+      firstName: 'Super',
+      lastName: 'Admin',
+      status: UserStatus.ACTIVE,
+      roleCode: 'SUPER_ADMIN',
     },
   });
 
@@ -97,6 +141,46 @@ async function main() {
       lastName: 'Mendoza',
       status: UserStatus.ACTIVE,
       roleCode: 'ADMINISTRADOR',
+    },
+  });
+
+  const individualTenant = await prisma.tenant.upsert({
+    where: { slug: 'consulta-individual-andrea' },
+    update: {
+      name: 'Consulta Individual Andrea',
+      status: TenantStatus.ACTIVE,
+      deletedAt: null,
+    },
+    create: {
+      name: 'Consulta Individual Andrea',
+      slug: 'consulta-individual-andrea',
+      status: TenantStatus.ACTIVE,
+    },
+  });
+
+  await prisma.user.upsert({
+    where: {
+      tenantId_email: {
+        tenantId: individualTenant.id,
+        email: 'andrea.morales@vitalbite.com',
+      },
+    },
+    update: {
+      firstName: 'Andrea',
+      lastName: 'Morales',
+      passwordHash: hashSync('demo1234', 10),
+      status: UserStatus.ACTIVE,
+      roleCode: 'NUTRICIONISTA',
+      deletedAt: null,
+    },
+    create: {
+      tenantId: individualTenant.id,
+      email: 'andrea.morales@vitalbite.com',
+      passwordHash: hashSync('demo1234', 10),
+      firstName: 'Andrea',
+      lastName: 'Morales',
+      status: UserStatus.ACTIVE,
+      roleCode: 'NUTRICIONISTA',
     },
   });
 

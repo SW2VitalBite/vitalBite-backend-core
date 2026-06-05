@@ -6,5 +6,6 @@ import { PaymentsResolver } from './payments.resolver';
 @Module({
   imports: [AuthModule],
   providers: [PaymentsIntegrationService, PaymentsResolver],
+  exports: [PaymentsIntegrationService],
 })
 export class PaymentsModule {}

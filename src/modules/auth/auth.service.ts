@@ -12,6 +12,8 @@ import { LoginInput } from './dto/login.input';
 import { RegisterInput } from './dto/register.input';
 import { AuthSessionModel } from './models/auth-session.model';
 
+const SYSTEM_TENANT_SLUG = 'vitalbite-system';
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -38,6 +40,10 @@ export class AuthService {
 
     if (!user || !(await compare(input.password, user.passwordHash))) {
       throw new UnauthorizedException('Invalid email or password.');
+    }
+
+    if (!this.canAccessTenant(user)) {
+      throw new UnauthorizedException('Tenant is not active.');
     }
 
     const accessToken = await this.jwtService.signAsync({
@@ -172,5 +178,17 @@ export class AuthService {
     }
 
     return slug;
+  }
+
+  private canAccessTenant(user: {
+    roleCode: string;
+    tenant: { slug: string; status: TenantStatus };
+  }) {
+    const roleCode = user.roleCode.trim().toUpperCase();
+    if (roleCode === 'SUPER_ADMIN' && user.tenant.slug === SYSTEM_TENANT_SLUG) {
+      return true;
+    }
+
+    return user.tenant.status === TenantStatus.ACTIVE;
   }
 }
