@@ -45,6 +45,11 @@ export { Prisma }
  */
 export type Tenant = Prisma.TenantModel
 /**
+ * Model AuditEvent
+ * 
+ */
+export type AuditEvent = Prisma.AuditEventModel
+/**
  * Model User
  * 
  */

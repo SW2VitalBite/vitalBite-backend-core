@@ -4,6 +4,7 @@ import {
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { AuditService } from '../audit/audit.service';
 import { AuthenticatedUser } from '../auth/auth.types';
 import { RequestPlanChangeInput } from './dto/request-plan-change.input';
 import { ResolvePlanChangeInput } from './dto/resolve-plan-change.input';
@@ -48,7 +49,10 @@ interface PaymentsPlanChangeRequestResponse {
 
 @Injectable()
 export class PaymentsIntegrationService {
-  constructor(private readonly configService: ConfigService) {}
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly auditService: AuditService,
+  ) {}
 
   async findPlans(currentUser: AuthenticatedUser) {
     this.ensureAdmin(currentUser);
@@ -151,7 +155,28 @@ export class PaymentsIntegrationService {
         }),
       },
     );
-    return this.toPlanChangeRequestModel(request);
+    const model = this.toPlanChangeRequestModel(request);
+
+    await this.auditService.recordEvent({
+      actor: currentUser,
+      tenantId: currentUser.tenantId,
+      tenantName: currentUser.tenant.name,
+      tenantSlug: currentUser.tenant.slug,
+      action: 'PLAN_CHANGE_REQUESTED',
+      resourceType: 'PLAN_CHANGE_REQUEST',
+      resourceId: model.requestId,
+      summary: `Cambio de plan solicitado de ${model.currentPlanCode} a ${model.requestedPlanCode}.`,
+      metadata: {
+        currentPlanCode: model.currentPlanCode,
+        requestedPlanCode: model.requestedPlanCode,
+        requestedPlanName: model.requestedPlanName,
+        status: model.status,
+        comment: model.comment,
+        requestedAt: model.requestedAt.toISOString(),
+      },
+    });
+
+    return model;
   }
 
   private ensureAdmin(currentUser: AuthenticatedUser) {

@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { Prisma, TenantStatus } from '../../prisma/generated-client';
 import { PrismaService } from '../../prisma/prisma.service';
+import { AuditService } from '../audit/audit.service';
 import { AuthenticatedUser } from '../auth/auth.types';
 import { ResolvePlanChangeInput } from '../payments/dto/resolve-plan-change.input';
 import { PlanChangeRequestModel } from '../payments/models/plan-change-request.model';
@@ -33,6 +34,7 @@ export class TenantsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly paymentsIntegration: PaymentsIntegrationService,
+    private readonly auditService: AuditService,
   ) {}
 
   async findGlobalTenants(
@@ -113,7 +115,7 @@ export class TenantsService {
       throw new ForbiddenException('System tenant status cannot be changed.');
     }
 
-    return this.prisma.tenant.update({
+    const updatedTenant = await this.prisma.tenant.update({
       where: {
         id: input.tenantId,
       },
@@ -121,6 +123,23 @@ export class TenantsService {
         status: input.status,
       },
     });
+
+    await this.auditService.recordEvent({
+      actor: currentUser,
+      tenantId: tenant.id,
+      tenantName: tenant.name,
+      tenantSlug: tenant.slug,
+      action: 'TENANT_STATUS_CHANGED',
+      resourceType: 'TENANT',
+      resourceId: tenant.id,
+      summary: `Tenant ${tenant.slug} cambio de estado ${tenant.status} a ${updatedTenant.status}.`,
+      metadata: {
+        previousStatus: tenant.status,
+        newStatus: updatedTenant.status,
+      },
+    });
+
+    return updatedTenant;
   }
 
   async resolveSuperAdminPlanChange(
@@ -134,7 +153,7 @@ export class TenantsService {
         ? 'approve'
         : 'reject';
 
-    return this.paymentsIntegration.resolvePlanChangeForTenant(
+    const request = await this.paymentsIntegration.resolvePlanChangeForTenant(
       currentUser,
       tenant.slug,
       {
@@ -143,6 +162,30 @@ export class TenantsService {
       } satisfies ResolvePlanChangeInput,
       action,
     );
+
+    await this.auditService.recordEvent({
+      actor: currentUser,
+      tenantId: tenant.id,
+      tenantName: tenant.name,
+      tenantSlug: tenant.slug,
+      action:
+        input.action === SuperAdminPlanChangeAction.APPROVE
+          ? 'PLAN_CHANGE_APPROVED'
+          : 'PLAN_CHANGE_REJECTED',
+      resourceType: 'PLAN_CHANGE_REQUEST',
+      resourceId: request.requestId,
+      summary: `Solicitud de cambio de plan ${request.requestId} ${action === 'approve' ? 'aprobada' : 'rechazada'}.`,
+      metadata: {
+        currentPlanCode: request.currentPlanCode,
+        requestedPlanCode: request.requestedPlanCode,
+        requestedPlanName: request.requestedPlanName,
+        status: request.status,
+        resolutionComment: request.resolutionComment,
+        resolvedAt: request.resolvedAt?.toISOString() ?? null,
+      },
+    });
+
+    return request;
   }
 
   private async findTenants(filters: {

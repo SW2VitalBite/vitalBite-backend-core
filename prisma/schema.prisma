@@ -64,6 +64,31 @@ model Tenant {
   @@map("tenants")
 }
 
+model AuditEvent {
+  id            String   @id @default(uuid())
+  tenantId      String?  @map("tenant_id")
+  tenantName    String?  @map("tenant_name")
+  tenantSlug    String?  @map("tenant_slug")
+  actorUserId   String?  @map("actor_user_id")
+  actorTenantId String?  @map("actor_tenant_id")
+  actorEmail    String?  @map("actor_email")
+  actorRoleCode String?  @map("actor_role_code")
+  action        String
+  resourceType  String   @map("resource_type")
+  resourceId    String?  @map("resource_id")
+  summary       String
+  metadata      Json?
+  previousHash  String?  @map("previous_hash")
+  eventHash     String   @map("event_hash")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  @@index([tenantId, createdAt])
+  @@index([action, createdAt])
+  @@index([resourceType, resourceId])
+  @@index([actorUserId, createdAt])
+  @@map("audit_events")
+}
+
 model User {
   id                         String            @id @default(uuid())
   tenantId                   String            @map("tenant_id")

@@ -60,6 +60,7 @@ Usuario demo plan individual:
 - Password: `demo1234`
 - Tenant: `Consulta Individual Andrea`
 - Plan: `Nutricionista individual` (`$15/mes`)
+- Regla: el plan individual permite solo 1 usuario activo total; no tiene administrador separado en la demo.
 
 ## Scripts
 

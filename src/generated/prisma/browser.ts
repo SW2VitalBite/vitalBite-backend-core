@@ -23,6 +23,11 @@ export * from './enums.js';
  */
 export type Tenant = Prisma.TenantModel
 /**
+ * Model AuditEvent
+ * 
+ */
+export type AuditEvent = Prisma.AuditEventModel
+/**
  * Model User
  * 
  */

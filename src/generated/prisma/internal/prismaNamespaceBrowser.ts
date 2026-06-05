@@ -52,6 +52,7 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   Tenant: 'Tenant',
+  AuditEvent: 'AuditEvent',
   User: 'User',
   Patient: 'Patient',
   Appointment: 'Appointment',
@@ -86,6 +87,28 @@ export const TenantScalarFieldEnum = {
 } as const
 
 export type TenantScalarFieldEnum = (typeof TenantScalarFieldEnum)[keyof typeof TenantScalarFieldEnum]
+
+
+export const AuditEventScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  tenantName: 'tenantName',
+  tenantSlug: 'tenantSlug',
+  actorUserId: 'actorUserId',
+  actorTenantId: 'actorTenantId',
+  actorEmail: 'actorEmail',
+  actorRoleCode: 'actorRoleCode',
+  action: 'action',
+  resourceType: 'resourceType',
+  resourceId: 'resourceId',
+  summary: 'summary',
+  metadata: 'metadata',
+  previousHash: 'previousHash',
+  eventHash: 'eventHash',
+  createdAt: 'createdAt'
+} as const
+
+export type AuditEventScalarFieldEnum = (typeof AuditEventScalarFieldEnum)[keyof typeof AuditEventScalarFieldEnum]
 
 
 export const UserScalarFieldEnum = {
@@ -193,6 +216,14 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
 export const QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -207,4 +238,13 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
