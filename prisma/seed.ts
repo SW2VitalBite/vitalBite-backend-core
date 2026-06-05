@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import { PrismaPg } from '@prisma/adapter-pg';
+import { hashSync } from 'bcryptjs';
 import {
   AppointmentMode,
   AppointmentStatus,
@@ -20,6 +21,19 @@ const adapter = new PrismaPg({ connectionString: databaseUrl });
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
+  await prisma.bodyComposition.deleteMany();
+  await prisma.bodyMeasurement.deleteMany();
+  await prisma.appointment.deleteMany();
+  await prisma.patient.deleteMany();
+  await prisma.user.deleteMany();
+  await prisma.tenant.deleteMany({
+    where: {
+      slug: {
+        not: 'clinica-central',
+      },
+    },
+  });
+
   const tenant = await prisma.tenant.upsert({
     where: { slug: 'clinica-central' },
     update: {
@@ -34,7 +48,7 @@ async function main() {
     },
   });
 
-  const elena = await prisma.user.upsert({
+  const nutritionist = await prisma.user.upsert({
     where: {
       tenantId_email: {
         tenantId: tenant.id,
@@ -44,6 +58,7 @@ async function main() {
     update: {
       firstName: 'Elena',
       lastName: 'Cruz',
+      passwordHash: hashSync('demo1234', 10),
       status: UserStatus.ACTIVE,
       roleCode: 'NUTRICIONISTA',
       deletedAt: null,
@@ -51,6 +66,7 @@ async function main() {
     create: {
       tenantId: tenant.id,
       email: 'elena.cruz@gmail.com',
+      passwordHash: hashSync('demo1234', 10),
       firstName: 'Elena',
       lastName: 'Cruz',
       status: UserStatus.ACTIVE,
@@ -58,463 +74,264 @@ async function main() {
     },
   });
 
-  const sofia = await prisma.user.upsert({
+  await prisma.user.upsert({
     where: {
       tenantId_email: {
         tenantId: tenant.id,
-        email: 'sofia.paredes@gmail.com',
+        email: 'admin.central@vitalbite.com',
       },
     },
     update: {
-      firstName: 'Sofia',
-      lastName: 'Paredes',
+      firstName: 'Valeria',
+      lastName: 'Mendoza',
+      passwordHash: hashSync('demo1234', 10),
       status: UserStatus.ACTIVE,
-      roleCode: 'NUTRICIONISTA',
+      roleCode: 'ADMINISTRADOR',
       deletedAt: null,
     },
     create: {
       tenantId: tenant.id,
-      email: 'sofia.paredes@gmail.com',
-      firstName: 'Sofia',
-      lastName: 'Paredes',
+      email: 'admin.central@vitalbite.com',
+      passwordHash: hashSync('demo1234', 10),
+      firstName: 'Valeria',
+      lastName: 'Mendoza',
       status: UserStatus.ACTIVE,
-      roleCode: 'NUTRICIONISTA',
+      roleCode: 'ADMINISTRADOR',
     },
   });
 
-  const patients = [
-    {
-      email: 'ana.rojas@gmail.com',
-      firstName: 'Ana',
-      lastName: 'Rojas',
-      phone: '70012345',
-      birthDate: new Date('1992-05-14T00:00:00.000Z'),
-      gender: Gender.FEMALE,
-      status: PatientStatus.ACTIVE,
-      nutritionGoal: 'Bajar grasa corporal',
-      clinicalNotes:
-        'Refiere baja adherencia durante la ultima semana. Revisar distribucion de comidas y registrar nueva medida de cintura.',
-      nutritionistId: elena.id,
-    },
-    {
-      email: 'luis.pinto@gmail.com',
-      firstName: 'Luis',
-      lastName: 'Pinto',
-      phone: '70023456',
-      birthDate: new Date('1988-11-22T00:00:00.000Z'),
-      gender: Gender.MALE,
-      status: PatientStatus.ACTIVE,
-      nutritionGoal: 'Ganar masa muscular',
-      clinicalNotes:
-        'Seguimiento orientado a fuerza, distribucion proteica y control de medidas.',
-      nutritionistId: elena.id,
-    },
-    {
-      email: 'marta.silva@gmail.com',
-      firstName: 'Marta',
-      lastName: 'Silva',
-      phone: '70034567',
-      birthDate: new Date('1979-03-31T00:00:00.000Z'),
-      gender: Gender.FEMALE,
-      status: PatientStatus.ACTIVE,
-      nutritionGoal: 'Control glucosa',
-      clinicalNotes:
-        'Paciente con antecedentes de resistencia a la insulina y objetivo de control de peso.',
-      nutritionistId: sofia.id,
-    },
-    {
-      email: 'carlos.meza@gmail.com',
-      firstName: 'Carlos',
-      lastName: 'Meza',
-      phone: '70045678',
-      birthDate: new Date('1995-08-09T00:00:00.000Z'),
-      gender: Gender.MALE,
-      status: PatientStatus.INACTIVE,
-      nutritionGoal: 'Mantener peso',
-      clinicalNotes: 'Plan de mantenimiento con controles mensuales.',
-      nutritionistId: elena.id,
-    },
-    {
-      email: 'sofia.arias@gmail.com',
-      firstName: 'Sofia',
-      lastName: 'Arias',
-      phone: '70056789',
-      birthDate: new Date('1990-01-18T00:00:00.000Z'),
-      gender: Gender.FEMALE,
-      status: PatientStatus.INACTIVE,
-      nutritionGoal: 'Reducir cintura',
-      clinicalNotes:
-        'Seguimiento pendiente para revisar adherencia y ajuste de plan.',
-      nutritionistId: sofia.id,
-    },
-  ];
-
-  const savedPatients = new Map<string, { id: string }>();
-
-  for (const patient of patients) {
-    const savedPatient = await prisma.patient.upsert({
-      where: {
-        tenantId_email: {
+  const patients = await Promise.all(
+    [
+      {
+        firstName: 'Ana',
+        lastName: 'Rojas',
+        email: 'ana.rojas@email.com',
+        phone: '70012345',
+        birthDate: new Date('1992-05-14T00:00:00.000Z'),
+        gender: Gender.FEMALE,
+        status: PatientStatus.INACTIVE,
+        nutritionGoal: 'Bajar grasa corporal',
+        clinicalNotes:
+          'Refiere baja adherencia durante la ultima semana. Revisar distribucion de comidas y registrar nueva medida de cintura en la cita de hoy.',
+        createdAt: new Date('2026-06-04T09:00:00.000Z'),
+      },
+      {
+        firstName: 'Luis',
+        lastName: 'Pinto',
+        email: 'luis.pinto@email.com',
+        phone: '70123456',
+        birthDate: new Date('1988-09-22T00:00:00.000Z'),
+        gender: Gender.MALE,
+        status: PatientStatus.ACTIVE,
+        nutritionGoal: 'Ganar masa muscular',
+        clinicalNotes:
+          'Plan activo con buena tolerancia. Priorizar seguimiento de proteinas y entrenamiento de fuerza.',
+        createdAt: new Date('2026-06-03T09:00:00.000Z'),
+      },
+      {
+        firstName: 'Marta',
+        lastName: 'Silva',
+        email: 'marta.silva@email.com',
+        phone: '70234567',
+        birthDate: new Date('1979-03-08T00:00:00.000Z'),
+        gender: Gender.FEMALE,
+        status: PatientStatus.INACTIVE,
+        nutritionGoal: 'Control glucosa',
+        clinicalNotes:
+          'Paciente requiere seguimiento cercano de horarios y carga glucemica en comidas principales.',
+        createdAt: new Date('2026-05-31T09:00:00.000Z'),
+      },
+      {
+        firstName: 'Carlos',
+        lastName: 'Meza',
+        email: 'carlos.meza@email.com',
+        phone: '70345678',
+        birthDate: new Date('1985-11-17T00:00:00.000Z'),
+        gender: Gender.MALE,
+        status: PatientStatus.ACTIVE,
+        nutritionGoal: 'Mantener peso',
+        clinicalNotes:
+          'Evolucion estable. Mantener controles mensuales y registrar composicion corporal.',
+        createdAt: new Date('2026-05-29T09:00:00.000Z'),
+      },
+      {
+        firstName: 'Sofia',
+        lastName: 'Arias',
+        email: 'sofia.arias@email.com',
+        phone: '70456789',
+        birthDate: new Date('1997-07-30T00:00:00.000Z'),
+        gender: Gender.FEMALE,
+        status: PatientStatus.INACTIVE,
+        nutritionGoal: 'Reducir cintura',
+        clinicalNotes:
+          'Seguimiento pendiente. Validar medidas y ajustar plan si es necesario.',
+        createdAt: new Date('2026-05-28T09:00:00.000Z'),
+      },
+    ].map((patient) =>
+      prisma.patient.create({
+        data: {
+          ...patient,
           tenantId: tenant.id,
-          email: patient.email,
+          nutritionistId: nutritionist.id,
         },
-      },
-      update: {
-        ...patient,
-        deletedAt: null,
-      },
-      create: {
-        tenantId: tenant.id,
-        ...patient,
-      },
-    });
+      }),
+    ),
+  );
 
-    savedPatients.set(patient.email, savedPatient);
-  }
+  await Promise.all(
+    [
+      {
+        firstName: 'Paola',
+        lastName: 'Vaca',
+        email: 'paola.vaca@email.com',
+      },
+      {
+        firstName: 'Miguel',
+        lastName: 'Rios',
+        email: 'miguel.rios@email.com',
+      },
+    ].map((patient) =>
+      prisma.patient.create({
+        data: {
+          ...patient,
+          tenantId: tenant.id,
+          nutritionistId: nutritionist.id,
+          phone: null,
+          gender: Gender.NOT_SPECIFIED,
+          status: PatientStatus.ARCHIVED,
+          nutritionGoal: 'Seguimiento cerrado',
+          clinicalNotes: 'Paciente archivado para demostracion de filtros.',
+          createdAt: new Date('2026-05-20T09:00:00.000Z'),
+          deletedAt: new Date('2026-05-20T12:00:00.000Z'),
+        },
+      }),
+    ),
+  );
 
-  const appointments = [
+  const appointmentSeeds = [
     {
-      patientEmail: 'luis.pinto@gmail.com',
-      nutritionistId: elena.id,
-      scheduledAt: new Date('2026-06-08T09:00:00.000Z'),
+      patient: patients[0],
+      scheduledAt: new Date('2026-06-04T14:30:00.000Z'),
       durationMinutes: 45,
       status: AppointmentStatus.CONFIRMED,
-      mode: AppointmentMode.IN_PERSON,
       reason: 'Control de medidas y adherencia',
-      notes: 'Revisar progreso de fuerza y distribucion proteica.',
+      notes: 'Actualizar peso y cintura. Revisar registro de comidas.',
     },
     {
-      patientEmail: 'ana.rojas@gmail.com',
-      nutritionistId: elena.id,
-      scheduledAt: new Date('2026-06-09T10:30:00.000Z'),
-      durationMinutes: 45,
-      status: AppointmentStatus.CONFIRMED,
-      mode: AppointmentMode.IN_PERSON,
-      reason: 'Seguimiento nutricional',
-      notes: 'Revisar registro de comidas de la ultima semana.',
-    },
-    {
-      patientEmail: 'marta.silva@gmail.com',
-      nutritionistId: sofia.id,
-      scheduledAt: new Date('2026-06-10T11:00:00.000Z'),
-      durationMinutes: 60,
-      status: AppointmentStatus.RESCHEDULED,
-      mode: AppointmentMode.VIRTUAL,
-      reason: 'Control glucosa',
-      notes: 'Cita reprogramada para revisar adherencia y sintomas.',
-    },
-    {
-      patientEmail: 'carlos.meza@gmail.com',
-      nutritionistId: elena.id,
-      scheduledAt: new Date('2026-06-11T08:30:00.000Z'),
+      patient: patients[1],
+      scheduledAt: new Date('2026-06-03T15:00:00.000Z'),
       durationMinutes: 45,
       status: AppointmentStatus.COMPLETED,
-      mode: AppointmentMode.IN_PERSON,
-      reason: 'Consulta de mantenimiento',
-      notes: 'Control mensual completado.',
+      reason: 'Seguimiento de masa muscular',
+      notes: 'Revisar progreso de plan activo.',
     },
     {
-      patientEmail: 'sofia.arias@gmail.com',
-      nutritionistId: sofia.id,
-      scheduledAt: new Date('2026-06-08T15:30:00.000Z'),
+      patient: patients[2],
+      scheduledAt: new Date('2026-05-31T13:30:00.000Z'),
       durationMinutes: 45,
-      status: AppointmentStatus.SCHEDULED,
-      mode: AppointmentMode.IN_PERSON,
-      reason: 'Evaluacion de adherencia',
-      notes: 'Pendiente revisar ajuste de plan.',
+      status: AppointmentStatus.COMPLETED,
+      reason: 'Control glucosa',
+      notes: 'Evaluar adherencia y sintomas reportados.',
     },
     {
-      patientEmail: 'ana.rojas@gmail.com',
-      nutritionistId: elena.id,
-      scheduledAt: new Date('2026-06-11T16:00:00.000Z'),
+      patient: patients[3],
+      scheduledAt: new Date('2026-05-29T16:00:00.000Z'),
+      durationMinutes: 30,
+      status: AppointmentStatus.COMPLETED,
+      reason: 'Mantenimiento de peso',
+      notes: 'Control mensual sin alertas.',
+    },
+    {
+      patient: patients[4],
+      scheduledAt: new Date('2026-05-28T12:00:00.000Z'),
       durationMinutes: 45,
       status: AppointmentStatus.SCHEDULED,
-      mode: AppointmentMode.VIRTUAL,
-      reason: 'Ajuste de plan alimenticio',
-      notes: 'Preparar recomendaciones para la siguiente semana.',
+      reason: 'Revision de cintura',
+      notes: 'Registrar medida y seguimiento pendiente.',
     },
   ];
 
-  for (const appointment of appointments) {
-    const patient = savedPatients.get(appointment.patientEmail);
-
-    if (!patient) {
-      throw new Error(
-        `Seed patient ${appointment.patientEmail} was not found.`,
-      );
-    }
-
-    await prisma.appointment.upsert({
-      where: {
-        tenantId_patientId_scheduledAt: {
+  await Promise.all(
+    appointmentSeeds.map((appointment) =>
+      prisma.appointment.create({
+        data: {
           tenantId: tenant.id,
-          patientId: patient.id,
+          patientId: appointment.patient.id,
+          nutritionistId: nutritionist.id,
           scheduledAt: appointment.scheduledAt,
+          durationMinutes: appointment.durationMinutes,
+          status: appointment.status,
+          mode: AppointmentMode.IN_PERSON,
+          reason: appointment.reason,
+          notes: appointment.notes,
         },
-      },
-      update: {
-        nutritionistId: appointment.nutritionistId,
-        durationMinutes: appointment.durationMinutes,
-        status: appointment.status,
-        mode: appointment.mode,
-        reason: appointment.reason,
-        notes: appointment.notes,
-        cancelReason: null,
-        deletedAt: null,
-      },
-      create: {
-        tenantId: tenant.id,
-        patientId: patient.id,
-        nutritionistId: appointment.nutritionistId,
-        scheduledAt: appointment.scheduledAt,
-        durationMinutes: appointment.durationMinutes,
-        status: appointment.status,
-        mode: appointment.mode,
-        reason: appointment.reason,
-        notes: appointment.notes,
-      },
-    });
-  }
+      }),
+    ),
+  );
 
-  const bodyMeasurements = [
-    {
-      patientEmail: 'ana.rojas@gmail.com',
-      registeredById: elena.id,
-      measuredAt: new Date('2026-05-01T09:00:00.000Z'),
-      weightKg: 72.4,
-      heightCm: 165,
-      waistCm: 86,
-      hipCm: 101,
-      composition: {
-        bodyFatPercentage: 34.2,
-        muscleMassKg: 43.1,
-        waterPercentage: 48.5,
-        visceralFatLevel: 8,
-        boneMassKg: 2.6,
-        metabolicAge: 36,
+  await Promise.all(
+    [
+      {
+        patient: patients[0],
+        measuredAt: new Date('2026-05-31T10:00:00.000Z'),
+        weightKg: 68.4,
+        heightCm: 164,
+        waistCm: 86,
+        hipCm: 100,
       },
-    },
-    {
-      patientEmail: 'ana.rojas@gmail.com',
-      registeredById: elena.id,
-      measuredAt: new Date('2026-06-01T09:00:00.000Z'),
-      weightKg: 70.8,
-      heightCm: 165,
-      waistCm: 83,
-      hipCm: 99,
-      composition: {
-        bodyFatPercentage: 32.8,
-        muscleMassKg: 43.7,
-        waterPercentage: 49.4,
-        visceralFatLevel: 7,
-        boneMassKg: 2.6,
-        metabolicAge: 35,
+      {
+        patient: patients[1],
+        measuredAt: new Date('2026-06-02T11:00:00.000Z'),
+        weightKg: 74.2,
+        heightCm: 178,
+        waistCm: 82,
+        hipCm: 96,
       },
-    },
-    {
-      patientEmail: 'luis.pinto@gmail.com',
-      registeredById: elena.id,
-      measuredAt: new Date('2026-05-03T10:00:00.000Z'),
-      weightKg: 78.1,
-      heightCm: 176,
-      waistCm: 84,
-      hipCm: 96,
-      composition: {
-        bodyFatPercentage: 20.8,
-        muscleMassKg: 59.6,
-        waterPercentage: 56.2,
-        visceralFatLevel: 5,
-        boneMassKg: 3.1,
-        metabolicAge: 31,
+      {
+        patient: patients[2],
+        measuredAt: new Date('2026-05-30T09:30:00.000Z'),
+        weightKg: 71.5,
+        heightCm: 160,
+        waistCm: 91,
+        hipCm: 103,
       },
-    },
-    {
-      patientEmail: 'luis.pinto@gmail.com',
-      registeredById: elena.id,
-      measuredAt: new Date('2026-06-03T10:00:00.000Z'),
-      weightKg: 79.4,
-      heightCm: 176,
-      waistCm: 83,
-      hipCm: 96,
-      composition: {
-        bodyFatPercentage: 19.7,
-        muscleMassKg: 60.9,
-        waterPercentage: 57.1,
-        visceralFatLevel: 5,
-        boneMassKg: 3.1,
-        metabolicAge: 30,
+      {
+        patient: patients[3],
+        measuredAt: new Date('2026-05-28T14:00:00.000Z'),
+        weightKg: 79.1,
+        heightCm: 174,
+        waistCm: 88,
+        hipCm: 99,
       },
-    },
-    {
-      patientEmail: 'marta.silva@gmail.com',
-      registeredById: sofia.id,
-      measuredAt: new Date('2026-05-05T11:00:00.000Z'),
-      weightKg: 81.2,
-      heightCm: 160,
-      waistCm: 96,
-      hipCm: 108,
-      composition: {
-        bodyFatPercentage: 39.4,
-        muscleMassKg: 42.3,
-        waterPercentage: 45.9,
-        visceralFatLevel: 10,
-        boneMassKg: 2.5,
-        metabolicAge: 48,
+      {
+        patient: patients[4],
+        measuredAt: new Date('2026-05-27T08:45:00.000Z'),
+        weightKg: 63.8,
+        heightCm: 158,
+        waistCm: 80,
+        hipCm: 95,
       },
-    },
-    {
-      patientEmail: 'marta.silva@gmail.com',
-      registeredById: sofia.id,
-      measuredAt: new Date('2026-06-05T11:00:00.000Z'),
-      weightKg: 79.6,
-      heightCm: 160,
-      waistCm: 93,
-      hipCm: 106,
-      composition: {
-        bodyFatPercentage: 38.1,
-        muscleMassKg: 42.8,
-        waterPercentage: 46.8,
-        visceralFatLevel: 9,
-        boneMassKg: 2.5,
-        metabolicAge: 47,
-      },
-    },
-    {
-      patientEmail: 'carlos.meza@gmail.com',
-      registeredById: elena.id,
-      measuredAt: new Date('2026-05-07T08:30:00.000Z'),
-      weightKg: 70.1,
-      heightCm: 171,
-      waistCm: 80,
-      hipCm: 94,
-      composition: {
-        bodyFatPercentage: 22.4,
-        muscleMassKg: 51.8,
-        waterPercentage: 54.6,
-        visceralFatLevel: 6,
-        boneMassKg: 2.9,
-        metabolicAge: 32,
-      },
-    },
-    {
-      patientEmail: 'carlos.meza@gmail.com',
-      registeredById: elena.id,
-      measuredAt: new Date('2026-06-07T08:30:00.000Z'),
-      weightKg: 70.3,
-      heightCm: 171,
-      waistCm: 80,
-      hipCm: 94,
-      composition: {
-        bodyFatPercentage: 22.1,
-        muscleMassKg: 52,
-        waterPercentage: 54.8,
-        visceralFatLevel: 6,
-        boneMassKg: 2.9,
-        metabolicAge: 32,
-      },
-    },
-    {
-      patientEmail: 'sofia.arias@gmail.com',
-      registeredById: sofia.id,
-      measuredAt: new Date('2026-05-09T15:30:00.000Z'),
-      weightKg: 68.6,
-      heightCm: 162,
-      waistCm: 88,
-      hipCm: 103,
-      composition: {
-        bodyFatPercentage: 35.6,
-        muscleMassKg: 40.8,
-        waterPercentage: 47.5,
-        visceralFatLevel: 8,
-        boneMassKg: 2.4,
-        metabolicAge: 39,
-      },
-    },
-    {
-      patientEmail: 'sofia.arias@gmail.com',
-      registeredById: sofia.id,
-      measuredAt: new Date('2026-06-09T15:30:00.000Z'),
-      weightKg: 67.9,
-      heightCm: 162,
-      waistCm: 86,
-      hipCm: 102,
-      composition: {
-        bodyFatPercentage: 34.9,
-        muscleMassKg: 41.1,
-        waterPercentage: 48.1,
-        visceralFatLevel: 8,
-        boneMassKg: 2.4,
-        metabolicAge: 38,
-      },
-    },
-  ];
-
-  for (const measurement of bodyMeasurements) {
-    const patient = savedPatients.get(measurement.patientEmail);
-
-    if (!patient) {
-      throw new Error(
-        `Seed patient ${measurement.patientEmail} was not found.`,
+    ].map((measurement) => {
+      const heightMeters = measurement.heightCm / 100;
+      const bmi = Number(
+        (measurement.weightKg / (heightMeters * heightMeters)).toFixed(2),
       );
-    }
 
-    const heightMeters = measurement.heightCm / 100;
-    const bmi = Number(
-      (measurement.weightKg / (heightMeters * heightMeters)).toFixed(2),
-    );
-
-    const savedMeasurement = await prisma.bodyMeasurement.upsert({
-      where: {
-        tenantId_patientId_measuredAt: {
+      return prisma.bodyMeasurement.create({
+        data: {
           tenantId: tenant.id,
-          patientId: patient.id,
+          patientId: measurement.patient.id,
+          registeredById: nutritionist.id,
           measuredAt: measurement.measuredAt,
+          weightKg: measurement.weightKg,
+          heightCm: measurement.heightCm,
+          bmi,
+          waistCm: measurement.waistCm,
+          hipCm: measurement.hipCm,
         },
-      },
-      update: {
-        registeredById: measurement.registeredById,
-        weightKg: measurement.weightKg,
-        heightCm: measurement.heightCm,
-        bmi,
-        waistCm: measurement.waistCm,
-        hipCm: measurement.hipCm,
-        deletedAt: null,
-      },
-      create: {
-        tenantId: tenant.id,
-        patientId: patient.id,
-        registeredById: measurement.registeredById,
-        measuredAt: measurement.measuredAt,
-        weightKg: measurement.weightKg,
-        heightCm: measurement.heightCm,
-        bmi,
-        waistCm: measurement.waistCm,
-        hipCm: measurement.hipCm,
-      },
-    });
-
-    await prisma.bodyComposition.upsert({
-      where: {
-        tenantId_patientId_measuredAt: {
-          tenantId: tenant.id,
-          patientId: patient.id,
-          measuredAt: measurement.measuredAt,
-        },
-      },
-      update: {
-        bodyMeasurementId: savedMeasurement.id,
-        ...measurement.composition,
-        deletedAt: null,
-      },
-      create: {
-        tenantId: tenant.id,
-        patientId: patient.id,
-        bodyMeasurementId: savedMeasurement.id,
-        measuredAt: measurement.measuredAt,
-        ...measurement.composition,
-      },
-    });
-  }
+      });
+    }),
+  );
 }
 
 main()

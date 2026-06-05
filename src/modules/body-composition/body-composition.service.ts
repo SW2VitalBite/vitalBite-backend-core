@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { DemoCurrentUser } from '../demo-context/demo-context.service';
+import { AuthenticatedUser } from '../auth/auth.types';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateBodyCompositionInput } from './dto/create-body-composition.input';
 import { UpdateBodyCompositionInput } from './dto/update-body-composition.input';
@@ -8,7 +8,7 @@ import { UpdateBodyCompositionInput } from './dto/update-body-composition.input'
 export class BodyCompositionService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findByPatient(currentUser: DemoCurrentUser, patientId: string) {
+  async findByPatient(currentUser: AuthenticatedUser, patientId: string) {
     await this.ensurePatientBelongsToTenant(currentUser.tenantId, patientId);
 
     return this.prisma.bodyComposition.findMany({
@@ -23,7 +23,7 @@ export class BodyCompositionService {
     });
   }
 
-  async findLatestByPatient(currentUser: DemoCurrentUser, patientId: string) {
+  async findLatestByPatient(currentUser: AuthenticatedUser, patientId: string) {
     await this.ensurePatientBelongsToTenant(currentUser.tenantId, patientId);
 
     const bodyComposition = await this.prisma.bodyComposition.findFirst({
@@ -47,7 +47,7 @@ export class BodyCompositionService {
   }
 
   async create(
-    currentUser: DemoCurrentUser,
+    currentUser: AuthenticatedUser,
     input: CreateBodyCompositionInput,
   ) {
     await this.ensurePatientBelongsToTenant(
@@ -80,7 +80,7 @@ export class BodyCompositionService {
   }
 
   async update(
-    currentUser: DemoCurrentUser,
+    currentUser: AuthenticatedUser,
     id: string,
     input: UpdateBodyCompositionInput,
   ) {
@@ -112,7 +112,7 @@ export class BodyCompositionService {
     });
   }
 
-  async delete(currentUser: DemoCurrentUser, id: string) {
+  async delete(currentUser: AuthenticatedUser, id: string) {
     await this.findRecordById(currentUser, id);
 
     return this.prisma.bodyComposition.update({
@@ -125,7 +125,7 @@ export class BodyCompositionService {
     });
   }
 
-  private async findRecordById(currentUser: DemoCurrentUser, id: string) {
+  private async findRecordById(currentUser: AuthenticatedUser, id: string) {
     const bodyComposition = await this.prisma.bodyComposition.findFirst({
       where: {
         id,

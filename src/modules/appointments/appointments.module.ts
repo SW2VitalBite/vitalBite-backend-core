@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
-import { DemoContextModule } from '../demo-context/demo-context.module';
+import { AuthModule } from '../auth/auth.module';
 import { PrismaModule } from '../../prisma/prisma.module';
 import { AppointmentsResolver } from './appointments.resolver';
 import { AppointmentsService } from './appointments.service';
 
 @Module({
-  imports: [PrismaModule, DemoContextModule],
+  imports: [PrismaModule, AuthModule],
   providers: [AppointmentsResolver, AppointmentsService],
   exports: [AppointmentsService],
 })
