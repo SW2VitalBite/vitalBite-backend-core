@@ -31,6 +31,7 @@ El paciente no usa la Web.
 - `advanced-anthropometry:read`
 - `advanced-anthropometry:write`
 - `dashboard:read`
+- `payments:read`
 - `documents:request`
 
 ## Reglas
@@ -39,3 +40,4 @@ El paciente no usa la Web.
 - El backend conserva la validación final.
 - Nutricionista trabaja sobre pacientes asignados.
 - Administrador trabaja sobre el tenant según permisos.
+- Pagos y suscripciones usa `payments:read` y queda reservado al administrador.

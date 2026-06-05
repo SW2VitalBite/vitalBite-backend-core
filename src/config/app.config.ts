@@ -4,5 +4,7 @@ export default () => ({
   graphqlPlayground: process.env.GRAPHQL_PLAYGROUND === 'true',
   graphqlLogResponses: process.env.GRAPHQL_LOG_RESPONSES !== 'false',
   databaseUrl: process.env.DATABASE_URL,
-  demoUserEmail: process.env.DEMO_USER_EMAIL ?? 'elena.cruz@gmail.com',
+  jwtSecret: process.env.JWT_SECRET,
+  jwtExpiresIn: process.env.JWT_EXPIRES_IN ?? '8h',
+  paymentsServiceUrl: process.env.PAYMENTS_SERVICE_URL,
 });

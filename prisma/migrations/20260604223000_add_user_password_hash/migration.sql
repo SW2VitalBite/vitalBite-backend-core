@@ -1,0 +1,3 @@
+ALTER TABLE "users" ADD COLUMN "password_hash" TEXT NOT NULL DEFAULT '$2b$10$ci6CCurQwmmF2sXMn8MBje2DQNOS2mZKC/cgoDf5VCf.u/lAZabMq';
+
+ALTER TABLE "users" ALTER COLUMN "password_hash" DROP DEFAULT;

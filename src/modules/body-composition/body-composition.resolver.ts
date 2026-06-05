@@ -1,5 +1,5 @@
 import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { DemoContextService } from '../demo-context/demo-context.service';
+import { AuthContextService } from '../auth/auth-context.service';
 import { BodyCompositionService } from './body-composition.service';
 import { CreateBodyCompositionInput } from './dto/create-body-composition.input';
 import { UpdateBodyCompositionInput } from './dto/update-body-composition.input';
@@ -8,7 +8,7 @@ import { BodyCompositionModel } from './models/body-composition.model';
 @Resolver(() => BodyCompositionModel)
 export class BodyCompositionResolver {
   constructor(
-    private readonly demoContext: DemoContextService,
+    private readonly authContext: AuthContextService,
     private readonly bodyCompositionService: BodyCompositionService,
   ) {}
 
@@ -16,7 +16,7 @@ export class BodyCompositionResolver {
   async bodyCompositionByPatient(
     @Args('patientId', { type: () => ID }) patientId: string,
   ) {
-    const currentUser = await this.demoContext.getCurrentUser();
+    const currentUser = await this.authContext.getCurrentUser();
     return this.bodyCompositionService.findByPatient(currentUser, patientId);
   }
 
@@ -24,7 +24,7 @@ export class BodyCompositionResolver {
   async latestBodyComposition(
     @Args('patientId', { type: () => ID }) patientId: string,
   ) {
-    const currentUser = await this.demoContext.getCurrentUser();
+    const currentUser = await this.authContext.getCurrentUser();
     return this.bodyCompositionService.findLatestByPatient(
       currentUser,
       patientId,
@@ -35,7 +35,7 @@ export class BodyCompositionResolver {
   async createBodyComposition(
     @Args('input') input: CreateBodyCompositionInput,
   ) {
-    const currentUser = await this.demoContext.getCurrentUser();
+    const currentUser = await this.authContext.getCurrentUser();
     return this.bodyCompositionService.create(currentUser, input);
   }
 
@@ -44,13 +44,13 @@ export class BodyCompositionResolver {
     @Args('id', { type: () => ID }) id: string,
     @Args('input') input: UpdateBodyCompositionInput,
   ) {
-    const currentUser = await this.demoContext.getCurrentUser();
+    const currentUser = await this.authContext.getCurrentUser();
     return this.bodyCompositionService.update(currentUser, id, input);
   }
 
   @Mutation(() => BodyCompositionModel)
   async deleteBodyComposition(@Args('id', { type: () => ID }) id: string) {
-    const currentUser = await this.demoContext.getCurrentUser();
+    const currentUser = await this.authContext.getCurrentUser();
     return this.bodyCompositionService.delete(currentUser, id);
   }
 }

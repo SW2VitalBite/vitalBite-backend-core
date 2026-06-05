@@ -7,7 +7,7 @@ import {
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
-import { DemoContextService } from '../demo-context/demo-context.service';
+import { AuthContextService } from '../auth/auth-context.service';
 import { CreatePatientInput } from './dto/create-patient.input';
 import { PatientFilterInput } from './dto/patient-filter.input';
 import { UpdatePatientInput } from './dto/update-patient.input';
@@ -17,7 +17,7 @@ import { PatientsService } from './patients.service';
 @Resolver(() => PatientModel)
 export class PatientsResolver {
   constructor(
-    private readonly demoContext: DemoContextService,
+    private readonly authContext: AuthContextService,
     private readonly patientsService: PatientsService,
   ) {}
 
@@ -25,13 +25,13 @@ export class PatientsResolver {
   async patients(
     @Args('filter', { nullable: true }) filter?: PatientFilterInput,
   ) {
-    const currentUser = await this.demoContext.getCurrentUser();
+    const currentUser = await this.authContext.getCurrentUser();
     return this.patientsService.findMany(currentUser, filter);
   }
 
   @Query(() => PatientModel)
   async patientById(@Args('id', { type: () => ID }) id: string) {
-    const currentUser = await this.demoContext.getCurrentUser();
+    const currentUser = await this.authContext.getCurrentUser();
     return this.patientsService.findById(currentUser, id);
   }
 
@@ -39,13 +39,13 @@ export class PatientsResolver {
   async patientsByNutritionist(
     @Args('nutritionistId', { type: () => ID }) nutritionistId: string,
   ) {
-    const currentUser = await this.demoContext.getCurrentUser();
+    const currentUser = await this.authContext.getCurrentUser();
     return this.patientsService.findByNutritionist(currentUser, nutritionistId);
   }
 
   @Mutation(() => PatientModel)
   async createPatient(@Args('input') input: CreatePatientInput) {
-    const currentUser = await this.demoContext.getCurrentUser();
+    const currentUser = await this.authContext.getCurrentUser();
     return this.patientsService.create(currentUser, input);
   }
 
@@ -54,13 +54,13 @@ export class PatientsResolver {
     @Args('id', { type: () => ID }) id: string,
     @Args('input') input: UpdatePatientInput,
   ) {
-    const currentUser = await this.demoContext.getCurrentUser();
+    const currentUser = await this.authContext.getCurrentUser();
     return this.patientsService.update(currentUser, id, input);
   }
 
   @Mutation(() => PatientModel)
   async archivePatient(@Args('id', { type: () => ID }) id: string) {
-    const currentUser = await this.demoContext.getCurrentUser();
+    const currentUser = await this.authContext.getCurrentUser();
     return this.patientsService.archive(currentUser, id);
   }
 
@@ -69,7 +69,7 @@ export class PatientsResolver {
     @Args('patientId', { type: () => ID }) patientId: string,
     @Args('nutritionistId', { type: () => ID }) nutritionistId: string,
   ) {
-    const currentUser = await this.demoContext.getCurrentUser();
+    const currentUser = await this.authContext.getCurrentUser();
     return this.patientsService.assignToNutritionist(
       currentUser,
       patientId,

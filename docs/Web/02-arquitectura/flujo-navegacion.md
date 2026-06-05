@@ -11,7 +11,9 @@
 
 ## Rutas documentadas
 
+- `/`
 - `/login`
+- `/register`
 - `/dashboard`
 - `/patients`
 - `/patients/:id`
@@ -28,7 +30,9 @@
 
 ## Reglas de navegación
 
-- Usuario no autenticado solo accede a `/login`.
+- Usuario no autenticado accede a landing, login y registro.
+- La landing publica muestra beneficios funcionales y planes mensuales disponibles.
+- Usuario autenticado que entra a `/login` o `/register` se redirige a `/dashboard`.
 - Administrador accede a módulos administrativos y BI.
 - Nutricionista accede a operación clínica y nutricional.
 - Paciente no accede a la Web.

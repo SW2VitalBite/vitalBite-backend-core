@@ -4,7 +4,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { DemoCurrentUser } from '../demo-context/demo-context.service';
+import { AuthenticatedUser } from '../auth/auth.types';
 import {
   AppointmentMode,
   AppointmentStatus,
@@ -36,7 +36,7 @@ export class AppointmentsService {
   constructor(private readonly prisma: PrismaService) {}
 
   async findMany(
-    currentUser: DemoCurrentUser,
+    currentUser: AuthenticatedUser,
     filter?: AppointmentFilterInput,
   ) {
     const appointments = await this.prisma.appointment.findMany({
@@ -50,12 +50,12 @@ export class AppointmentsService {
     return appointments.map((appointment) => this.mapAppointment(appointment));
   }
 
-  async findById(currentUser: DemoCurrentUser, id: string) {
+  async findById(currentUser: AuthenticatedUser, id: string) {
     const appointment = await this.findRecordById(currentUser, id);
     return this.mapAppointment(appointment);
   }
 
-  async findByPatient(currentUser: DemoCurrentUser, patientId: string) {
+  async findByPatient(currentUser: AuthenticatedUser, patientId: string) {
     await this.ensurePatientBelongsToTenant(currentUser.tenantId, patientId);
 
     return this.findMany(currentUser, {
@@ -64,13 +64,13 @@ export class AppointmentsService {
   }
 
   async findCalendar(
-    currentUser: DemoCurrentUser,
+    currentUser: AuthenticatedUser,
     filter?: AppointmentFilterInput,
   ) {
     return this.findMany(currentUser, filter);
   }
 
-  async create(currentUser: DemoCurrentUser, input: CreateAppointmentInput) {
+  async create(currentUser: AuthenticatedUser, input: CreateAppointmentInput) {
     this.ensureValidSchedule(input.scheduledAt, input.durationMinutes);
     await this.ensurePatientBelongsToTenant(
       currentUser.tenantId,
@@ -110,7 +110,7 @@ export class AppointmentsService {
     return this.mapAppointment(appointment);
   }
 
-  async confirm(currentUser: DemoCurrentUser, id: string) {
+  async confirm(currentUser: AuthenticatedUser, id: string) {
     await this.findRecordById(currentUser, id);
 
     const appointment = await this.prisma.appointment.update({
@@ -126,7 +126,7 @@ export class AppointmentsService {
   }
 
   async reschedule(
-    currentUser: DemoCurrentUser,
+    currentUser: AuthenticatedUser,
     id: string,
     input: RescheduleAppointmentInput,
   ) {
@@ -158,7 +158,7 @@ export class AppointmentsService {
   }
 
   async cancel(
-    currentUser: DemoCurrentUser,
+    currentUser: AuthenticatedUser,
     id: string,
     input: CancelAppointmentInput,
   ) {
@@ -178,7 +178,7 @@ export class AppointmentsService {
   }
 
   async complete(
-    currentUser: DemoCurrentUser,
+    currentUser: AuthenticatedUser,
     id: string,
     input?: CompleteAppointmentInput,
   ) {
@@ -197,7 +197,7 @@ export class AppointmentsService {
     return this.mapAppointment(appointment);
   }
 
-  async markNoShow(currentUser: DemoCurrentUser, id: string) {
+  async markNoShow(currentUser: AuthenticatedUser, id: string) {
     await this.findRecordById(currentUser, id);
 
     const appointment = await this.prisma.appointment.update({
@@ -268,7 +268,7 @@ export class AppointmentsService {
     return where;
   }
 
-  private async findRecordById(currentUser: DemoCurrentUser, id: string) {
+  private async findRecordById(currentUser: AuthenticatedUser, id: string) {
     const appointment = await this.prisma.appointment.findFirst({
       where: {
         id,

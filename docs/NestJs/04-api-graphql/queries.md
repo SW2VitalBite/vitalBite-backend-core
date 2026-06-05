@@ -208,6 +208,16 @@ Indicadores esperados:
 - Riesgos nutricionales servidos desde FastAPI o métricas asociadas.
 - Indicadores financieros obtenidos por integración con `.NET + DynamoDB`, no persistidos en PostgreSQL del Core.
 
+## Pagos y suscripciones
+
+| Query                       | Descripcion                         | Acceso        |
+| --------------------------- | ----------------------------------- | ------------- |
+| `subscriptionPlans`         | Lista planes comerciales disponibles | Administrador |
+| `currentTenantSubscription` | Consulta plan activo del tenant      | Administrador |
+| `planChangeRequests`        | Lista solicitudes de cambio de plan  | Administrador |
+
+Los datos financieros se consultan al microservicio `.NET + DynamoDB`; el Core no los persiste en PostgreSQL.
+
 ## Reglas generales
 
 - Toda query protegida debe validar `tenant_id`.
