@@ -57,7 +57,11 @@ export const ModelName = {
   Patient: 'Patient',
   Appointment: 'Appointment',
   BodyMeasurement: 'BodyMeasurement',
-  BodyComposition: 'BodyComposition'
+  BodyComposition: 'BodyComposition',
+  DietPlan: 'DietPlan',
+  DietPlanDay: 'DietPlanDay',
+  DietMeal: 'DietMeal',
+  DietMealItem: 'DietMealItem'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -206,6 +210,72 @@ export const BodyCompositionScalarFieldEnum = {
 } as const
 
 export type BodyCompositionScalarFieldEnum = (typeof BodyCompositionScalarFieldEnum)[keyof typeof BodyCompositionScalarFieldEnum]
+
+
+export const DietPlanScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  patientId: 'patientId',
+  nutritionistId: 'nutritionistId',
+  name: 'name',
+  objective: 'objective',
+  phase: 'phase',
+  approach: 'approach',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  status: 'status',
+  mealsPerDay: 'mealsPerDay',
+  mainRestriction: 'mainRestriction',
+  notes: 'notes',
+  estimatedCalories: 'estimatedCalories',
+  adherencePercent: 'adherencePercent',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type DietPlanScalarFieldEnum = (typeof DietPlanScalarFieldEnum)[keyof typeof DietPlanScalarFieldEnum]
+
+
+export const DietPlanDayScalarFieldEnum = {
+  id: 'id',
+  dietPlanId: 'dietPlanId',
+  dayLabel: 'dayLabel',
+  dayOrder: 'dayOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DietPlanDayScalarFieldEnum = (typeof DietPlanDayScalarFieldEnum)[keyof typeof DietPlanDayScalarFieldEnum]
+
+
+export const DietMealScalarFieldEnum = {
+  id: 'id',
+  dietPlanDayId: 'dietPlanDayId',
+  name: 'name',
+  mealOrder: 'mealOrder',
+  targetCalories: 'targetCalories',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DietMealScalarFieldEnum = (typeof DietMealScalarFieldEnum)[keyof typeof DietMealScalarFieldEnum]
+
+
+export const DietMealItemScalarFieldEnum = {
+  id: 'id',
+  dietMealId: 'dietMealId',
+  name: 'name',
+  portion: 'portion',
+  calories: 'calories',
+  itemOrder: 'itemOrder',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DietMealItemScalarFieldEnum = (typeof DietMealItemScalarFieldEnum)[keyof typeof DietMealItemScalarFieldEnum]
 
 
 export const SortOrder = {

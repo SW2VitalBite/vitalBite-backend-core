@@ -64,3 +64,12 @@ export const AppointmentMode = {
 } as const
 
 export type AppointmentMode = (typeof AppointmentMode)[keyof typeof AppointmentMode]
+
+
+export const DietPlanStatus = {
+  ACTIVE: 'ACTIVE',
+  DRAFT: 'DRAFT',
+  NEEDS_ADJUSTMENT: 'NEEDS_ADJUSTMENT'
+} as const
+
+export type DietPlanStatus = (typeof DietPlanStatus)[keyof typeof DietPlanStatus]

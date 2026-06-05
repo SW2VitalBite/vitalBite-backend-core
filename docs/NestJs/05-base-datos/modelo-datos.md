@@ -68,7 +68,7 @@ Estos datos pertenecen al microservicio `.NET + DynamoDB`. El Core solo consulta
 | Medidas corporales      | `body_measurements`                                                                                  |
 | Composición corporal    | `body_compositions`                                                                                  |
 | Seguimiento nutricional | `nutrition_tracking`                                                                                 |
-| Dietas                  | `diets`, `diet_meals`, `diet_items`                                                                  |
+| Dietas                  | `diet_plans`, `diet_plan_days`, `diet_meals`, `diet_meal_items`                                      |
 | Catálogo nutricional    | `food_catalog_items`, `recipes`, `recipe_items`                                                      |
 | Plantillas de dietas    | `diet_templates`, `diet_template_meals`, `diet_template_items`                                       |
 | Dietocálculo            | `nutrition_calculations`                                                                             |
@@ -108,8 +108,10 @@ El primer slice funcional versionado en Prisma cubre:
 | Citas         | `appointments`       |
 | Medidas       | `body_measurements`  |
 | Composición   | `body_compositions`  |
+| Dietas MVP    | `diet_plans`, `diet_plan_days`, `diet_meals`, `diet_meal_items` |
 
 La migracion inicial esta en `prisma/migrations/20260604130000_init_patients_core/`.
 El slice de citas esta en `prisma/migrations/20260604143000_add_appointments/`.
 El slice de medidas y composición esta en `prisma/migrations/20260604153000_add_body_measurements_and_composition/`.
+El slice de dietas MVP esta en `prisma/migrations/20260605183000_add_diet_plans/`.
 Los datos de ejemplo se cargan con `pnpm run prisma:seed`.

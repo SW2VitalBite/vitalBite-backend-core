@@ -74,3 +74,23 @@ export type BodyMeasurement = Prisma.BodyMeasurementModel
  * 
  */
 export type BodyComposition = Prisma.BodyCompositionModel
+/**
+ * Model DietPlan
+ * 
+ */
+export type DietPlan = Prisma.DietPlanModel
+/**
+ * Model DietPlanDay
+ * 
+ */
+export type DietPlanDay = Prisma.DietPlanDayModel
+/**
+ * Model DietMeal
+ * 
+ */
+export type DietMeal = Prisma.DietMealModel
+/**
+ * Model DietMealItem
+ * 
+ */
+export type DietMealItem = Prisma.DietMealItemModel

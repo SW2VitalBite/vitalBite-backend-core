@@ -4,6 +4,7 @@ import { hashSync } from 'bcryptjs';
 import {
   AppointmentMode,
   AppointmentStatus,
+  DietPlanStatus,
   Gender,
   PatientStatus,
   PrismaClient,
@@ -21,6 +22,7 @@ const adapter = new PrismaPg({ connectionString: databaseUrl });
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
+  await prisma.dietPlan.deleteMany();
   await prisma.bodyComposition.deleteMany();
   await prisma.bodyMeasurement.deleteMany();
   await prisma.appointment.deleteMany();
@@ -416,6 +418,154 @@ async function main() {
       });
     }),
   );
+
+  await Promise.all([
+    prisma.dietPlan.create({
+      data: {
+        tenantId: tenant.id,
+        patientId: patients[0].id,
+        nutritionistId: nutritionist.id,
+        name: 'Plan antiinflamatorio',
+        objective: 'Bajar grasa',
+        phase: 'Semana 4',
+        approach: 'Antiinflamatorio',
+        startDate: new Date('2026-06-05T00:00:00.000Z'),
+        endDate: new Date('2026-07-12T00:00:00.000Z'),
+        status: DietPlanStatus.ACTIVE,
+        mealsPerDay: 4,
+        mainRestriction: 'Sin bebidas azucaradas',
+        notes:
+          'Ajuste enfocado en adherencia, antiinflamacion y control de ansiedad nocturna dentro del plan actual de la paciente.',
+        estimatedCalories: 1570,
+        adherencePercent: 82,
+        days: {
+          create: [
+            {
+              dayLabel: 'Lunes',
+              dayOrder: 1,
+              meals: {
+                create: [
+                  {
+                    name: 'Desayuno',
+                    mealOrder: 1,
+                    targetCalories: 420,
+                    items: {
+                      create: [
+                        { name: 'Avena cocida', portion: '1 taza', calories: 150, itemOrder: 1 },
+                        { name: 'Huevos revueltos', portion: '2 unidades', calories: 180, itemOrder: 2 },
+                        { name: 'Frutillas', portion: '1/2 taza', calories: 90, itemOrder: 3 },
+                      ],
+                    },
+                  },
+                  {
+                    name: 'Almuerzo',
+                    mealOrder: 2,
+                    targetCalories: 560,
+                    items: {
+                      create: [
+                        { name: 'Pollo grillado', portion: '140 g', calories: 240, itemOrder: 1 },
+                        { name: 'Quinoa cocida', portion: '3/4 taza', calories: 170, itemOrder: 2 },
+                        { name: 'Ensalada verde', portion: '1 porcion', calories: 150, itemOrder: 3 },
+                      ],
+                    },
+                  },
+                  {
+                    name: 'Cena',
+                    mealOrder: 3,
+                    targetCalories: 390,
+                    items: {
+                      create: [
+                        { name: 'Crema de verduras', portion: '1 bowl', calories: 160, itemOrder: 1 },
+                        { name: 'Pescado al horno', portion: '120 g', calories: 170, itemOrder: 2 },
+                        { name: 'Infusion', portion: '1 taza', calories: 60, itemOrder: 3 },
+                      ],
+                    },
+                  },
+                  {
+                    name: 'Colaciones',
+                    mealOrder: 4,
+                    targetCalories: 200,
+                    items: {
+                      create: [
+                        { name: 'Yogur griego', portion: '1 unidad', calories: 110, itemOrder: 1 },
+                        { name: 'Nueces', portion: '15 g', calories: 90, itemOrder: 2 },
+                      ],
+                    },
+                  },
+                ],
+              },
+            },
+            {
+              dayLabel: 'Martes',
+              dayOrder: 2,
+              meals: {
+                create: [
+                  {
+                    name: 'Desayuno',
+                    mealOrder: 1,
+                    targetCalories: 410,
+                    items: {
+                      create: [
+                        { name: 'Pan integral', portion: '2 rebanadas', calories: 170, itemOrder: 1 },
+                        { name: 'Palta', portion: '1/4 unidad', calories: 90, itemOrder: 2 },
+                        { name: 'Papaya', portion: '1 taza', calories: 150, itemOrder: 3 },
+                      ],
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      },
+    }),
+    prisma.dietPlan.create({
+      data: {
+        tenantId: tenant.id,
+        patientId: patients[0].id,
+        nutritionistId: nutritionist.id,
+        name: 'Plan glucemico base',
+        objective: 'Control glucemico',
+        phase: 'Borrador',
+        approach: 'Control de carga glucemica',
+        status: DietPlanStatus.DRAFT,
+        mealsPerDay: 4,
+        mainRestriction: 'Sin bebidas azucaradas',
+        notes: 'Borrador para ajuste posterior segun registro de adherencia.',
+        days: {
+          create: [
+            {
+              dayLabel: 'Lunes',
+              dayOrder: 1,
+              meals: {
+                create: [
+                  { name: 'Desayuno', mealOrder: 1, targetCalories: 380 },
+                  { name: 'Almuerzo', mealOrder: 2, targetCalories: 520 },
+                  { name: 'Cena', mealOrder: 3, targetCalories: 360 },
+                  { name: 'Colaciones', mealOrder: 4, targetCalories: 180 },
+                ],
+              },
+            },
+          ],
+        },
+      },
+    }),
+    prisma.dietPlan.create({
+      data: {
+        tenantId: tenant.id,
+        patientId: patients[0].id,
+        nutritionistId: nutritionist.id,
+        name: 'Plan recomposicion',
+        objective: 'Mantenimiento muscular',
+        phase: 'Semana 8',
+        approach: 'Recomposicion',
+        endDate: new Date('2026-06-09T00:00:00.000Z'),
+        status: DietPlanStatus.NEEDS_ADJUSTMENT,
+        mealsPerDay: 4,
+        notes: 'Revisar por vencimiento cercano y ajustar fibra nocturna.',
+      },
+    }),
+  ]);
 }
 
 main()

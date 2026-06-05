@@ -57,3 +57,30 @@ Crear y asignar planes alimenticios personalizados.
 - Cada ítem debe tener exactamente una fuente: `foodCatalogItemId`, `recipeId` o `manualFoodName`.
 - La dieta final debe guardar una foto nutricional del ítem: nombre, porción, calorías, proteínas, carbohidratos, grasas y micronutrientes.
 - Cambios posteriores en catálogo o recetas no deben alterar dietas históricas ya asignadas.
+## MVP implementado
+
+El primer slice funcional de dietas cubre planes por paciente con estructura persistente:
+
+- `DietPlan`: datos generales, objetivo, vigencia, estado, restriccion, notas y adherencia.
+- `DietPlanDay`: dias del plan.
+- `DietMeal`: comidas por dia.
+- `DietMealItem`: alimentos manuales con porcion y calorias.
+
+Operaciones GraphQL implementadas:
+
+- `diets(filter)`.
+- `dietById(id)`.
+- `dietsByPatient(patientId)`.
+- `activeDietByPatient(patientId)`.
+- `createDietPlan(input)`.
+- `updateDietPlan(id, input)`.
+- `updateDietPlanStructure(id, input)`.
+- `changeDietPlanStatus(id, status)`.
+- `duplicateDietPlanDay(input)`.
+
+Quedan para fases posteriores:
+
+- Catalogo nutricional.
+- Plantillas reutilizables.
+- Calculo macro/micronutrientes.
+- PDF real desde el microservicio documental.

@@ -396,6 +396,23 @@ export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedIntNullableFilter<$PrismaModel>
 }
 
+export type EnumDietPlanStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.DietPlanStatus | Prisma.EnumDietPlanStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.DietPlanStatus[] | Prisma.ListEnumDietPlanStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DietPlanStatus[] | Prisma.ListEnumDietPlanStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDietPlanStatusFilter<$PrismaModel> | $Enums.DietPlanStatus
+}
+
+export type EnumDietPlanStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.DietPlanStatus | Prisma.EnumDietPlanStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.DietPlanStatus[] | Prisma.ListEnumDietPlanStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DietPlanStatus[] | Prisma.ListEnumDietPlanStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDietPlanStatusWithAggregatesFilter<$PrismaModel> | $Enums.DietPlanStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumDietPlanStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumDietPlanStatusFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -740,6 +757,23 @@ export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
   _sum?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _max?: Prisma.NestedIntNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumDietPlanStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.DietPlanStatus | Prisma.EnumDietPlanStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.DietPlanStatus[] | Prisma.ListEnumDietPlanStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DietPlanStatus[] | Prisma.ListEnumDietPlanStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDietPlanStatusFilter<$PrismaModel> | $Enums.DietPlanStatus
+}
+
+export type NestedEnumDietPlanStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.DietPlanStatus | Prisma.EnumDietPlanStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.DietPlanStatus[] | Prisma.ListEnumDietPlanStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DietPlanStatus[] | Prisma.ListEnumDietPlanStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDietPlanStatusWithAggregatesFilter<$PrismaModel> | $Enums.DietPlanStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumDietPlanStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumDietPlanStatusFilter<$PrismaModel>
 }
 
 

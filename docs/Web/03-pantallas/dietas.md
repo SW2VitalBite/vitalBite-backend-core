@@ -2,7 +2,7 @@
 
 ## Ruta
 
-- `/diets`
+- `/patients/:id/diets`
 
 ## Actor principal
 
@@ -127,3 +127,37 @@ Debe mostrar:
 - El panel de dietocálculo debe ser visible al editar.
 - Cada ítem debe dejar clara su fuente.
 - El snapshot nutricional debe verse como resumen no editable o calculado.
+## MVP implementado
+
+Rutas:
+
+- `/patients/:id/diets`: lista de planes alimenticios del paciente, filtros visuales y panel lateral.
+- `/patients/:id/diets/:dietId/edit`: editor de dias, comidas e items manuales.
+
+La ruta global `/diets` no se expone; Dietas se abre desde el expediente del paciente.
+
+GraphQL implementado:
+
+- `diets(filter)`.
+- `dietById(id)`.
+- `dietsByPatient(patientId)`.
+- `activeDietByPatient(patientId)`.
+- `createDietPlan(input)`.
+- `updateDietPlan(id, input)`.
+- `updateDietPlanStructure(id, input)`.
+- `changeDietPlanStatus(id, status)`.
+- `duplicateDietPlanDay(input)`.
+
+Alcance:
+
+- Estados: `Activo`, `Borrador`, `Ajustar`.
+- Los items del plan son manuales y guardan nombre, porcion y calorias.
+- `Vence pronto` se calcula desde la fecha de fin del plan.
+- Catalogo nutricional, dietocalculo avanzado y exportacion PDF real quedan para una fase posterior.
+
+Feedback UI:
+
+- La lista del paciente muestra mensajes locales cuando un plan se crea correctamente o cuando falla la creacion.
+- El editor muestra mensajes locales al guardar borrador, actualizar plan o duplicar un dia.
+- Durante una accion de guardado se deshabilitan los CTAs principales y el texto cambia a `Guardando...`, `Actualizando...` o `Duplicando...`.
+- Las acciones `Exportar dieta`, `Exportar PDF`, `Abrir biblioteca` y `Filtros` quedan visibles como accesos preparados, deshabilitados y con nota de proxima fase documental.
