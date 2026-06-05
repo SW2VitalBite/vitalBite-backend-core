@@ -2,10 +2,12 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { Request } from 'express';
 import { join } from 'path';
 import './common/graphql/register-enums';
 import { createGraphqlLoggingPlugin } from './common/graphql/graphql-logging.plugin';
 import appConfig from './config/app.config';
+import { AuthModule } from './modules/auth/auth.module';
 import { HealthModule } from './modules/health/health.module';
 import { TenantsModule } from './modules/tenants/tenants.module';
 import { UsersModule } from './modules/users/users.module';
@@ -28,6 +30,7 @@ import { ReportsModule } from './modules/reports/reports.module';
         autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
         sortSchema: true,
         playground: process.env.GRAPHQL_PLAYGROUND === 'true',
+        context: ({ req }: { req: Request }) => ({ req }),
         plugins: [
           createGraphqlLoggingPlugin(
             process.env.GRAPHQL_LOG_RESPONSES !== 'false',
@@ -35,6 +38,7 @@ import { ReportsModule } from './modules/reports/reports.module';
         ],
       }),
     }),
+    AuthModule,
     HealthModule,
     TenantsModule,
     UsersModule,

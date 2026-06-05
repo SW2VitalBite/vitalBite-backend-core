@@ -1,14 +1,14 @@
 import { Query, Resolver } from '@nestjs/graphql';
-import { DemoContextService } from '../demo-context/demo-context.service';
+import { AuthContextService } from '../auth/auth-context.service';
 import { TenantModel } from './models/tenant.model';
 
 @Resolver(() => TenantModel)
 export class TenantsResolver {
-  constructor(private readonly demoContext: DemoContextService) {}
+  constructor(private readonly authContext: AuthContextService) {}
 
   @Query(() => TenantModel)
   async currentTenant() {
-    const currentUser = await this.demoContext.getCurrentUser();
+    const currentUser = await this.authContext.getCurrentUser();
     return currentUser.tenant;
   }
 }

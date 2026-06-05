@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { DemoContextModule } from '../demo-context/demo-context.module';
+import { AuthModule } from '../auth/auth.module';
 import { TenantsResolver } from './tenants.resolver';
 
 @Module({
-  imports: [DemoContextModule],
+  imports: [AuthModule],
   providers: [TenantsResolver],
 })
 export class TenantsModule {}

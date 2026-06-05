@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { DemoCurrentUser } from '../demo-context/demo-context.service';
+import { AuthenticatedUser } from '../auth/auth.types';
 import { Prisma } from '../../prisma/generated-client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { BodyMeasurementFilterInput } from './dto/body-measurement-filter.input';
@@ -11,7 +11,7 @@ export class BodyMeasurementsService {
   constructor(private readonly prisma: PrismaService) {}
 
   async findByPatient(
-    currentUser: DemoCurrentUser,
+    currentUser: AuthenticatedUser,
     patientId: string,
     filter?: BodyMeasurementFilterInput,
   ) {
@@ -25,12 +25,12 @@ export class BodyMeasurementsService {
     });
   }
 
-  async findById(currentUser: DemoCurrentUser, id: string) {
+  async findById(currentUser: AuthenticatedUser, id: string) {
     return this.findRecordById(currentUser, id);
   }
 
   async create(
-    currentUser: DemoCurrentUser,
+    currentUser: AuthenticatedUser,
     input: CreateBodyMeasurementInput,
   ) {
     await this.ensurePatientBelongsToTenant(
@@ -54,7 +54,7 @@ export class BodyMeasurementsService {
   }
 
   async update(
-    currentUser: DemoCurrentUser,
+    currentUser: AuthenticatedUser,
     id: string,
     input: UpdateBodyMeasurementInput,
   ) {
@@ -78,7 +78,7 @@ export class BodyMeasurementsService {
     });
   }
 
-  async delete(currentUser: DemoCurrentUser, id: string) {
+  async delete(currentUser: AuthenticatedUser, id: string) {
     await this.findRecordById(currentUser, id);
 
     return this.prisma.bodyMeasurement.update({
@@ -121,7 +121,7 @@ export class BodyMeasurementsService {
     return where;
   }
 
-  private async findRecordById(currentUser: DemoCurrentUser, id: string) {
+  private async findRecordById(currentUser: AuthenticatedUser, id: string) {
     const bodyMeasurement = await this.prisma.bodyMeasurement.findFirst({
       where: {
         id,

@@ -1,5 +1,5 @@
 import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { DemoContextService } from '../demo-context/demo-context.service';
+import { AuthContextService } from '../auth/auth-context.service';
 import { BodyMeasurementsService } from './body-measurements.service';
 import { BodyMeasurementFilterInput } from './dto/body-measurement-filter.input';
 import { CreateBodyMeasurementInput } from './dto/create-body-measurement.input';
@@ -9,7 +9,7 @@ import { BodyMeasurementModel } from './models/body-measurement.model';
 @Resolver(() => BodyMeasurementModel)
 export class BodyMeasurementsResolver {
   constructor(
-    private readonly demoContext: DemoContextService,
+    private readonly authContext: AuthContextService,
     private readonly bodyMeasurementsService: BodyMeasurementsService,
   ) {}
 
@@ -18,7 +18,7 @@ export class BodyMeasurementsResolver {
     @Args('patientId', { type: () => ID }) patientId: string,
     @Args('filter', { nullable: true }) filter?: BodyMeasurementFilterInput,
   ) {
-    const currentUser = await this.demoContext.getCurrentUser();
+    const currentUser = await this.authContext.getCurrentUser();
     return this.bodyMeasurementsService.findByPatient(
       currentUser,
       patientId,
@@ -28,7 +28,7 @@ export class BodyMeasurementsResolver {
 
   @Query(() => BodyMeasurementModel)
   async bodyMeasurementById(@Args('id', { type: () => ID }) id: string) {
-    const currentUser = await this.demoContext.getCurrentUser();
+    const currentUser = await this.authContext.getCurrentUser();
     return this.bodyMeasurementsService.findById(currentUser, id);
   }
 
@@ -36,7 +36,7 @@ export class BodyMeasurementsResolver {
   async createBodyMeasurement(
     @Args('input') input: CreateBodyMeasurementInput,
   ) {
-    const currentUser = await this.demoContext.getCurrentUser();
+    const currentUser = await this.authContext.getCurrentUser();
     return this.bodyMeasurementsService.create(currentUser, input);
   }
 
@@ -45,13 +45,13 @@ export class BodyMeasurementsResolver {
     @Args('id', { type: () => ID }) id: string,
     @Args('input') input: UpdateBodyMeasurementInput,
   ) {
-    const currentUser = await this.demoContext.getCurrentUser();
+    const currentUser = await this.authContext.getCurrentUser();
     return this.bodyMeasurementsService.update(currentUser, id, input);
   }
 
   @Mutation(() => BodyMeasurementModel)
   async deleteBodyMeasurement(@Args('id', { type: () => ID }) id: string) {
-    const currentUser = await this.demoContext.getCurrentUser();
+    const currentUser = await this.authContext.getCurrentUser();
     return this.bodyMeasurementsService.delete(currentUser, id);
   }
 }

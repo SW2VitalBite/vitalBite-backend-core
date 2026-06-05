@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { DemoCurrentUser } from '../demo-context/demo-context.service';
+import { AuthenticatedUser } from '../auth/auth.types';
 import {
   PatientStatus,
   Prisma,
@@ -14,7 +14,7 @@ import { UpdatePatientInput } from './dto/update-patient.input';
 export class PatientsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findMany(currentUser: DemoCurrentUser, filter?: PatientFilterInput) {
+  async findMany(currentUser: AuthenticatedUser, filter?: PatientFilterInput) {
     return this.prisma.patient.findMany({
       where: this.buildWhere(currentUser.tenantId, filter),
       orderBy: [
@@ -28,7 +28,7 @@ export class PatientsService {
     });
   }
 
-  async findById(currentUser: DemoCurrentUser, id: string) {
+  async findById(currentUser: AuthenticatedUser, id: string) {
     const patient = await this.prisma.patient.findFirst({
       where: {
         id,
@@ -46,7 +46,7 @@ export class PatientsService {
   }
 
   async findByNutritionist(
-    currentUser: DemoCurrentUser,
+    currentUser: AuthenticatedUser,
     nutritionistId: string,
   ) {
     await this.ensureNutritionistBelongsToTenant(
@@ -59,7 +59,7 @@ export class PatientsService {
     });
   }
 
-  async create(currentUser: DemoCurrentUser, input: CreatePatientInput) {
+  async create(currentUser: AuthenticatedUser, input: CreatePatientInput) {
     const nutritionistId = input.nutritionistId ?? currentUser.id;
     await this.ensureNutritionistBelongsToTenant(
       currentUser.tenantId,
@@ -84,7 +84,7 @@ export class PatientsService {
   }
 
   async update(
-    currentUser: DemoCurrentUser,
+    currentUser: AuthenticatedUser,
     id: string,
     input: UpdatePatientInput,
   ) {
@@ -133,7 +133,7 @@ export class PatientsService {
     });
   }
 
-  async archive(currentUser: DemoCurrentUser, id: string) {
+  async archive(currentUser: AuthenticatedUser, id: string) {
     await this.findById(currentUser, id);
 
     return this.prisma.patient.update({
@@ -148,7 +148,7 @@ export class PatientsService {
   }
 
   async assignToNutritionist(
-    currentUser: DemoCurrentUser,
+    currentUser: AuthenticatedUser,
     patientId: string,
     nutritionistId: string,
   ) {
