@@ -17,7 +17,9 @@ Gestionar pacientes desde la Web y servir como punto de entrada al expediente nu
 ## Layout sugerido
 
 - Header con título `Pacientes`, descripción breve y botón principal `Nuevo paciente`.
-- Barra de filtros encima de la tabla.
+- Acciones superiores `Filtros` y `Nuevo paciente`.
+- Fila de indicadores: activos, inactivos, archivados y seguimiento.
+- Barra de filtros encima de la tabla con buscador, estado, registro y botón `Aplicar`.
 - Tabla/lista principal de pacientes.
 - Panel o página de detalle del paciente.
 - Tabs internos en detalle: resumen, citas, medidas, seguimiento, dietas y documentos.
@@ -33,11 +35,8 @@ Gestionar pacientes desde la Web y servir como punto de entrada al expediente nu
 ## Tabla y columnas
 
 - Nombre completo.
-- Email.
-- Teléfono.
-- Objetivo nutricional.
 - Estado.
-- Nutricionista asignado.
+- Objetivo nutricional.
 - Última cita.
 - Acciones.
 
@@ -45,21 +44,18 @@ Gestionar pacientes desde la Web y servir como punto de entrada al expediente nu
 
 Campos:
 
-- Nombre.
-- Apellido.
+- Nombre completo.
 - Email.
 - Teléfono.
-- Fecha de nacimiento.
-- Género.
+- Estado del paciente.
 - Objetivo nutricional.
+- Nutricionista asignado como dato informativo.
 - Notas clínicas.
-- Estado.
 
 Validaciones:
 
-- Nombre y apellido obligatorios.
+- Nombre completo obligatorio.
 - Email con formato válido si se registra.
-- Fecha de nacimiento no puede ser futura.
 - Estado debe ser válido.
 
 ## Acciones principales
@@ -106,3 +102,17 @@ Validaciones:
 - Los filtros deben estar visibles antes de la tabla.
 - El detalle del paciente debe permitir navegar a módulos relacionados sin volver al listado.
 - Las acciones por fila deben estar agrupadas en un menú o columna de acciones.
+- El modal debe mostrar tarjetas de contexto: tenant, responsable y estado inicial.
+- El detalle debe mostrar tabs visuales, resumen clínico, próxima cita, módulos relacionados y acciones del paciente.
+
+## Datos demo
+
+El seed del Core carga pacientes, citas y medidas asociadas a `Clinica Central` para validar visualmente:
+
+- Ana Rojas.
+- Luis Pinto.
+- Marta Silva.
+- Carlos Meza.
+- Sofia Arias.
+
+Estos datos alimentan la tabla, la última cita, el detalle clínico y los indicadores sin usar datos estáticos en Angular.

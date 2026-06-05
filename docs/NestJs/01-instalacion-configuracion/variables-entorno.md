@@ -20,6 +20,14 @@ Variables esperadas para el microservicio Core NestJS.
 - No versionar `.env` con credenciales.
 - Usar valores separados por ambiente.
 
+## Pagos y suscripciones V1
+
+En desarrollo local, el Core consulta el microservicio .NET mediante:
+
+```env
+PAYMENTS_SERVICE_URL=http://localhost:5100
+```
+
 ## Variables agregadas para el slice de pacientes
 
 | Variable | Descripcion |

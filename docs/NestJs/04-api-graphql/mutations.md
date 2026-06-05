@@ -238,6 +238,27 @@ Inputs mínimos:
 
 El Core no genera PDFs ni escribe en S3. Solo solicita el proceso al microservicio Spring Boot y guarda metadatos.
 
+## Pagos y suscripciones
+
+| Mutation                   | Descripcion                            | Acceso        |
+| -------------------------- | -------------------------------------- | ------------- |
+| `requestPlanChange(input)` | Registra solicitud pendiente de cambio | Administrador |
+| `approvePlanChange(input)` | Aprueba solicitud y aplica nuevo plan  | Administrador |
+| `rejectPlanChange(input)`  | Rechaza solicitud pendiente            | Administrador |
+
+Input minimo:
+
+- `RequestPlanChangeInput`: `planCode`, `comment?`
+- `ResolvePlanChangeInput`: `requestId`, `comment?`
+
+Reglas:
+
+- La solicitud nueva queda en estado `PENDING`.
+- Al aprobar, cambia el plan activo del tenant en el microservicio de pagos.
+- Al rechazar, no cambia el plan activo.
+- No procesa pagos reales.
+- No persiste datos financieros en PostgreSQL del Core.
+
 ## Reglas generales
 
 - Las mutations de escritura deben generar eventos auditables cuando cambian información crítica.

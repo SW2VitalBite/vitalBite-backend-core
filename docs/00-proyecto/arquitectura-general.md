@@ -93,6 +93,23 @@ Responsabilidades:
 - Notificar al Core cambios de estado de suscripción.
 - Notificar al servicio Documental eventos financieros auditables.
 
+### Implementacion V1
+
+El primer corte de pagos y suscripciones se implementa en el repositorio hermano
+`vitalBite-backend-payments-dotnet`.
+
+- Expone catalogo de planes y estado demo de suscripcion.
+- Usa DynamoDB Local con tabla unica `VitalBitePayments`.
+- Mantiene dos planes mensuales: `Nutricionista individual` por 15 USD y `Clinica completa` por 30 USD.
+- No procesa cobros reales, facturas ni cambios de plan todavia.
+- El Core consulta este servicio y expone la informacion a Angular mediante GraphQL.
+
+### Flujo futuro: Super Admin VitalBite
+
+En una fase posterior, VitalBite debe contar con un rol `SUPER_ADMIN` para gestionar tenants de forma global. Este actor revisaria solicitudes comerciales de todas las clinicas, aprobaria o rechazaria cambios de plan, conciliaria cobros y consultaria auditoria financiera global.
+
+La implementacion actual usa aprobacion simple por el administrador del tenant para cerrar el flujo academico sin incorporar todavia una pantalla global de tenants.
+
 ## Comunicación
 
 La comunicación principal del sistema será GraphQL a través del Core NestJS. Los clientes web y móvil consumen el Core para las operaciones empresariales.
