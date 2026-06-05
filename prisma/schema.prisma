@@ -1,0 +1,194 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum TenantStatus {
+  ACTIVE
+  SUSPENDED
+  DISABLED
+}
+
+enum UserStatus {
+  ACTIVE
+  INVITED
+  DISABLED
+}
+
+enum PatientStatus {
+  ACTIVE
+  INACTIVE
+  ARCHIVED
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+  NOT_SPECIFIED
+}
+
+enum AppointmentStatus {
+  SCHEDULED
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+  RESCHEDULED
+  NO_SHOW
+}
+
+enum AppointmentMode {
+  IN_PERSON
+  VIRTUAL
+}
+
+model Tenant {
+  id               String            @id @default(uuid())
+  name             String
+  slug             String            @unique
+  status           TenantStatus      @default(ACTIVE)
+  users            User[]
+  patients         Patient[]
+  appointments     Appointment[]
+  bodyMeasurements BodyMeasurement[]
+  bodyCompositions BodyComposition[]
+  createdAt        DateTime          @default(now()) @map("created_at")
+  updatedAt        DateTime          @updatedAt @map("updated_at")
+  deletedAt        DateTime?         @map("deleted_at")
+
+  @@map("tenants")
+}
+
+model User {
+  id                         String            @id @default(uuid())
+  tenantId                   String            @map("tenant_id")
+  email                      String
+  firstName                  String            @map("first_name")
+  lastName                   String            @map("last_name")
+  status                     UserStatus        @default(ACTIVE)
+  roleCode                   String            @map("role_code")
+  tenant                     Tenant            @relation(fields: [tenantId], references: [id])
+  assignedPatients           Patient[]         @relation("NutritionistPatients")
+  nutritionistAppointments   Appointment[]     @relation("NutritionistAppointments")
+  registeredBodyMeasurements BodyMeasurement[] @relation("RegisteredBodyMeasurements")
+  createdAt                  DateTime          @default(now()) @map("created_at")
+  updatedAt                  DateTime          @updatedAt @map("updated_at")
+  deletedAt                  DateTime?         @map("deleted_at")
+
+  @@unique([tenantId, email])
+  @@index([tenantId])
+  @@index([tenantId, status])
+  @@map("users")
+}
+
+model Patient {
+  id               String            @id @default(uuid())
+  tenantId         String            @map("tenant_id")
+  nutritionistId   String            @map("nutritionist_id")
+  firstName        String            @map("first_name")
+  lastName         String            @map("last_name")
+  email            String?
+  phone            String?
+  birthDate        DateTime?         @map("birth_date")
+  gender           Gender?
+  status           PatientStatus     @default(ACTIVE)
+  clinicalNotes    String?           @map("clinical_notes")
+  nutritionGoal    String?           @map("nutrition_goal")
+  tenant           Tenant            @relation(fields: [tenantId], references: [id])
+  nutritionist     User              @relation("NutritionistPatients", fields: [nutritionistId], references: [id])
+  appointments     Appointment[]
+  bodyMeasurements BodyMeasurement[]
+  bodyCompositions BodyComposition[]
+  createdAt        DateTime          @default(now()) @map("created_at")
+  updatedAt        DateTime          @updatedAt @map("updated_at")
+  deletedAt        DateTime?         @map("deleted_at")
+
+  @@unique([tenantId, email])
+  @@index([tenantId])
+  @@index([tenantId, nutritionistId])
+  @@index([tenantId, status])
+  @@index([tenantId, lastName])
+  @@map("patients")
+}
+
+model Appointment {
+  id              String            @id @default(uuid())
+  tenantId        String            @map("tenant_id")
+  patientId       String            @map("patient_id")
+  nutritionistId  String            @map("nutritionist_id")
+  scheduledAt     DateTime          @map("scheduled_at")
+  durationMinutes Int               @map("duration_minutes")
+  status          AppointmentStatus @default(SCHEDULED)
+  mode            AppointmentMode   @default(IN_PERSON)
+  reason          String?
+  notes           String?
+  cancelReason    String?           @map("cancel_reason")
+  tenant          Tenant            @relation(fields: [tenantId], references: [id])
+  patient         Patient           @relation(fields: [patientId], references: [id])
+  nutritionist    User              @relation("NutritionistAppointments", fields: [nutritionistId], references: [id])
+  createdAt       DateTime          @default(now()) @map("created_at")
+  updatedAt       DateTime          @updatedAt @map("updated_at")
+  deletedAt       DateTime?         @map("deleted_at")
+
+  @@unique([tenantId, patientId, scheduledAt])
+  @@index([tenantId, scheduledAt])
+  @@index([tenantId, nutritionistId, scheduledAt])
+  @@index([tenantId, patientId, scheduledAt])
+  @@index([tenantId, status])
+  @@map("appointments")
+}
+
+model BodyMeasurement {
+  id               String            @id @default(uuid())
+  tenantId         String            @map("tenant_id")
+  patientId        String            @map("patient_id")
+  registeredById   String            @map("registered_by_id")
+  measuredAt       DateTime          @map("measured_at")
+  weightKg         Float             @map("weight_kg")
+  heightCm         Float?            @map("height_cm")
+  bmi              Float?
+  waistCm          Float?            @map("waist_cm")
+  hipCm            Float?            @map("hip_cm")
+  tenant           Tenant            @relation(fields: [tenantId], references: [id])
+  patient          Patient           @relation(fields: [patientId], references: [id])
+  registeredBy     User              @relation("RegisteredBodyMeasurements", fields: [registeredById], references: [id])
+  bodyCompositions BodyComposition[]
+  createdAt        DateTime          @default(now()) @map("created_at")
+  updatedAt        DateTime          @updatedAt @map("updated_at")
+  deletedAt        DateTime?         @map("deleted_at")
+
+  @@unique([tenantId, patientId, measuredAt])
+  @@index([tenantId, patientId, measuredAt])
+  @@index([tenantId, registeredById])
+  @@map("body_measurements")
+}
+
+model BodyComposition {
+  id                String           @id @default(uuid())
+  tenantId          String           @map("tenant_id")
+  patientId         String           @map("patient_id")
+  bodyMeasurementId String?          @map("body_measurement_id")
+  measuredAt        DateTime         @map("measured_at")
+  bodyFatPercentage Float?           @map("body_fat_percentage")
+  muscleMassKg      Float?           @map("muscle_mass_kg")
+  waterPercentage   Float?           @map("water_percentage")
+  visceralFatLevel  Float?           @map("visceral_fat_level")
+  boneMassKg        Float?           @map("bone_mass_kg")
+  metabolicAge      Int?             @map("metabolic_age")
+  tenant            Tenant           @relation(fields: [tenantId], references: [id])
+  patient           Patient          @relation(fields: [patientId], references: [id])
+  bodyMeasurement   BodyMeasurement? @relation(fields: [bodyMeasurementId], references: [id])
+  createdAt         DateTime         @default(now()) @map("created_at")
+  updatedAt         DateTime         @updatedAt @map("updated_at")
+  deletedAt         DateTime?        @map("deleted_at")
+
+  @@unique([tenantId, patientId, measuredAt])
+  @@index([tenantId, patientId, measuredAt])
+  @@index([bodyMeasurementId])
+  @@map("body_compositions")
+}

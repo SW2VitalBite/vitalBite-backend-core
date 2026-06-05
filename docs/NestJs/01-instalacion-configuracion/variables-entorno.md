@@ -19,3 +19,13 @@ Variables esperadas para el microservicio Core NestJS.
 - No guardar secretos reales en documentación.
 - No versionar `.env` con credenciales.
 - Usar valores separados por ambiente.
+
+## Variables agregadas para el slice de pacientes
+
+| Variable | Descripcion |
+|---|---|
+| `DATABASE_URL` | Obligatoria para Prisma CLI, migraciones, seed y runtime local |
+| `DEMO_USER_EMAIL` | Usuario demo que actua como contexto temporal sin JWT |
+| `GRAPHQL_LOG_RESPONSES` | Activa logs de consultas, variables y respuestas GraphQL en terminal |
+
+`DEMO_USER_EMAIL` se mantiene solo hasta implementar autenticacion real con JWT.

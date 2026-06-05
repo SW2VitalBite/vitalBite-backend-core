@@ -48,33 +48,33 @@ Estos datos pertenecen al microservicio `.NET + DynamoDB`. El Core solo consulta
 
 ## Convenciones
 
-| Concepto | Convención |
-|---|---|
-| IDs | `String` con UUID |
-| Fechas | `DateTime` |
-| Tenant | Campo `tenantId` en entidades del negocio |
-| Auditoría | `createdAt`, `updatedAt`, `deletedAt` cuando aplique |
-| Estados | Enums Prisma y GraphQL equivalentes |
-| Eliminación | Lógica en datos clínicos o auditables |
+| Concepto    | Convención                                           |
+| ----------- | ---------------------------------------------------- |
+| IDs         | `String` con UUID                                    |
+| Fechas      | `DateTime`                                           |
+| Tenant      | Campo `tenantId` en entidades del negocio            |
+| Auditoría   | `createdAt`, `updatedAt`, `deletedAt` cuando aplique |
+| Estados     | Enums Prisma y GraphQL equivalentes                  |
+| Eliminación | Lógica en datos clínicos o auditables                |
 
 ## Módulos y tablas
 
-| Módulo | Tablas principales |
-|---|---|
-| Tenants | `tenants` |
-| Usuarios y roles | `users`, `roles`, `permissions`, `role_permissions` |
-| Pacientes | `patients` |
-| Citas | `appointments` |
-| Medidas corporales | `body_measurements` |
-| Composición corporal | `body_compositions` |
-| Seguimiento nutricional | `nutrition_tracking` |
-| Dietas | `diets`, `diet_meals`, `diet_items` |
-| Catálogo nutricional | `food_catalog_items`, `recipes`, `recipe_items` |
-| Plantillas de dietas | `diet_templates`, `diet_template_meals`, `diet_template_items` |
-| Dietocálculo | `nutrition_calculations` |
-| Seguimiento diario | `daily_tracking_entries`, `daily_tracking_food_photos`, `physical_activity_entries`, `patient_goals` |
-| Antropometría avanzada | `anthropometry_measurements`, `somatotype_results` |
-| Reportes | `reports`, `document_metadata` |
+| Módulo                  | Tablas principales                                                                                   |
+| ----------------------- | ---------------------------------------------------------------------------------------------------- |
+| Tenants                 | `tenants`                                                                                            |
+| Usuarios y roles        | `users`, `roles`, `permissions`, `role_permissions`                                                  |
+| Pacientes               | `patients`                                                                                           |
+| Citas                   | `appointments`                                                                                       |
+| Medidas corporales      | `body_measurements`                                                                                  |
+| Composición corporal    | `body_compositions`                                                                                  |
+| Seguimiento nutricional | `nutrition_tracking`                                                                                 |
+| Dietas                  | `diets`, `diet_meals`, `diet_items`                                                                  |
+| Catálogo nutricional    | `food_catalog_items`, `recipes`, `recipe_items`                                                      |
+| Plantillas de dietas    | `diet_templates`, `diet_template_meals`, `diet_template_items`                                       |
+| Dietocálculo            | `nutrition_calculations`                                                                             |
+| Seguimiento diario      | `daily_tracking_entries`, `daily_tracking_food_photos`, `physical_activity_entries`, `patient_goals` |
+| Antropometría avanzada  | `anthropometry_measurements`, `somatotype_results`                                                   |
+| Reportes                | `reports`, `document_metadata`                                                                       |
 
 ## Índices generales recomendados
 
@@ -95,3 +95,21 @@ Estos datos pertenecen al microservicio `.NET + DynamoDB`. El Core solo consulta
 ## Regla multi-tenant
 
 Cada consulta del Core debe incluir el `tenant_id` del usuario autenticado. Incluso si el cliente envía un `id`, el service debe validar que el recurso pertenezca al mismo tenant.
+
+## Estado implementado
+
+El primer slice funcional versionado en Prisma cubre:
+
+| Modulo        | Tablas implementadas |
+| ------------- | -------------------- |
+| Tenants       | `tenants`            |
+| Usuarios demo | `users`              |
+| Pacientes     | `patients`           |
+| Citas         | `appointments`       |
+| Medidas       | `body_measurements`  |
+| Composición   | `body_compositions`  |
+
+La migracion inicial esta en `prisma/migrations/20260604130000_init_patients_core/`.
+El slice de citas esta en `prisma/migrations/20260604143000_add_appointments/`.
+El slice de medidas y composición esta en `prisma/migrations/20260604153000_add_body_measurements_and_composition/`.
+Los datos de ejemplo se cargan con `pnpm run prisma:seed`.

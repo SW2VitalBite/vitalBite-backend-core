@@ -23,7 +23,7 @@ API central del sistema VitalBite para nutricionistas (SaaS multi-tenant).
 ## Requisitos
 
 - Node.js 20+
-- npm 10+
+- pnpm 10+
 
 ## Configuración
 
@@ -34,8 +34,8 @@ cp .env.example .env
 ## Desarrollo
 
 ```bash
-npm install
-npm run start:dev
+pnpm install
+pnpm run start:dev
 ```
 
 GraphQL Playground: `http://localhost:3000/graphql`
@@ -52,12 +52,12 @@ query {
 
 | Comando | Descripción |
 |---------|-------------|
-| `npm run start:dev` | Servidor en modo watch |
-| `npm run build` | Compilar para producción |
-| `npm run start:prod` | Ejecutar build compilado |
-| `npm run test` | Tests unitarios |
-| `npm run test:e2e` | Tests end-to-end |
-| `npm run lint` | Linter |
+| `pnpm run start:dev` | Servidor en modo watch |
+| `pnpm run build` | Compilar para producción |
+| `pnpm run start:prod` | Ejecutar build compilado |
+| `pnpm run test` | Tests unitarios |
+| `pnpm run test:e2e` | Tests end-to-end |
+| `pnpm run lint` | Linter |
 
 ## Documentación
 

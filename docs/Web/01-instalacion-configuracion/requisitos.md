@@ -3,7 +3,7 @@
 ## Requisitos técnicos
 
 - Node.js LTS.
-- npm.
+- pnpm 10+.
 - Angular CLI.
 - Navegador moderno.
 - Acceso al endpoint GraphQL del Core NestJS.

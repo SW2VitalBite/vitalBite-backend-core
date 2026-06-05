@@ -4,16 +4,16 @@ Las queries permiten consultar información del Core NestJS. Todas las queries p
 
 ## Health
 
-| Query | Descripción | Acceso |
-|---|---|---|
+| Query    | Descripción                      | Acceso  |
+| -------- | -------------------------------- | ------- |
 | `health` | Verifica que el Core esté activo | Público |
 
 ## Tenants
 
-| Query | Descripción | Acceso |
-|---|---|---|
-| `tenantById(id)` | Obtiene un tenant por ID | Administrador |
-| `currentTenant` | Obtiene el tenant del usuario autenticado | Administrador, nutricionista |
+| Query            | Descripción                               | Acceso                       |
+| ---------------- | ----------------------------------------- | ---------------------------- |
+| `tenantById(id)` | Obtiene un tenant por ID                  | Administrador                |
+| `currentTenant`  | Obtiene el tenant del usuario autenticado | Administrador, nutricionista |
 
 Filtros sugeridos:
 
@@ -22,13 +22,13 @@ Filtros sugeridos:
 
 ## Usuarios y roles
 
-| Query | Descripción | Acceso |
-|---|---|---|
-| `me` | Devuelve el usuario autenticado | Usuario autenticado |
-| `users(filter)` | Lista usuarios del tenant | Administrador |
-| `userById(id)` | Obtiene un usuario por ID | Administrador |
-| `roles` | Lista roles disponibles | Administrador |
-| `permissions` | Lista permisos disponibles | Administrador |
+| Query           | Descripción                     | Acceso              |
+| --------------- | ------------------------------- | ------------------- |
+| `me`            | Devuelve el usuario autenticado | Usuario autenticado |
+| `users(filter)` | Lista usuarios del tenant       | Administrador       |
+| `userById(id)`  | Obtiene un usuario por ID       | Administrador       |
+| `roles`         | Lista roles disponibles         | Administrador       |
+| `permissions`   | Lista permisos disponibles      | Administrador       |
 
 Filtros sugeridos:
 
@@ -38,11 +38,11 @@ Filtros sugeridos:
 
 ## Pacientes
 
-| Query | Descripción | Acceso |
-|---|---|---|
-| `patients(filter)` | Lista pacientes del tenant | Administrador, nutricionista |
-| `patientById(id)` | Obtiene detalle de paciente | Administrador, nutricionista, paciente dueño |
-| `patientsByNutritionist(nutritionistId)` | Lista pacientes de un nutricionista | Administrador, nutricionista |
+| Query                                    | Descripción                         | Acceso                                       |
+| ---------------------------------------- | ----------------------------------- | -------------------------------------------- |
+| `patients(filter)`                       | Lista pacientes del tenant          | Administrador, nutricionista                 |
+| `patientById(id)`                        | Obtiene detalle de paciente         | Administrador, nutricionista, paciente dueño |
+| `patientsByNutritionist(nutritionistId)` | Lista pacientes de un nutricionista | Administrador, nutricionista                 |
 
 Filtros sugeridos:
 
@@ -54,12 +54,12 @@ Filtros sugeridos:
 
 ## Citas
 
-| Query | Descripción | Acceso |
-|---|---|---|
-| `appointments(filter)` | Lista citas del tenant | Administrador, nutricionista |
-| `appointmentById(id)` | Obtiene una cita | Administrador, nutricionista, paciente dueño |
-| `appointmentsByPatient(patientId)` | Lista citas de un paciente | Administrador, nutricionista, paciente dueño |
-| `appointmentsCalendar(filter)` | Lista citas para calendario | Administrador, nutricionista |
+| Query                              | Descripción                 | Acceso                                       |
+| ---------------------------------- | --------------------------- | -------------------------------------------- |
+| `appointments(filter)`             | Lista citas del tenant      | Administrador, nutricionista                 |
+| `appointmentById(id)`              | Obtiene una cita            | Administrador, nutricionista, paciente dueño |
+| `appointmentsByPatient(patientId)` | Lista citas de un paciente  | Administrador, nutricionista, paciente dueño |
+| `appointmentsCalendar(filter)`     | Lista citas para calendario | Administrador, nutricionista                 |
 
 Filtros sugeridos:
 
@@ -68,33 +68,33 @@ Filtros sugeridos:
 - `status`
 - `dateFrom`
 - `dateTo`
+- `search`
 
 ## Medidas corporales
 
-| Query | Descripción | Acceso |
-|---|---|---|
+| Query                                  | Descripción                  | Acceso                                       |
+| -------------------------------------- | ---------------------------- | -------------------------------------------- |
 | `bodyMeasurementsByPatient(patientId)` | Lista medidas de un paciente | Administrador, nutricionista, paciente dueño |
-| `bodyMeasurementById(id)` | Obtiene una medición | Administrador, nutricionista |
+| `bodyMeasurementById(id)`              | Obtiene una medición         | Administrador, nutricionista                 |
 
 Filtros sugeridos:
 
-- `patientId`
 - `measuredFrom`
 - `measuredTo`
 
 ## Composición corporal
 
-| Query | Descripción | Acceso |
-|---|---|---|
+| Query                                 | Descripción                             | Acceso                                       |
+| ------------------------------------- | --------------------------------------- | -------------------------------------------- |
 | `bodyCompositionByPatient(patientId)` | Lista composición corporal del paciente | Administrador, nutricionista, paciente dueño |
-| `latestBodyComposition(patientId)` | Obtiene la última composición corporal | Administrador, nutricionista, paciente dueño |
+| `latestBodyComposition(patientId)`    | Obtiene la última composición corporal  | Administrador, nutricionista, paciente dueño |
 
 ## Seguimiento nutricional
 
-| Query | Descripción | Acceso |
-|---|---|---|
+| Query                          | Descripción                      | Acceso                                       |
+| ------------------------------ | -------------------------------- | -------------------------------------------- |
 | `trackingByPatient(patientId)` | Lista seguimiento de un paciente | Administrador, nutricionista, paciente dueño |
-| `trackingSummary(patientId)` | Devuelve resumen de progreso | Administrador, nutricionista, paciente dueño |
+| `trackingSummary(patientId)`   | Devuelve resumen de progreso     | Administrador, nutricionista, paciente dueño |
 
 Filtros sugeridos:
 
@@ -105,12 +105,12 @@ Filtros sugeridos:
 
 ## Dietas
 
-| Query | Descripción | Acceso |
-|---|---|---|
-| `diets(filter)` | Lista dietas del tenant | Administrador, nutricionista |
-| `dietById(id)` | Obtiene una dieta completa | Administrador, nutricionista, paciente dueño |
-| `dietsByPatient(patientId)` | Lista dietas de un paciente | Administrador, nutricionista, paciente dueño |
-| `activeDietByPatient(patientId)` | Obtiene dieta activa | Administrador, nutricionista, paciente dueño |
+| Query                            | Descripción                 | Acceso                                       |
+| -------------------------------- | --------------------------- | -------------------------------------------- |
+| `diets(filter)`                  | Lista dietas del tenant     | Administrador, nutricionista                 |
+| `dietById(id)`                   | Obtiene una dieta completa  | Administrador, nutricionista, paciente dueño |
+| `dietsByPatient(patientId)`      | Lista dietas de un paciente | Administrador, nutricionista, paciente dueño |
+| `activeDietByPatient(patientId)` | Obtiene dieta activa        | Administrador, nutricionista, paciente dueño |
 
 Filtros sugeridos:
 
@@ -122,12 +122,12 @@ Filtros sugeridos:
 
 ## Catálogo nutricional
 
-| Query | Descripción | Acceso |
-|---|---|---|
-| `foodCatalog(filter)` | Lista alimentos del catálogo | Administrador, nutricionista |
+| Query                     | Descripción                      | Acceso                       |
+| ------------------------- | -------------------------------- | ---------------------------- |
+| `foodCatalog(filter)`     | Lista alimentos del catálogo     | Administrador, nutricionista |
 | `foodCatalogItemById(id)` | Obtiene un alimento del catálogo | Administrador, nutricionista |
-| `recipes(filter)` | Lista recetas reutilizables | Administrador, nutricionista |
-| `recipeById(id)` | Obtiene una receta | Administrador, nutricionista |
+| `recipes(filter)`         | Lista recetas reutilizables      | Administrador, nutricionista |
+| `recipeById(id)`          | Obtiene una receta               | Administrador, nutricionista |
 
 Filtros sugeridos:
 
@@ -137,10 +137,10 @@ Filtros sugeridos:
 
 ## Plantillas de dietas
 
-| Query | Descripción | Acceso |
-|---|---|---|
-| `dietTemplates(filter)` | Lista plantillas de dietas | Administrador, nutricionista |
-| `dietTemplateById(id)` | Obtiene una plantilla completa | Administrador, nutricionista |
+| Query                   | Descripción                    | Acceso                       |
+| ----------------------- | ------------------------------ | ---------------------------- |
+| `dietTemplates(filter)` | Lista plantillas de dietas     | Administrador, nutricionista |
+| `dietTemplateById(id)`  | Obtiene una plantilla completa | Administrador, nutricionista |
 
 Filtros sugeridos:
 
@@ -151,11 +151,11 @@ Filtros sugeridos:
 
 ## Dietocálculo
 
-| Query | Descripción | Acceso |
-|---|---|---|
-| `calculateDietNutrition(input)` | Calcula nutrientes de una dieta o comidas enviadas | Administrador, nutricionista |
-| `nutritionCalculationByDiet(dietId)` | Obtiene último cálculo de una dieta | Administrador, nutricionista, paciente dueño |
-| `nutritionCalculationsByPatient(patientId)` | Lista cálculos asociados al paciente | Administrador, nutricionista, paciente dueño |
+| Query                                       | Descripción                                        | Acceso                                       |
+| ------------------------------------------- | -------------------------------------------------- | -------------------------------------------- |
+| `calculateDietNutrition(input)`             | Calcula nutrientes de una dieta o comidas enviadas | Administrador, nutricionista                 |
+| `nutritionCalculationByDiet(dietId)`        | Obtiene último cálculo de una dieta                | Administrador, nutricionista, paciente dueño |
+| `nutritionCalculationsByPatient(patientId)` | Lista cálculos asociados al paciente               | Administrador, nutricionista, paciente dueño |
 
 Reglas:
 
@@ -165,10 +165,10 @@ Reglas:
 
 ## Seguimiento diario
 
-| Query | Descripción | Acceso |
-|---|---|---|
+| Query                                       | Descripción                          | Acceso                                       |
+| ------------------------------------------- | ------------------------------------ | -------------------------------------------- |
 | `dailyTrackingByPatient(patientId, filter)` | Lista registros diarios del paciente | Administrador, nutricionista, paciente dueño |
-| `patientGoals(patientId)` | Lista metas del paciente | Administrador, nutricionista, paciente dueño |
+| `patientGoals(patientId)`                   | Lista metas del paciente             | Administrador, nutricionista, paciente dueño |
 
 Filtros sugeridos:
 
@@ -178,26 +178,26 @@ Filtros sugeridos:
 
 ## Antropometría avanzada
 
-| Query | Descripción | Acceso |
-|---|---|---|
-| `anthropometryByPatient(patientId)` | Lista mediciones antropométricas | Administrador, nutricionista, paciente dueño |
-| `latestSomatotype(patientId)` | Obtiene último somatotipo calculado | Administrador, nutricionista, paciente dueño |
+| Query                               | Descripción                         | Acceso                                       |
+| ----------------------------------- | ----------------------------------- | -------------------------------------------- |
+| `anthropometryByPatient(patientId)` | Lista mediciones antropométricas    | Administrador, nutricionista, paciente dueño |
+| `latestSomatotype(patientId)`       | Obtiene último somatotipo calculado | Administrador, nutricionista, paciente dueño |
 
 ## Reportes y documentos
 
-| Query | Descripción | Acceso |
-|---|---|---|
-| `reports(filter)` | Lista reportes solicitados | Administrador, nutricionista |
-| `reportById(id)` | Obtiene detalle de reporte | Administrador, nutricionista |
-| `documentsByPatient(patientId)` | Lista documentos del paciente | Administrador, nutricionista, paciente dueño |
-| `documentById(id)` | Obtiene metadatos de documento | Administrador, nutricionista, paciente dueño |
+| Query                           | Descripción                    | Acceso                                       |
+| ------------------------------- | ------------------------------ | -------------------------------------------- |
+| `reports(filter)`               | Lista reportes solicitados     | Administrador, nutricionista                 |
+| `reportById(id)`                | Obtiene detalle de reporte     | Administrador, nutricionista                 |
+| `documentsByPatient(patientId)` | Lista documentos del paciente  | Administrador, nutricionista, paciente dueño |
+| `documentById(id)`              | Obtiene metadatos de documento | Administrador, nutricionista, paciente dueño |
 
 ## Dashboard
 
-| Query | Descripción | Acceso |
-|---|---|---|
-| `dashboardSummary(filter)` | Resumen general del tenant | Administrador, nutricionista |
-| `patientProgressDashboard(patientId)` | Indicadores del paciente | Administrador, nutricionista, paciente dueño |
+| Query                                 | Descripción                | Acceso                                       |
+| ------------------------------------- | -------------------------- | -------------------------------------------- |
+| `dashboardSummary(filter)`            | Resumen general del tenant | Administrador, nutricionista                 |
+| `patientProgressDashboard(patientId)` | Indicadores del paciente   | Administrador, nutricionista, paciente dueño |
 
 Indicadores esperados:
 

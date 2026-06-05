@@ -3,7 +3,7 @@
 ## Requisitos técnicos
 
 - Node.js LTS.
-- npm o yarn.
+- pnpm 10+.
 - NestJS CLI.
 - PostgreSQL o acceso a Supabase.
 - Prisma ORM.

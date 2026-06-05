@@ -3,7 +3,7 @@
 ## Instalación base
 
 ```bash
-npm install
+pnpm install
 ```
 
 ## Configuración inicial
