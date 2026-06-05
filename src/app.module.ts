@@ -27,7 +27,8 @@ import { ReportsModule } from './modules/reports/reports.module';
       useFactory: () => ({
         autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
         sortSchema: true,
-        playground: process.env.GRAPHQL_PLAYGROUND === 'true',
+        playground: false,
+        graphiql: process.env.GRAPHQL_PLAYGROUND === 'true',
         plugins: [
           createGraphqlLoggingPlugin(
             process.env.GRAPHQL_LOG_RESPONSES !== 'false',
