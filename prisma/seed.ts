@@ -22,7 +22,10 @@ const adapter = new PrismaPg({ connectionString: databaseUrl });
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
+  const anthropometryMeasurement = (prisma as any).anthropometryMeasurement;
+
   await prisma.dietPlan.deleteMany();
+  await anthropometryMeasurement.deleteMany();
   await prisma.bodyComposition.deleteMany();
   await prisma.bodyMeasurement.deleteMany();
   await prisma.appointment.deleteMany();
@@ -355,7 +358,7 @@ async function main() {
     ),
   );
 
-  await Promise.all(
+  const bodyMeasurements = await Promise.all(
     [
       {
         patient: patients[0],
@@ -418,6 +421,51 @@ async function main() {
       });
     }),
   );
+
+  await Promise.all([
+    anthropometryMeasurement.create({
+      data: {
+        tenantId: tenant.id,
+        patientId: patients[0].id,
+        bodyMeasurementId: bodyMeasurements[0].id,
+        measuredAt: new Date('2026-05-31T10:00:00.000Z'),
+        neckCm: 34.5,
+        chestThoraxCm: 92,
+        rightArmCm: 29.8,
+        leftArmCm: 29.2,
+        rightForearmCm: 24.5,
+        leftForearmCm: 24.1,
+        waistCm: 86,
+        abdomenCm: 90,
+        hipCm: 100,
+        rightThighCm: 57,
+        leftThighCm: 56.7,
+        rightCalfCm: 35.8,
+        leftCalfCm: 35.3,
+      },
+    }),
+    anthropometryMeasurement.create({
+      data: {
+        tenantId: tenant.id,
+        patientId: patients[3].id,
+        bodyMeasurementId: bodyMeasurements[3].id,
+        measuredAt: new Date('2026-05-28T14:00:00.000Z'),
+        neckCm: 38,
+        chestThoraxCm: 98.5,
+        rightArmCm: 32.5,
+        leftArmCm: 31.8,
+        rightForearmCm: 27,
+        leftForearmCm: 26.5,
+        waistCm: 88,
+        abdomenCm: 88,
+        hipCm: 98,
+        rightThighCm: 56,
+        leftThighCm: 55.5,
+        rightCalfCm: 36,
+        leftCalfCm: 35.5,
+      },
+    }),
+  ]);
 
   await Promise.all([
     prisma.dietPlan.create({

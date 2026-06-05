@@ -391,6 +391,7 @@ export const ModelName = {
   Appointment: 'Appointment',
   BodyMeasurement: 'BodyMeasurement',
   BodyComposition: 'BodyComposition',
+  AnthropometryMeasurement: 'AnthropometryMeasurement',
   DietPlan: 'DietPlan',
   DietPlanDay: 'DietPlanDay',
   DietMeal: 'DietMeal',
@@ -410,7 +411,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "auditEvent" | "user" | "patient" | "appointment" | "bodyMeasurement" | "bodyComposition" | "dietPlan" | "dietPlanDay" | "dietMeal" | "dietMealItem"
+    modelProps: "tenant" | "auditEvent" | "user" | "patient" | "appointment" | "bodyMeasurement" | "bodyComposition" | "anthropometryMeasurement" | "dietPlan" | "dietPlanDay" | "dietMeal" | "dietMealItem"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -932,6 +933,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    AnthropometryMeasurement: {
+      payload: Prisma.$AnthropometryMeasurementPayload<ExtArgs>
+      fields: Prisma.AnthropometryMeasurementFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AnthropometryMeasurementFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AnthropometryMeasurementPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AnthropometryMeasurementFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AnthropometryMeasurementPayload>
+        }
+        findFirst: {
+          args: Prisma.AnthropometryMeasurementFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AnthropometryMeasurementPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AnthropometryMeasurementFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AnthropometryMeasurementPayload>
+        }
+        findMany: {
+          args: Prisma.AnthropometryMeasurementFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AnthropometryMeasurementPayload>[]
+        }
+        create: {
+          args: Prisma.AnthropometryMeasurementCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AnthropometryMeasurementPayload>
+        }
+        createMany: {
+          args: Prisma.AnthropometryMeasurementCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AnthropometryMeasurementCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AnthropometryMeasurementPayload>[]
+        }
+        delete: {
+          args: Prisma.AnthropometryMeasurementDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AnthropometryMeasurementPayload>
+        }
+        update: {
+          args: Prisma.AnthropometryMeasurementUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AnthropometryMeasurementPayload>
+        }
+        deleteMany: {
+          args: Prisma.AnthropometryMeasurementDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AnthropometryMeasurementUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AnthropometryMeasurementUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AnthropometryMeasurementPayload>[]
+        }
+        upsert: {
+          args: Prisma.AnthropometryMeasurementUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AnthropometryMeasurementPayload>
+        }
+        aggregate: {
+          args: Prisma.AnthropometryMeasurementAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAnthropometryMeasurement>
+        }
+        groupBy: {
+          args: Prisma.AnthropometryMeasurementGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AnthropometryMeasurementGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AnthropometryMeasurementCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AnthropometryMeasurementCountAggregateOutputType> | number
+        }
+      }
+    }
     DietPlan: {
       payload: Prisma.$DietPlanPayload<ExtArgs>
       fields: Prisma.DietPlanFieldRefs
@@ -1399,6 +1474,33 @@ export const BodyCompositionScalarFieldEnum = {
 export type BodyCompositionScalarFieldEnum = (typeof BodyCompositionScalarFieldEnum)[keyof typeof BodyCompositionScalarFieldEnum]
 
 
+export const AnthropometryMeasurementScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  patientId: 'patientId',
+  bodyMeasurementId: 'bodyMeasurementId',
+  measuredAt: 'measuredAt',
+  neckCm: 'neckCm',
+  chestThoraxCm: 'chestThoraxCm',
+  rightArmCm: 'rightArmCm',
+  leftArmCm: 'leftArmCm',
+  rightForearmCm: 'rightForearmCm',
+  leftForearmCm: 'leftForearmCm',
+  waistCm: 'waistCm',
+  abdomenCm: 'abdomenCm',
+  hipCm: 'hipCm',
+  rightThighCm: 'rightThighCm',
+  leftThighCm: 'leftThighCm',
+  rightCalfCm: 'rightCalfCm',
+  leftCalfCm: 'leftCalfCm',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type AnthropometryMeasurementScalarFieldEnum = (typeof AnthropometryMeasurementScalarFieldEnum)[keyof typeof AnthropometryMeasurementScalarFieldEnum]
+
+
 export const DietPlanScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -1796,6 +1898,7 @@ export type GlobalOmitConfig = {
   appointment?: Prisma.AppointmentOmit
   bodyMeasurement?: Prisma.BodyMeasurementOmit
   bodyComposition?: Prisma.BodyCompositionOmit
+  anthropometryMeasurement?: Prisma.AnthropometryMeasurementOmit
   dietPlan?: Prisma.DietPlanOmit
   dietPlanDay?: Prisma.DietPlanDayOmit
   dietMeal?: Prisma.DietMealOmit

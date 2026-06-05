@@ -16,6 +16,7 @@ import { AppointmentsModule } from './modules/appointments/appointments.module';
 import { BodyMeasurementsModule } from './modules/body-measurements/body-measurements.module';
 import { DietsModule } from './modules/diets/diets.module';
 import { BodyCompositionModule } from './modules/body-composition/body-composition.module';
+import { AnthropometryModule } from './modules/anthropometry/anthropometry.module';
 import { ReportsModule } from './modules/reports/reports.module';
 import { PaymentsModule } from './modules/payments/payments.module';
 import { AuditModule } from './modules/audit/audit.module';
@@ -49,6 +50,7 @@ import { AuditModule } from './modules/audit/audit.module';
     BodyMeasurementsModule,
     DietsModule,
     BodyCompositionModule,
+    AnthropometryModule,
     ReportsModule,
     PaymentsModule,
     AuditModule,

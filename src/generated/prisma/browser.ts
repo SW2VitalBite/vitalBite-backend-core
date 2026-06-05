@@ -53,6 +53,11 @@ export type BodyMeasurement = Prisma.BodyMeasurementModel
  */
 export type BodyComposition = Prisma.BodyCompositionModel
 /**
+ * Model AnthropometryMeasurement
+ * 
+ */
+export type AnthropometryMeasurement = Prisma.AnthropometryMeasurementModel
+/**
  * Model DietPlan
  * 
  */

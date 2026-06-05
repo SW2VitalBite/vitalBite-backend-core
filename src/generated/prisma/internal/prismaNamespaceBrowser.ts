@@ -58,6 +58,7 @@ export const ModelName = {
   Appointment: 'Appointment',
   BodyMeasurement: 'BodyMeasurement',
   BodyComposition: 'BodyComposition',
+  AnthropometryMeasurement: 'AnthropometryMeasurement',
   DietPlan: 'DietPlan',
   DietPlanDay: 'DietPlanDay',
   DietMeal: 'DietMeal',
@@ -210,6 +211,33 @@ export const BodyCompositionScalarFieldEnum = {
 } as const
 
 export type BodyCompositionScalarFieldEnum = (typeof BodyCompositionScalarFieldEnum)[keyof typeof BodyCompositionScalarFieldEnum]
+
+
+export const AnthropometryMeasurementScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  patientId: 'patientId',
+  bodyMeasurementId: 'bodyMeasurementId',
+  measuredAt: 'measuredAt',
+  neckCm: 'neckCm',
+  chestThoraxCm: 'chestThoraxCm',
+  rightArmCm: 'rightArmCm',
+  leftArmCm: 'leftArmCm',
+  rightForearmCm: 'rightForearmCm',
+  leftForearmCm: 'leftForearmCm',
+  waistCm: 'waistCm',
+  abdomenCm: 'abdomenCm',
+  hipCm: 'hipCm',
+  rightThighCm: 'rightThighCm',
+  leftThighCm: 'leftThighCm',
+  rightCalfCm: 'rightCalfCm',
+  leftCalfCm: 'leftCalfCm',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type AnthropometryMeasurementScalarFieldEnum = (typeof AnthropometryMeasurementScalarFieldEnum)[keyof typeof AnthropometryMeasurementScalarFieldEnum]
 
 
 export const DietPlanScalarFieldEnum = {
