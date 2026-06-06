@@ -41,5 +41,6 @@
 ## Flujo por paciente
 
 - Dietas y medidas se consultan desde el expediente del paciente.
+- La tab `Dietas` del detalle del paciente navega a `/patients/:id/diets`.
 - Las rutas globales `/diets` y `/body-measurements` no se exponen en la navegacion principal.
 - El acceso vigente a medidas es `/patients/:id/measurements`.

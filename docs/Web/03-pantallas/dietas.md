@@ -132,7 +132,7 @@ Debe mostrar:
 Rutas:
 
 - `/patients/:id/diets`: lista de planes alimenticios del paciente, filtros visuales y panel lateral.
-- `/patients/:id/diets/:dietId/edit`: editor de dias, comidas e items manuales.
+- `/patients/:id/diets/:dietId/edit`: editor semanal de Lunes a Domingo con horarios dinamicos, comidas e items manuales.
 
 La ruta global `/diets` no se expone; Dietas se abre desde el expediente del paciente.
 
@@ -152,6 +152,10 @@ Alcance:
 
 - Estados: `Activo`, `Borrador`, `Ajustar`.
 - Los items del plan son manuales y guardan nombre, porcion y calorias.
+- El editor semanal usa 7 columnas fijas, de Lunes a Domingo.
+- La nutricionista puede crear N filas de horarios; cada fila representa una comida compartida por todos los dias.
+- Cada celda de dia y horario permite editar alimentos inline con nombre, porcion y calorias.
+- La hora de cada comida se guarda en la estructura del plan sin cambiar el contrato GraphQL.
 - `Vence pronto` se calcula desde la fecha de fin del plan.
 - Catalogo nutricional, dietocalculo avanzado y exportacion PDF real quedan para una fase posterior.
 
