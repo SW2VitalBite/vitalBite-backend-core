@@ -17,10 +17,11 @@
 - `/dashboard`
 - `/patients`
 - `/patients/:id`
+- `/patients/:id/measurements`
+- `/patients/:id/diets`
+- `/patients/:id/diets/:dietId/edit`
 - `/appointments`
-- `/body-measurements`
 - `/nutrition-tracking`
-- `/diets`
 - `/nutrition-catalog`
 - `/diet-templates`
 - `/anthropometry`
@@ -36,3 +37,10 @@
 - Administrador accede a módulos administrativos y BI.
 - Nutricionista accede a operación clínica y nutricional.
 - Paciente no accede a la Web.
+
+## Flujo por paciente
+
+- Dietas y medidas se consultan desde el expediente del paciente.
+- La tab `Dietas` del detalle del paciente navega a `/patients/:id/diets`.
+- Las rutas globales `/diets` y `/body-measurements` no se exponen en la navegacion principal.
+- El acceso vigente a medidas es `/patients/:id/measurements`.

@@ -47,6 +47,12 @@ enum AppointmentMode {
   VIRTUAL
 }
 
+enum DietPlanStatus {
+  ACTIVE
+  DRAFT
+  NEEDS_ADJUSTMENT
+}
+
 model Tenant {
   id               String            @id @default(uuid())
   name             String
@@ -57,11 +63,38 @@ model Tenant {
   appointments     Appointment[]
   bodyMeasurements BodyMeasurement[]
   bodyCompositions BodyComposition[]
+  anthropometryMeasurements AnthropometryMeasurement[]
+  dietPlans        DietPlan[]
   createdAt        DateTime          @default(now()) @map("created_at")
   updatedAt        DateTime          @updatedAt @map("updated_at")
   deletedAt        DateTime?         @map("deleted_at")
 
   @@map("tenants")
+}
+
+model AuditEvent {
+  id            String   @id @default(uuid())
+  tenantId      String?  @map("tenant_id")
+  tenantName    String?  @map("tenant_name")
+  tenantSlug    String?  @map("tenant_slug")
+  actorUserId   String?  @map("actor_user_id")
+  actorTenantId String?  @map("actor_tenant_id")
+  actorEmail    String?  @map("actor_email")
+  actorRoleCode String?  @map("actor_role_code")
+  action        String
+  resourceType  String   @map("resource_type")
+  resourceId    String?  @map("resource_id")
+  summary       String
+  metadata      Json?
+  previousHash  String?  @map("previous_hash")
+  eventHash     String   @map("event_hash")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  @@index([tenantId, createdAt])
+  @@index([action, createdAt])
+  @@index([resourceType, resourceId])
+  @@index([actorUserId, createdAt])
+  @@map("audit_events")
 }
 
 model User {
@@ -77,6 +110,7 @@ model User {
   assignedPatients           Patient[]         @relation("NutritionistPatients")
   nutritionistAppointments   Appointment[]     @relation("NutritionistAppointments")
   registeredBodyMeasurements BodyMeasurement[] @relation("RegisteredBodyMeasurements")
+  dietPlans                  DietPlan[]        @relation("NutritionistDietPlans")
   createdAt                  DateTime          @default(now()) @map("created_at")
   updatedAt                  DateTime          @updatedAt @map("updated_at")
   deletedAt                  DateTime?         @map("deleted_at")
@@ -105,6 +139,8 @@ model Patient {
   appointments     Appointment[]
   bodyMeasurements BodyMeasurement[]
   bodyCompositions BodyComposition[]
+  anthropometryMeasurements AnthropometryMeasurement[]
+  dietPlans        DietPlan[]
   createdAt        DateTime          @default(now()) @map("created_at")
   updatedAt        DateTime          @updatedAt @map("updated_at")
   deletedAt        DateTime?         @map("deleted_at")
@@ -159,6 +195,7 @@ model BodyMeasurement {
   patient          Patient           @relation(fields: [patientId], references: [id])
   registeredBy     User              @relation("RegisteredBodyMeasurements", fields: [registeredById], references: [id])
   bodyCompositions BodyComposition[]
+  anthropometryMeasurements AnthropometryMeasurement[]
   createdAt        DateTime          @default(now()) @map("created_at")
   updatedAt        DateTime          @updatedAt @map("updated_at")
   deletedAt        DateTime?         @map("deleted_at")
@@ -192,4 +229,112 @@ model BodyComposition {
   @@index([tenantId, patientId, measuredAt])
   @@index([bodyMeasurementId])
   @@map("body_compositions")
+}
+
+model AnthropometryMeasurement {
+  id               String           @id @default(uuid())
+  tenantId         String           @map("tenant_id")
+  patientId        String           @map("patient_id")
+  bodyMeasurementId String?         @map("body_measurement_id")
+  measuredAt       DateTime         @map("measured_at")
+  neckCm           Float?           @map("neck_cm")
+  chestThoraxCm    Float?           @map("chest_thorax_cm")
+  rightArmCm       Float?           @map("right_arm_cm")
+  leftArmCm        Float?           @map("left_arm_cm")
+  rightForearmCm   Float?           @map("right_forearm_cm")
+  leftForearmCm    Float?           @map("left_forearm_cm")
+  waistCm          Float?           @map("waist_cm")
+  abdomenCm        Float?           @map("abdomen_cm")
+  hipCm            Float?           @map("hip_cm")
+  rightThighCm     Float?           @map("right_thigh_cm")
+  leftThighCm      Float?           @map("left_thigh_cm")
+  rightCalfCm      Float?           @map("right_calf_cm")
+  leftCalfCm       Float?           @map("left_calf_cm")
+  tenant           Tenant           @relation(fields: [tenantId], references: [id])
+  patient          Patient          @relation(fields: [patientId], references: [id])
+  bodyMeasurement  BodyMeasurement? @relation(fields: [bodyMeasurementId], references: [id])
+  createdAt        DateTime         @default(now()) @map("created_at")
+  updatedAt        DateTime         @updatedAt @map("updated_at")
+  deletedAt        DateTime?        @map("deleted_at")
+
+  @@index([tenantId, patientId, measuredAt])
+  @@index([bodyMeasurementId])
+  @@map("anthropometry_measurements")
+}
+
+model DietPlan {
+  id                String           @id @default(uuid())
+  tenantId          String           @map("tenant_id")
+  patientId         String           @map("patient_id")
+  nutritionistId    String           @map("nutritionist_id")
+  name              String
+  objective         String
+  phase             String?
+  approach          String?
+  startDate         DateTime?        @map("start_date")
+  endDate           DateTime?        @map("end_date")
+  status            DietPlanStatus   @default(DRAFT)
+  mealsPerDay       Int?             @map("meals_per_day")
+  mainRestriction   String?          @map("main_restriction")
+  notes             String?
+  estimatedCalories Int?             @map("estimated_calories")
+  adherencePercent  Int?             @map("adherence_percent")
+  tenant            Tenant           @relation(fields: [tenantId], references: [id])
+  patient           Patient          @relation(fields: [patientId], references: [id])
+  nutritionist      User             @relation("NutritionistDietPlans", fields: [nutritionistId], references: [id])
+  days              DietPlanDay[]
+  createdAt         DateTime         @default(now()) @map("created_at")
+  updatedAt         DateTime         @updatedAt @map("updated_at")
+  deletedAt         DateTime?        @map("deleted_at")
+
+  @@index([tenantId, patientId, status])
+  @@index([tenantId, nutritionistId])
+  @@index([tenantId, status])
+  @@map("diet_plans")
+}
+
+model DietPlanDay {
+  id         String     @id @default(uuid())
+  dietPlanId String     @map("diet_plan_id")
+  dayLabel   String     @map("day_label")
+  dayOrder   Int        @map("day_order")
+  dietPlan   DietPlan   @relation(fields: [dietPlanId], references: [id], onDelete: Cascade)
+  meals      DietMeal[]
+  createdAt  DateTime   @default(now()) @map("created_at")
+  updatedAt  DateTime   @updatedAt @map("updated_at")
+
+  @@unique([dietPlanId, dayOrder])
+  @@map("diet_plan_days")
+}
+
+model DietMeal {
+  id             String         @id @default(uuid())
+  dietPlanDayId  String         @map("diet_plan_day_id")
+  name           String
+  mealOrder      Int            @map("meal_order")
+  targetCalories Int?           @map("target_calories")
+  notes          String?
+  day            DietPlanDay    @relation(fields: [dietPlanDayId], references: [id], onDelete: Cascade)
+  items          DietMealItem[]
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @updatedAt @map("updated_at")
+
+  @@unique([dietPlanDayId, mealOrder])
+  @@map("diet_meals")
+}
+
+model DietMealItem {
+  id          String   @id @default(uuid())
+  dietMealId  String   @map("diet_meal_id")
+  name        String
+  portion     String?
+  calories    Int?
+  itemOrder   Int      @map("item_order")
+  notes       String?
+  meal        DietMeal @relation(fields: [dietMealId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@unique([dietMealId, itemOrder])
+  @@map("diet_meal_items")
 }

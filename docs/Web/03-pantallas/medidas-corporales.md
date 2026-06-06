@@ -2,7 +2,7 @@
 
 ## Ruta
 
-- `/body-measurements`
+- `/patients/:id/measurements`
 
 ## Actor principal
 
@@ -112,6 +112,12 @@ Validaciones:
 - Los gráficos deben estar encima del historial.
 - El formulario debe separar medición básica y composición corporal.
 - El historial debe permitir comparar fechas.
+
+## Navegacion actual
+
+- Medidas corporales se abre exclusivamente desde `/patients/:id/measurements`.
+- No existe acceso global desde el sidebar ni ruta global `/body-measurements`.
+- El modulo conserva las acciones de nueva medicion y registro de composicion para el paciente actual.
 
 ## Backend disponible
 

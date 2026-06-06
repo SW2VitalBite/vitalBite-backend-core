@@ -2,6 +2,7 @@ import { registerEnumType } from '@nestjs/graphql';
 import {
   AppointmentMode,
   AppointmentStatus,
+  DietPlanStatus,
   Gender,
   PatientStatus,
   TenantStatus,
@@ -14,6 +15,10 @@ registerEnumType(AppointmentStatus, {
 
 registerEnumType(AppointmentMode, {
   name: 'AppointmentMode',
+});
+
+registerEnumType(DietPlanStatus, {
+  name: 'DietPlanStatus',
 });
 
 registerEnumType(TenantStatus, {

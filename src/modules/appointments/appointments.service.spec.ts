@@ -124,6 +124,54 @@ describe('AppointmentsService', () => {
     );
   });
 
+  it.each([
+    {
+      label: 'day',
+      dateFrom: new Date('2026-06-08T00:00:00.000Z'),
+      dateTo: new Date('2026-06-08T23:59:59.000Z'),
+    },
+    {
+      label: 'week',
+      dateFrom: new Date('2026-06-08T00:00:00.000Z'),
+      dateTo: new Date('2026-06-14T23:59:59.000Z'),
+    },
+    {
+      label: 'month',
+      dateFrom: new Date('2026-06-01T00:00:00.000Z'),
+      dateTo: new Date('2026-06-30T23:59:59.000Z'),
+    },
+  ])('returns calendar data for %s range preserving order and filters', async ({ dateFrom, dateTo }) => {
+    const prisma = createPrismaMock();
+    prisma.appointment.findMany.mockResolvedValueOnce([appointment]);
+    const service = new AppointmentsService(prisma as any);
+
+    const result = await service.findCalendar(currentUser, {
+      dateFrom,
+      dateTo,
+      status: AppointmentStatus.CONFIRMED,
+      search: 'control',
+    });
+
+    expect(prisma.appointment.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: expect.objectContaining({
+          tenantId: currentUser.tenantId,
+          status: AppointmentStatus.CONFIRMED,
+          deletedAt: null,
+          scheduledAt: {
+            gte: dateFrom,
+            lte: dateTo,
+          },
+          OR: expect.any(Array),
+        }),
+        orderBy: {
+          scheduledAt: 'asc',
+        },
+      }),
+    );
+    expect(result[0].patientFullName).toBe('Ana Rojas');
+  });
+
   it('creates an appointment with valid patient and nutritionist', async () => {
     const prisma = createPrismaMock();
     const service = new AppointmentsService(prisma as any);

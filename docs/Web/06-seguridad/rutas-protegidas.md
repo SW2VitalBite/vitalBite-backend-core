@@ -17,10 +17,11 @@
 - `/dashboard`
 - `/patients`
 - `/patients/:id`
+- `/patients/:id/measurements`
+- `/patients/:id/diets`
+- `/patients/:id/diets/:dietId/edit`
 - `/appointments`
-- `/body-measurements`
 - `/nutrition-tracking`
-- `/diets`
 - `/nutrition-catalog`
 - `/diet-templates`
 - `/anthropometry`
