@@ -242,17 +242,21 @@ El Core no genera PDFs ni escribe en S3. Solo solicita el proceso al microservic
 
 | Mutation                   | Descripcion                            | Acceso        |
 | -------------------------- | -------------------------------------- | ------------- |
+| `createInitialCheckoutSession(input)` | Crea una sesion Stripe para alta inicial | Administrador, nutricionista |
 | `requestPlanChange(input)` | Registra solicitud pendiente de cambio | Administrador |
 | `approvePlanChange(input)` | Aprueba solicitud y aplica nuevo plan  | Administrador |
 | `rejectPlanChange(input)`  | Rechaza solicitud pendiente            | Administrador |
+| `paySubscription`         | Procesa una renovacion manual/demo      | Administrador |
 
 Input minimo:
 
+- `CreateInitialCheckoutSessionInput`: `planCode`
 - `RequestPlanChangeInput`: `planCode`, `comment?`
 - `ResolvePlanChangeInput`: `requestId`, `comment?`
 
 Reglas:
 
+- La compra inicial usa Stripe Checkout en modo test.
 - La solicitud nueva queda en estado `PENDING`.
 - Al aprobar, cambia el plan activo del tenant en el microservicio de pagos.
 - Al rechazar, no cambia el plan activo.

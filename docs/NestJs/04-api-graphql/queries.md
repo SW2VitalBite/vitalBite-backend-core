@@ -218,8 +218,9 @@ Indicadores esperados:
 | Query                       | Descripcion                         | Acceso        |
 | --------------------------- | ----------------------------------- | ------------- |
 | `subscriptionPlans`         | Lista planes comerciales disponibles | Administrador |
-| `currentTenantSubscription` | Consulta plan activo del tenant      | Administrador |
+| `currentTenantSubscription` | Consulta plan activo del tenant      | Administrador, nutricionista |
 | `planChangeRequests`        | Lista solicitudes de cambio de plan  | Administrador |
+| `checkoutSessionStatus(sessionId)` | Verifica estado de compra inicial | Administrador, nutricionista |
 
 Los datos financieros se consultan al microservicio `.NET + DynamoDB`; el Core no los persiste en PostgreSQL.
 
