@@ -58,11 +58,15 @@ export const ModelName = {
   Appointment: 'Appointment',
   BodyMeasurement: 'BodyMeasurement',
   BodyComposition: 'BodyComposition',
+  RiskPrediction: 'RiskPrediction',
+  PatientSegmentation: 'PatientSegmentation',
   AnthropometryMeasurement: 'AnthropometryMeasurement',
   DietPlan: 'DietPlan',
   DietPlanDay: 'DietPlanDay',
   DietMeal: 'DietMeal',
-  DietMealItem: 'DietMealItem'
+  DietMealItem: 'DietMealItem',
+  Notification: 'Notification',
+  DocumentMetadata: 'DocumentMetadata'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -140,12 +144,18 @@ export const PatientScalarFieldEnum = {
   firstName: 'firstName',
   lastName: 'lastName',
   email: 'email',
+  passwordHash: 'passwordHash',
   phone: 'phone',
   birthDate: 'birthDate',
   gender: 'gender',
+  activityLevel: 'activityLevel',
+  dietQualityScore: 'dietQualityScore',
+  comorbiditiesCount: 'comorbiditiesCount',
   status: 'status',
   clinicalNotes: 'clinicalNotes',
   nutritionGoal: 'nutritionGoal',
+  heightCm: 'heightCm',
+  expoPushToken: 'expoPushToken',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt'
@@ -211,6 +221,43 @@ export const BodyCompositionScalarFieldEnum = {
 } as const
 
 export type BodyCompositionScalarFieldEnum = (typeof BodyCompositionScalarFieldEnum)[keyof typeof BodyCompositionScalarFieldEnum]
+
+
+export const RiskPredictionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  patientId: 'patientId',
+  requestedById: 'requestedById',
+  features: 'features',
+  featuresFingerprint: 'featuresFingerprint',
+  modelVersion: 'modelVersion',
+  nivelRiesgo: 'nivelRiesgo',
+  probabilidad: 'probabilidad',
+  probabilidades: 'probabilidades',
+  factoresCriticos: 'factoresCriticos',
+  recomendacion: 'recomendacion',
+  sourceMeasurementId: 'sourceMeasurementId',
+  sourceCompositionId: 'sourceCompositionId',
+  createdAt: 'createdAt'
+} as const
+
+export type RiskPredictionScalarFieldEnum = (typeof RiskPredictionScalarFieldEnum)[keyof typeof RiskPredictionScalarFieldEnum]
+
+
+export const PatientSegmentationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  requestedById: 'requestedById',
+  kClusters: 'kClusters',
+  totalPatients: 'totalPatients',
+  silhouetteScore: 'silhouetteScore',
+  clusters: 'clusters',
+  pcaPoints: 'pcaPoints',
+  varianceExplained: 'varianceExplained',
+  createdAt: 'createdAt'
+} as const
+
+export type PatientSegmentationScalarFieldEnum = (typeof PatientSegmentationScalarFieldEnum)[keyof typeof PatientSegmentationScalarFieldEnum]
 
 
 export const AnthropometryMeasurementScalarFieldEnum = {
@@ -306,6 +353,41 @@ export const DietMealItemScalarFieldEnum = {
 export type DietMealItemScalarFieldEnum = (typeof DietMealItemScalarFieldEnum)[keyof typeof DietMealItemScalarFieldEnum]
 
 
+export const NotificationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  patientId: 'patientId',
+  type: 'type',
+  title: 'title',
+  body: 'body',
+  data: 'data',
+  isRead: 'isRead',
+  createdAt: 'createdAt'
+} as const
+
+export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
+
+
+export const DocumentMetadataScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  patientId: 'patientId',
+  nutritionistId: 'nutritionistId',
+  resourceId: 'resourceId',
+  tipoDocumento: 'tipoDocumento',
+  nombreArchivo: 'nombreArchivo',
+  pacienteNombre: 'pacienteNombre',
+  nutricionistaNombre: 'nutricionistaNombre',
+  s3Url: 's3Url',
+  hashDocumento: 'hashDocumento',
+  estado: 'estado',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DocumentMetadataScalarFieldEnum = (typeof DocumentMetadataScalarFieldEnum)[keyof typeof DocumentMetadataScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -320,6 +402,13 @@ export const NullableJsonNullValueInput = {
 } as const
 
 export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {

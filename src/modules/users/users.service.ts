@@ -317,7 +317,7 @@ export class UsersService {
   }
 
   private async ensureTenantAllowsReactivation(currentUser: AuthenticatedUser) {
-    let subscription: { planCode: string };
+    let subscription: { planCode: string } | null;
 
     try {
       subscription =
@@ -325,6 +325,12 @@ export class UsersService {
     } catch {
       throw new ServiceUnavailableException(
         'Cannot validate plan limits while Payments is unavailable.',
+      );
+    }
+
+    if (!subscription) {
+      throw new ForbiddenException(
+        'An active subscription is required to reactivate users.',
       );
     }
 
@@ -347,7 +353,7 @@ export class UsersService {
   }
 
   private async ensureTenantUserLimit(currentUser: AuthenticatedUser) {
-    let subscription: { planCode: string };
+    let subscription: { planCode: string } | null;
 
     try {
       subscription =
@@ -355,6 +361,12 @@ export class UsersService {
     } catch {
       throw new ServiceUnavailableException(
         'Cannot validate plan limits while Payments is unavailable.',
+      );
+    }
+
+    if (!subscription) {
+      throw new ForbiddenException(
+        'An active subscription is required to create users.',
       );
     }
 

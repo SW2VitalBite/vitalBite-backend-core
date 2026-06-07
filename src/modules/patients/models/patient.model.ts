@@ -1,5 +1,6 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, Float, ID, Int, ObjectType } from '@nestjs/graphql';
 import { Gender, PatientStatus } from '../../../prisma/generated-client';
+import { DocumentMetadataModel } from './document-metadata.model';
 
 @ObjectType('Patient')
 export class PatientModel {
@@ -33,6 +34,15 @@ export class PatientModel {
   @Field(() => Gender, { nullable: true })
   gender?: Gender | null;
 
+  @Field(() => Int, { nullable: true })
+  activityLevel?: number | null;
+
+  @Field(() => Float, { nullable: true })
+  dietQualityScore?: number | null;
+
+  @Field(() => Int, { nullable: true })
+  comorbiditiesCount?: number | null;
+
   @Field(() => PatientStatus)
   status: PatientStatus;
 
@@ -42,9 +52,15 @@ export class PatientModel {
   @Field(() => String, { nullable: true })
   nutritionGoal?: string | null;
 
+  @Field(() => Number, { nullable: true })
+  heightCm?: number | null;
+
   @Field()
   createdAt: Date;
 
   @Field()
   updatedAt: Date;
+
+  @Field(() => [DocumentMetadataModel], { nullable: 'itemsAndList' })
+  documents?: DocumentMetadataModel[];
 }

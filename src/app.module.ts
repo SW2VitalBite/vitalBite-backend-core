@@ -19,7 +19,10 @@ import { BodyCompositionModule } from './modules/body-composition/body-compositi
 import { AnthropometryModule } from './modules/anthropometry/anthropometry.module';
 import { ReportsModule } from './modules/reports/reports.module';
 import { PaymentsModule } from './modules/payments/payments.module';
+import { NotificationsModule } from './modules/notifications/notifications.module';
 import { AuditModule } from './modules/audit/audit.module';
+import { RiskPredictionsModule } from './modules/risk-predictions/risk-predictions.module';
+import { PatientSegmentationsModule } from './modules/patient-segmentations/patient-segmentations.module';
 
 @Module({
   imports: [
@@ -32,8 +35,8 @@ import { AuditModule } from './modules/audit/audit.module';
       useFactory: () => ({
         autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
         sortSchema: true,
-        playground: process.env.GRAPHQL_PLAYGROUND === 'true',
-        context: ({ req }: { req: Request }) => ({ req }),
+        playground: false,
+        graphiql: process.env.GRAPHQL_PLAYGROUND === 'true',
         plugins: [
           createGraphqlLoggingPlugin(
             process.env.GRAPHQL_LOG_RESPONSES !== 'false',
@@ -53,7 +56,10 @@ import { AuditModule } from './modules/audit/audit.module';
     AnthropometryModule,
     ReportsModule,
     PaymentsModule,
+    NotificationsModule,
     AuditModule,
+    RiskPredictionsModule,
+    PatientSegmentationsModule,
   ],
 })
 export class AppModule {}

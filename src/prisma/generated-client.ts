@@ -3,6 +3,7 @@ export {
   AppointmentStatus,
   DietPlanStatus,
   Gender,
+  NotificationType,
   PatientStatus,
   Prisma,
   PrismaClient,

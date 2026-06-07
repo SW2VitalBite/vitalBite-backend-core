@@ -4,6 +4,7 @@ import {
   AppointmentStatus,
   DietPlanStatus,
   Gender,
+  NotificationType,
   PatientStatus,
   TenantStatus,
   UserStatus,
@@ -35,4 +36,8 @@ registerEnumType(PatientStatus, {
 
 registerEnumType(Gender, {
   name: 'Gender',
+});
+
+registerEnumType(NotificationType, {
+  name: 'NotificationType',
 });

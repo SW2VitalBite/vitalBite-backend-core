@@ -2,13 +2,20 @@ import {
   ForbiddenException,
   Injectable,
   ServiceUnavailableException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { Prisma } from '../../prisma/generated-client';
+import { PrismaService } from '../../prisma/prisma.service';
 import { AuditService } from '../audit/audit.service';
 import { AuthenticatedUser } from '../auth/auth.types';
+import { CreateInitialCheckoutSessionInput } from './dto/create-initial-checkout-session.input';
 import { RequestPlanChangeInput } from './dto/request-plan-change.input';
 import { ResolvePlanChangeInput } from './dto/resolve-plan-change.input';
+import { CheckoutSessionStatusModel } from './models/checkout-session-status.model';
+import { InitialCheckoutSessionModel } from './models/initial-checkout-session.model';
 import { PlanChangeRequestModel } from './models/plan-change-request.model';
+import { PaymentResponseModel } from './models/payment-response.model';
 import { SubscriptionPlanModel } from './models/subscription-plan.model';
 import { TenantSubscriptionModel } from './models/tenant-subscription.model';
 
@@ -47,26 +54,53 @@ interface PaymentsPlanChangeRequestResponse {
   resolvedAt?: string | null;
 }
 
+interface PaymentsPayResponse {
+  transactionHash: string;
+  invoiceUrl: string;
+  nextReviewAt: string;
+}
+
+interface PaymentsInitialCheckoutSessionResponse {
+  sessionId: string;
+  checkoutUrl: string;
+}
+
+interface PaymentsCheckoutSessionStatusResponse {
+  sessionId: string;
+  status: string;
+  tenantId: string;
+  planCode?: string | null;
+  invoiceUrl?: string | null;
+  activatedAt?: string | null;
+  nextReviewAt?: string | null;
+}
+
+interface PaymentsRequestOptions {
+  method?: string;
+  body?: string;
+}
+
 @Injectable()
 export class PaymentsIntegrationService {
   constructor(
     private readonly configService: ConfigService,
     private readonly auditService: AuditService,
+    private readonly prisma: PrismaService,
   ) {}
 
   async findPlans(currentUser: AuthenticatedUser) {
-    this.ensureAdmin(currentUser);
+    this.ensureTenantBillingAccess(currentUser);
     const plans = await this.request<PaymentsPlanResponse[]>('/plans');
     return plans.map((plan) => this.toPlanModel(plan));
   }
 
   async findCurrentTenantSubscription(currentUser: AuthenticatedUser) {
-    this.ensureAdmin(currentUser);
+    this.ensureTenantBillingAccess(currentUser);
     const tenantSlug = currentUser.tenant.slug;
-    const subscription = await this.request<PaymentsSubscriptionResponse>(
+    const subscription = await this.requestOptional<PaymentsSubscriptionResponse>(
       `/tenants/${encodeURIComponent(tenantSlug)}/subscription`,
     );
-    return this.toSubscriptionModel(subscription);
+    return subscription ? this.toSubscriptionModel(subscription) : null;
   }
 
   async findPlanChangeRequests(currentUser: AuthenticatedUser) {
@@ -125,6 +159,130 @@ export class PaymentsIntegrationService {
     return this.toPlanChangeRequestModel(request);
   }
 
+  async paySubscription(
+    currentUser: AuthenticatedUser,
+  ): Promise<PaymentResponseModel> {
+    this.ensureAdmin(currentUser);
+    const tenantSlug = currentUser.tenant.slug;
+    const result = await this.request<PaymentsPayResponse>(
+      `/tenants/${encodeURIComponent(tenantSlug)}/payments/pay`,
+      { method: 'POST', body: '{}' },
+    );
+
+    await this.auditService.recordEvent({
+      actor: currentUser,
+      tenantId: currentUser.tenantId,
+      tenantName: currentUser.tenant.name,
+      tenantSlug: currentUser.tenant.slug,
+      action: 'PAYMENT_PROCESSED',
+      resourceType: 'PAYMENT',
+      resourceId: result.transactionHash,
+      summary: `Pago de suscripción procesado. Hash: ${result.transactionHash}.`,
+      metadata: {
+        transactionHash: result.transactionHash,
+        invoiceUrl: result.invoiceUrl,
+        nextReviewAt: result.nextReviewAt,
+      },
+    });
+
+    return {
+      transactionHash: result.transactionHash,
+      invoiceUrl: result.invoiceUrl,
+      nextReviewAt: new Date(result.nextReviewAt),
+    };
+  }
+
+  async createInitialCheckoutSession(
+    currentUser: AuthenticatedUser,
+    input: CreateInitialCheckoutSessionInput,
+  ): Promise<InitialCheckoutSessionModel> {
+    this.ensureTenantBillingAccess(currentUser);
+    await this.ensureTenantHasNoSubscription(currentUser);
+
+    const tenantSlug = currentUser.tenant.slug;
+    const result = await this.request<PaymentsInitialCheckoutSessionResponse>(
+      `/tenants/${encodeURIComponent(tenantSlug)}/checkout-sessions`,
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          planCode: input.planCode,
+        }),
+      },
+    );
+
+    await this.auditService.recordEvent({
+      actor: currentUser,
+      tenantId: currentUser.tenantId,
+      tenantName: currentUser.tenant.name,
+      tenantSlug: currentUser.tenant.slug,
+      action: 'INITIAL_CHECKOUT_STARTED',
+      resourceType: 'CHECKOUT_SESSION',
+      resourceId: result.sessionId,
+      summary: `Inicio de compra inicial del plan ${input.planCode}.`,
+      metadata: {
+        sessionId: result.sessionId,
+        planCode: input.planCode,
+        checkoutUrl: result.checkoutUrl,
+      },
+    });
+
+    return result;
+  }
+
+  async getCheckoutSessionStatus(
+    currentUser: AuthenticatedUser,
+    sessionId: string,
+  ): Promise<CheckoutSessionStatusModel> {
+    this.ensureTenantBillingAccess(currentUser);
+    const result = await this.request<PaymentsCheckoutSessionStatusResponse>(
+      `/checkout-sessions/${encodeURIComponent(sessionId)}`,
+    );
+
+    if (result.tenantId !== currentUser.tenant.slug) {
+      throw new UnauthorizedException(
+        'Checkout session does not belong to the current tenant.',
+      );
+    }
+
+    if (result.status === 'ACTIVE') {
+      await this.recordUniqueAuditEvent(currentUser, {
+        action: 'INITIAL_SUBSCRIPTION_ACTIVATED',
+        resourceType: 'CHECKOUT_SESSION',
+        resourceId: result.sessionId,
+        summary: `Suscripción inicial activada para el plan ${result.planCode ?? 'N/A'}.`,
+        metadata: {
+          sessionId: result.sessionId,
+          planCode: result.planCode,
+          invoiceUrl: result.invoiceUrl,
+          activatedAt: result.activatedAt,
+          nextReviewAt: result.nextReviewAt,
+        },
+      });
+    }
+
+    if (result.status === 'CANCELED') {
+      await this.recordUniqueAuditEvent(currentUser, {
+        action: 'INITIAL_CHECKOUT_CANCELED',
+        resourceType: 'CHECKOUT_SESSION',
+        resourceId: result.sessionId,
+        summary: 'La compra inicial fue cancelada antes de activarse.',
+        metadata: {
+          sessionId: result.sessionId,
+          planCode: result.planCode,
+        },
+      });
+    }
+
+    return {
+      sessionId: result.sessionId,
+      status: result.status,
+      planCode: result.planCode ?? null,
+      invoiceUrl: result.invoiceUrl ?? null,
+      activatedAt: result.activatedAt ? new Date(result.activatedAt) : null,
+      nextReviewAt: result.nextReviewAt ? new Date(result.nextReviewAt) : null,
+    };
+  }
+
   async approvePlanChange(
     currentUser: AuthenticatedUser,
     input: ResolvePlanChangeInput,
@@ -156,16 +314,18 @@ export class PaymentsIntegrationService {
       },
     );
     const model = this.toPlanChangeRequestModel(request);
+    const actionEvent =
+      action === 'approve' ? 'PLAN_CHANGE_APPROVED' : 'PLAN_CHANGE_REJECTED';
 
     await this.auditService.recordEvent({
       actor: currentUser,
       tenantId: currentUser.tenantId,
       tenantName: currentUser.tenant.name,
       tenantSlug: currentUser.tenant.slug,
-      action: 'PLAN_CHANGE_REQUESTED',
+      action: actionEvent,
       resourceType: 'PLAN_CHANGE_REQUEST',
       resourceId: model.requestId,
-      summary: `Cambio de plan solicitado de ${model.currentPlanCode} a ${model.requestedPlanCode}.`,
+      summary: `Cambio de plan ${action === 'approve' ? 'aprobado' : 'rechazado'} de ${model.currentPlanCode} a ${model.requestedPlanCode}.`,
       metadata: {
         currentPlanCode: model.currentPlanCode,
         requestedPlanCode: model.requestedPlanCode,
@@ -188,6 +348,19 @@ export class PaymentsIntegrationService {
     }
   }
 
+  private ensureTenantBillingAccess(currentUser: AuthenticatedUser) {
+    const roleCode = currentUser.roleCode.trim().toUpperCase();
+    if (
+      roleCode !== 'ADMINISTRADOR' &&
+      roleCode !== 'ADMIN' &&
+      roleCode !== 'NUTRICIONISTA'
+    ) {
+      throw new ForbiddenException(
+        'Only tenant staff can access subscription information.',
+      );
+    }
+  }
+
   private ensureSuperAdmin(currentUser: AuthenticatedUser) {
     const roleCode = currentUser.roleCode.trim().toUpperCase();
     if (roleCode !== 'SUPER_ADMIN') {
@@ -199,7 +372,7 @@ export class PaymentsIntegrationService {
 
   private async request<T>(
     path: string,
-    init: { method?: string; body?: string } = {},
+    init: PaymentsRequestOptions = {},
   ): Promise<T> {
     const baseUrl = this.configService.get<string>('paymentsServiceUrl');
     if (!baseUrl) {
@@ -232,6 +405,96 @@ export class PaymentsIntegrationService {
     }
 
     return (await response.json()) as T;
+  }
+
+  private async requestOptional<T>(
+    path: string,
+    init: PaymentsRequestOptions = {},
+  ): Promise<T | null> {
+    const baseUrl = this.configService.get<string>('paymentsServiceUrl');
+    if (!baseUrl) {
+      throw new ServiceUnavailableException('PAYMENTS_SERVICE_URL is not set.');
+    }
+
+    const url = `${baseUrl.replace(/\/$/, '')}${path}`;
+    let response: Response;
+
+    try {
+      response = await fetch(url, {
+        method: init.method ?? 'GET',
+        headers: init.body
+          ? {
+              'Content-Type': 'application/json',
+            }
+          : undefined,
+        body: init.body,
+      });
+    } catch {
+      throw new ServiceUnavailableException(
+        'Payments service is not available.',
+      );
+    }
+
+    if (response.status === 404) {
+      return null;
+    }
+
+    if (!response.ok) {
+      throw new ServiceUnavailableException(
+        'Payments service returned an invalid response.',
+      );
+    }
+
+    return (await response.json()) as T;
+  }
+
+  private async ensureTenantHasNoSubscription(currentUser: AuthenticatedUser) {
+    const currentSubscription =
+      await this.findCurrentTenantSubscription(currentUser);
+    if (currentSubscription) {
+      throw new ForbiddenException(
+        'The tenant already has an active subscription.',
+      );
+    }
+  }
+
+  private async recordUniqueAuditEvent(
+    currentUser: AuthenticatedUser,
+    input: {
+      action: string;
+      resourceType: string;
+      resourceId: string;
+      summary: string;
+      metadata?: Prisma.InputJsonValue | null;
+    },
+  ) {
+    const existing = await this.prisma.auditEvent.findFirst({
+      where: {
+        tenantId: currentUser.tenantId,
+        action: input.action,
+        resourceType: input.resourceType,
+        resourceId: input.resourceId,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (existing) {
+      return existing;
+    }
+
+    return this.auditService.recordEvent({
+      actor: currentUser,
+      tenantId: currentUser.tenantId,
+      tenantName: currentUser.tenant.name,
+      tenantSlug: currentUser.tenant.slug,
+      action: input.action,
+      resourceType: input.resourceType,
+      resourceId: input.resourceId,
+      summary: input.summary,
+      metadata: input.metadata ?? null,
+    });
   }
 
   private async resolvePlanChange(

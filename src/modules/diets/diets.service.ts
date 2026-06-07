@@ -1,13 +1,20 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { AuthenticatedUser } from '../auth/auth.types';
-import { DietPlanStatus, Prisma, UserStatus } from '../../prisma/generated-client';
+import {
+  DietPlanStatus,
+  NotificationType,
+  Prisma,
+  UserStatus,
+} from '../../prisma/generated-client';
 import { PrismaService } from '../../prisma/prisma.service';
+import { NotificationsService } from '../notifications/notifications.service';
 import { CreateDietPlanInput } from './dto/create-diet-plan.input';
 import { DietFilterInput } from './dto/diet-filter.input';
 import { DietPlanDayInput } from './dto/diet-structure.input';
 import { DuplicateDietPlanDayInput } from './dto/duplicate-diet-plan-day.input';
 import { UpdateDietPlanStructureInput } from './dto/update-diet-plan-structure.input';
 import { UpdateDietPlanInput } from './dto/update-diet-plan.input';
+import { mapDietPlanToPdfPayload } from './diet-pdf.mapper';
 
 type DietPlanWithStructure = Prisma.DietPlanGetPayload<{
   include: {
@@ -27,7 +34,10 @@ type DietPlanWithStructure = Prisma.DietPlanGetPayload<{
 
 @Injectable()
 export class DietsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly notificationsService: NotificationsService,
+  ) {}
 
   async findMany(currentUser: AuthenticatedUser, filter?: DietFilterInput) {
     const diets = await this.prisma.dietPlan.findMany({
@@ -106,6 +116,15 @@ export class DietsService {
         },
       },
       include: this.includeStructure(),
+    });
+
+    void this.notificationsService.createAndPush({
+      tenantId: currentUser.tenantId,
+      patientId: input.patientId,
+      type: NotificationType.DIETA_ASIGNADA,
+      title: 'Nueva dieta asignada',
+      body: `Tu nutricionista ha asignado un nuevo plan de alimentación: ${diet.name}.`,
+      data: { dietPlanId: diet.id },
     });
 
     return this.mapDiet(diet);
@@ -269,6 +288,26 @@ export class DietsService {
     });
 
     return this.findById(currentUser, input.dietPlanId);
+  }
+
+  async generatePdf(currentUser: AuthenticatedUser, id: string) {
+    const diet = await this.findRecordById(currentUser, id);
+    const mappedDiet = this.mapDiet(diet);
+    const payload = mapDietPlanToPdfPayload(mappedDiet);
+
+    const documentsUrl = process.env.DOCUMENTS_SERVICE_URL || 'http://localhost:8082';
+    const response = await fetch(`${documentsUrl}/api/v1/documents/pdf/diet`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error generando PDF en el microservicio: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data.url;
   }
 
   private buildWhere(

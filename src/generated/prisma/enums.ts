@@ -73,3 +73,16 @@ export const DietPlanStatus = {
 } as const
 
 export type DietPlanStatus = (typeof DietPlanStatus)[keyof typeof DietPlanStatus]
+
+
+export const NotificationType = {
+  CITA_CREADA: 'CITA_CREADA',
+  CITA_CANCELADA: 'CITA_CANCELADA',
+  CITA_CONFIRMADA: 'CITA_CONFIRMADA',
+  CITA_REPROGRAMADA: 'CITA_REPROGRAMADA',
+  DIETA_ASIGNADA: 'DIETA_ASIGNADA',
+  MENSAJE: 'MENSAJE',
+  REPORTE: 'REPORTE'
+} as const
+
+export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]

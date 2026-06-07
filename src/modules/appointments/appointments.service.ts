@@ -8,10 +8,12 @@ import { AuthenticatedUser } from '../auth/auth.types';
 import {
   AppointmentMode,
   AppointmentStatus,
+  NotificationType,
   Prisma,
   UserStatus,
 } from '../../prisma/generated-client';
 import { PrismaService } from '../../prisma/prisma.service';
+import { NotificationsService } from '../notifications/notifications.service';
 import { AppointmentFilterInput } from './dto/appointment-filter.input';
 import { CancelAppointmentInput } from './dto/cancel-appointment.input';
 import { CompleteAppointmentInput } from './dto/complete-appointment.input';
@@ -33,7 +35,10 @@ type AppointmentWithPeople = Prisma.AppointmentGetPayload<{
 
 @Injectable()
 export class AppointmentsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly notificationsService: NotificationsService,
+  ) {}
 
   async findMany(
     currentUser: AuthenticatedUser,
@@ -107,7 +112,34 @@ export class AppointmentsService {
       include: this.includePeople(),
     });
 
-    return this.mapAppointment(appointment);
+    const mapped = this.mapAppointment(appointment);
+
+    const dateStr = new Date(appointment.scheduledAt).toLocaleDateString(
+      'es-ES',
+      {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+      },
+    );
+    const timeStr = new Date(appointment.scheduledAt).toLocaleTimeString(
+      'es-ES',
+      {
+        hour: '2-digit',
+        minute: '2-digit',
+      },
+    );
+
+    void this.notificationsService.createAndPush({
+      tenantId: currentUser.tenantId,
+      patientId: input.patientId,
+      type: NotificationType.CITA_CREADA,
+      title: 'Cita programada',
+      body: `Tu cita con ${appointment.nutritionist.firstName} ${appointment.nutritionist.lastName} está confirmada para el ${dateStr} a las ${timeStr}.`,
+      data: { appointmentId: appointment.id },
+    });
+
+    return mapped;
   }
 
   async confirm(currentUser: AuthenticatedUser, id: string) {
@@ -120,6 +152,24 @@ export class AppointmentsService {
         deletedAt: null,
       },
       include: this.includePeople(),
+    });
+
+    const dateStr = new Date(appointment.scheduledAt).toLocaleDateString(
+      'es-ES',
+      {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+      },
+    );
+
+    void this.notificationsService.createAndPush({
+      tenantId: currentUser.tenantId,
+      patientId: appointment.patientId,
+      type: NotificationType.CITA_CONFIRMADA,
+      title: 'Cita confirmada',
+      body: `Tu cita del ${dateStr} ha sido confirmada por tu nutricionista.`,
+      data: { appointmentId: appointment.id },
     });
 
     return this.mapAppointment(appointment);
@@ -154,6 +204,31 @@ export class AppointmentsService {
       include: this.includePeople(),
     });
 
+    const dateStr = new Date(appointment.scheduledAt).toLocaleDateString(
+      'es-ES',
+      {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+      },
+    );
+    const timeStr = new Date(appointment.scheduledAt).toLocaleTimeString(
+      'es-ES',
+      {
+        hour: '2-digit',
+        minute: '2-digit',
+      },
+    );
+
+    void this.notificationsService.createAndPush({
+      tenantId: currentUser.tenantId,
+      patientId: appointment.patientId,
+      type: NotificationType.CITA_REPROGRAMADA,
+      title: 'Cita reprogramada',
+      body: `Tu cita ha sido reprogramada para el ${dateStr} a las ${timeStr}.`,
+      data: { appointmentId: appointment.id },
+    });
+
     return this.mapAppointment(appointment);
   }
 
@@ -172,6 +247,15 @@ export class AppointmentsService {
         deletedAt: new Date(),
       },
       include: this.includePeople(),
+    });
+
+    void this.notificationsService.createAndPush({
+      tenantId: currentUser.tenantId,
+      patientId: appointment.patientId,
+      type: NotificationType.CITA_CANCELADA,
+      title: 'Cita cancelada',
+      body: `Tu cita ha sido cancelada. Motivo: ${input.reason.trim()}`,
+      data: { appointmentId: appointment.id },
     });
 
     return this.mapAppointment(appointment);

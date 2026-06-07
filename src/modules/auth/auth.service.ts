@@ -1,16 +1,23 @@
 import {
   ConflictException,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { compare, hash } from 'bcryptjs';
-import { TenantStatus, UserStatus } from '../../prisma/generated-client';
+import {
+  PatientStatus,
+  TenantStatus,
+  UserStatus,
+} from '../../prisma/generated-client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { LoginInput } from './dto/login.input';
 import { RegisterInput } from './dto/register.input';
+import { JoinTenantInput } from './dto/join-tenant.input';
 import { AuthSessionModel } from './models/auth-session.model';
+import { UserModel } from '../users/models/user.model';
 
 const SYSTEM_TENANT_SLUG = 'vitalbite-system';
 
@@ -24,40 +31,76 @@ export class AuthService {
 
   async login(input: LoginInput): Promise<AuthSessionModel> {
     const email = input.email.trim().toLowerCase();
+
+    // Intentar login como User (nutricionista / administrador)
     const user = await this.prisma.user.findFirst({
       where: {
         email,
         status: UserStatus.ACTIVE,
         deletedAt: null,
-        tenant: {
-          deletedAt: null,
-        },
+        tenant: { deletedAt: null },
       },
-      include: {
-        tenant: true,
-      },
+      include: { tenant: true },
     });
 
-    if (!user || !(await compare(input.password, user.passwordHash))) {
+    if (user && (await compare(input.password, user.passwordHash))) {
+      if (!this.canAccessTenant(user)) {
+        throw new UnauthorizedException('Tenant is not active.');
+      }
+      const accessToken = await this.jwtService.signAsync({
+        sub: user.id,
+        tenantId: user.tenantId,
+        email: user.email,
+        roleCode: user.roleCode,
+      });
+      return { accessToken, user, tenant: user.tenant };
+    }
+
+    // Intentar login como Patient (app móvil)
+    const patient = await this.prisma.patient.findFirst({
+      where: {
+        email,
+        deletedAt: null,
+        status: { not: PatientStatus.ARCHIVED },
+        tenant: { deletedAt: null },
+      },
+      include: { tenant: true },
+    });
+
+    if (
+      !patient ||
+      !patient.passwordHash ||
+      !(await compare(input.password, patient.passwordHash))
+    ) {
       throw new UnauthorizedException('Invalid email or password.');
     }
 
-    if (!this.canAccessTenant(user)) {
+    if (
+      !this.canAccessTenant({ roleCode: 'PACIENTE', tenant: patient.tenant })
+    ) {
       throw new UnauthorizedException('Tenant is not active.');
     }
 
     const accessToken = await this.jwtService.signAsync({
-      sub: user.id,
-      tenantId: user.tenantId,
-      email: user.email,
-      roleCode: user.roleCode,
+      sub: patient.id,
+      tenantId: patient.tenantId,
+      email: patient.email,
+      roleCode: 'PACIENTE',
     });
 
-    return {
-      accessToken,
-      user,
-      tenant: user.tenant,
+    const patientAsUser: UserModel = {
+      id: patient.id,
+      tenantId: patient.tenantId,
+      email: patient.email ?? '',
+      firstName: patient.firstName,
+      lastName: patient.lastName,
+      status: UserStatus.ACTIVE,
+      roleCode: 'PACIENTE',
+      createdAt: patient.createdAt,
+      updatedAt: patient.updatedAt,
     };
+
+    return { accessToken, user: patientAsUser, tenant: patient.tenant };
   }
 
   async register(input: RegisterInput): Promise<AuthSessionModel> {
@@ -73,7 +116,9 @@ export class AuthService {
     });
 
     if (existingUser) {
-      throw new ConflictException('An active account with this email already exists.');
+      throw new ConflictException(
+        'An active account with this email already exists.',
+      );
     }
 
     const passwordHash = await hash(input.password, 10);
@@ -121,6 +166,86 @@ export class AuthService {
       user,
       tenant,
     };
+  }
+
+  async joinTenant(input: JoinTenantInput): Promise<AuthSessionModel> {
+    const email = input.email.trim().toLowerCase();
+    const officeCode = input.officeCode.trim().toLowerCase();
+
+    const tenant = await this.prisma.tenant.findFirst({
+      where: {
+        slug: officeCode,
+        status: TenantStatus.ACTIVE,
+        deletedAt: null,
+      },
+    });
+
+    if (!tenant) {
+      throw new NotFoundException(
+        'No se encontró ningún consultorio con ese código.',
+      );
+    }
+
+    const existing = await this.prisma.patient.findFirst({
+      where: { email, tenantId: tenant.id, deletedAt: null },
+    });
+
+    if (existing) {
+      throw new ConflictException(
+        'Ya existe un paciente con ese correo en este consultorio.',
+      );
+    }
+
+    // Buscar al primer nutricionista activo del tenant para asignarlo
+    const nutritionist = await this.prisma.user.findFirst({
+      where: {
+        tenantId: tenant.id,
+        status: UserStatus.ACTIVE,
+        deletedAt: null,
+      },
+    });
+
+    if (!nutritionist) {
+      throw new NotFoundException(
+        'El consultorio no tiene nutricionistas activos.',
+      );
+    }
+
+    const passwordHash = await hash(input.password, 10);
+
+    const patient = await this.prisma.patient.create({
+      data: {
+        tenantId: tenant.id,
+        nutritionistId: nutritionist.id,
+        firstName: input.firstName.trim(),
+        lastName: input.lastName.trim(),
+        email,
+        passwordHash,
+        status: PatientStatus.ACTIVE,
+      },
+      include: { tenant: true },
+    });
+
+    const accessToken = await this.jwtService.signAsync({
+      sub: patient.id,
+      tenantId: patient.tenantId,
+      email: patient.email,
+      roleCode: 'PACIENTE',
+    });
+
+    const patientAsUser: UserModel = {
+      id: patient.id,
+      tenantId: patient.tenantId,
+      email: patient.email ?? '',
+      firstName: patient.firstName,
+      lastName: patient.lastName,
+      status: UserStatus.ACTIVE,
+      roleCode: 'PACIENTE',
+      createdAt: patient.createdAt,
+      updatedAt: patient.updatedAt,
+    };
+
+    return { accessToken, user: patientAsUser, tenant };
   }
 
   getJwtOptions() {

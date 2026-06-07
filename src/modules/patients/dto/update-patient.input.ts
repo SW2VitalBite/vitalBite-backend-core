@@ -1,12 +1,16 @@
-import { Field, InputType } from '@nestjs/graphql';
+import { Field, InputType, Int } from '@nestjs/graphql';
 import {
   IsDate,
   IsEmail,
   IsEnum,
+  IsInt,
+  IsNumber,
   IsOptional,
   IsString,
   IsUUID,
   Length,
+  Max,
+  Min,
 } from 'class-validator';
 import { IsNotFutureDate } from '../../../common/validators/is-not-future-date.validator';
 import { Gender, PatientStatus } from '../../../prisma/generated-client';
@@ -47,6 +51,27 @@ export class UpdatePatientInput {
   @IsEnum(Gender)
   gender?: Gender;
 
+  @Field(() => Int, { nullable: true })
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  @Max(4)
+  activityLevel?: number;
+
+  @Field(() => Int, { nullable: true })
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  @Max(10)
+  dietQualityScore?: number;
+
+  @Field(() => Number, { nullable: true })
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  @Max(20)
+  comorbiditiesCount?: number;
+
   @Field({ nullable: true })
   @IsOptional()
   @IsString()
@@ -67,4 +92,8 @@ export class UpdatePatientInput {
   @IsOptional()
   @IsUUID()
   nutritionistId?: string;
+
+  @Field(() => Number, { nullable: true })
+  @IsOptional()
+  heightCm?: number;
 }

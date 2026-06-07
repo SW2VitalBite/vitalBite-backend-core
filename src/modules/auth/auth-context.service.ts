@@ -40,6 +40,7 @@ export class AuthContextService {
       throw new UnauthorizedException('Invalid or expired token.');
     }
 
+    // Intentar resolver como User (nutricionista / administrador)
     const user = await this.prisma.user.findFirst({
       where: {
         id: payload.sub,
@@ -55,19 +56,59 @@ export class AuthContextService {
       },
     });
 
-    if (!user) {
-      throw new UnauthorizedException('Authenticated user was not found.');
+    if (user) {
+      if (!this.canAccessTenant(user)) {
+        throw new UnauthorizedException('Tenant is not active.');
+      }
+
+      if (request) {
+        request.currentUser = user;
+      }
+      return user;
     }
 
-    if (!this.canAccessTenant(user)) {
-      throw new UnauthorizedException('Tenant is not active.');
+    // Intentar resolver como Patient (app móvil — roleCode === 'PACIENTE')
+    if (payload.roleCode === 'PACIENTE') {
+      const patient = await this.prisma.patient.findFirst({
+        where: {
+          id: payload.sub,
+          tenantId: payload.tenantId,
+          deletedAt: null,
+          tenant: { deletedAt: null },
+        },
+        include: { tenant: true },
+      });
+
+      if (patient) {
+        // Proyección compatible con AuthenticatedUser para uso en servicios
+        const patientAsUser = {
+          id: patient.id,
+          tenantId: patient.tenantId,
+          email: patient.email ?? '',
+          firstName: patient.firstName,
+          lastName: patient.lastName,
+          passwordHash: '',
+          status: UserStatus.ACTIVE,
+          roleCode: 'PACIENTE',
+          tenant: patient.tenant,
+          assignedPatients: [],
+          nutritionistAppointments: [],
+          registeredBodyMeasurements: [],
+          dietPlans: [],
+          createdAt: patient.createdAt,
+          updatedAt: patient.updatedAt,
+          deletedAt: patient.deletedAt,
+        } as unknown as AuthenticatedUser;
+
+        if (request) {
+          request.currentUser = patientAsUser;
+        }
+
+        return patientAsUser;
+      }
     }
 
-    if (request) {
-      request.currentUser = user;
-    }
-
-    return user;
+    throw new UnauthorizedException('Authenticated user was not found.');
   }
 
   private extractBearerToken(request?: AuthRequest) {

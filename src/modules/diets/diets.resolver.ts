@@ -78,4 +78,10 @@ export class DietsResolver {
     const currentUser = await this.authContext.getCurrentUser();
     return this.dietsService.duplicateDay(currentUser, input);
   }
+
+  @Mutation(() => String)
+  async generateDietPdf(@Args('id', { type: () => ID }) id: string) {
+    const currentUser = await this.authContext.getCurrentUser();
+    return this.dietsService.generatePdf(currentUser, id);
+  }
 }
