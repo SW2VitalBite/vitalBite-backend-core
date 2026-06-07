@@ -1,8 +1,8 @@
-# Pantalla de antropometría avanzada
+# Pantalla de antropometria
 
 ## Ruta
 
-- `/anthropometry`
+- `/patients/:id?tab=Antropometria`
 
 ## Actor principal
 
@@ -10,99 +10,59 @@
 
 ## Objetivo
 
-Registrar pliegues, diámetros, perímetros avanzados, calcular somatotipo y visualizar somatocarta.
+Registrar y consultar perimetros corporales del paciente mediante un mapa corporal interactivo dentro del expediente.
 
-## Layout sugerido
+## Layout implementado
 
-- Header con selector de paciente y botón `Nueva antropometría`.
-- Panel de última medición antropométrica.
-- Formulario de medición.
-- Resultado de somatotipo.
-- Visualización de somatocarta.
-- Historial de mediciones.
-
-## Secciones visibles
-
-- Datos del paciente.
-- Medición corporal asociada.
-- Pliegues.
-- Diámetros.
-- Perímetros.
-- Resultado Heath-Carter.
-- Coordenadas de somatocarta.
-
-## Tabla y columnas
-
-- Fecha.
-- Pliegue tricipital.
-- Pliegue subescapular.
-- Pliegue suprailiaco.
-- Pliegue pantorrilla.
-- Endomorfia.
-- Mesomorfia.
-- Ectomorfia.
-- Acciones.
-
-## Formulario de antropometría
-
-Campos:
-
-- Paciente.
-- Medición corporal asociada.
-- Fecha.
-- Pliegue tricipital en mm.
-- Pliegue subescapular en mm.
-- Pliegue suprailiaco en mm.
-- Pliegue de pantorrilla en mm.
-- Diámetro de húmero en cm.
-- Diámetro de fémur en cm.
-- Perímetro de brazo contraído en cm.
-- Perímetro de pantorrilla en cm.
-
-## Resultado de somatotipo
-
-Campos visibles:
-
-- Endomorfia.
-- Mesomorfia.
-- Ectomorfia.
-- Coordenada X.
-- Coordenada Y.
-- Fecha de cálculo.
+- Tab `Antropometria` dentro del detalle del paciente.
+- Mapa corporal frontal con figura humana clinica.
+- Cuello, pecho/torax, cintura, abdomen, muslos, pantorrillas, brazos superiores y antebrazos representados con contornos anatomicos finales, integrados a la figura con sombreado suave.
+- Zonas seleccionables: cuello, pecho/torax, brazos, antebrazos, cintura, abdomen, cadera, muslos y pantorrillas.
+- Mapa corporal limpio sin etiquetas laterales ni puntos visibles.
+- Las zonas corporales se resaltan al pasar el mouse y muestran un tooltip con la ultima medicion registrada.
+- El tooltip permite registrar una nueva medida rapida de la zona seleccionada mediante un input en centimetros.
+- La seleccion persistente de zonas tambien se puede realizar desde el panel de perimetros corporales.
+- Panel lateral con informacion del paciente, resumen de medidas y lista de perimetros del registro seleccionado.
+- Historial de mediciones antropometricas agrupado por sesiones de registro cercanas.
+- Modal para crear o editar perimetros corporales.
 
 ## Acciones principales
 
-- Registrar antropometría.
-- Calcular somatotipo.
-- Ver somatocarta.
-- Consultar historial.
-- Ir a medidas corporales.
+- Registrar nueva medicion.
+- Registrar una medida rapida desde el tooltip de una zona corporal.
+- Editar medicion seleccionada.
+- Eliminar medicion seleccionada.
+- Seleccionar region corporal en el mapa.
+- Seleccionar medicion historica para revisar sus perimetros corporales.
+
+## GraphQL usado
+
+- `anthropometryByPatient(patientId)`.
+- `anthropometryMeasurementById(id)`.
+- `createAnthropometryMeasurement(input)`.
+- `updateAnthropometryMeasurement(id, input)`.
+- `deleteAnthropometryMeasurement(id)`.
+
+## Alcance actual
+
+- El ajuste visual prioriza una figura humana frontal mas anatomica y clara.
+- Se mantiene la identidad VitalBite verde.
+- No se implementan pliegues, diametros oseos, somatotipo Heath-Carter ni somatocarta en esta fase.
+- Los controles de vista y zoom son accesos visuales preparados, sin interaccion real todavia.
 
 ## Estados UI
 
-- Cargando antropometría.
-- Sin datos antropométricos.
-- Faltan datos mínimos.
-- Somatotipo calculado.
-- Error de validación de unidades.
+- Cargando antropometria.
+- Sin registros antropometricos.
+- Medicion registrada o actualizada.
+- Error por falta de perimetros.
+- Error por medida rapida vacia o invalida.
 - Sin permisos para registrar.
 
-## Permisos
+## Criterio de historial
 
-- Nutricionista: registra antropometría de pacientes asignados.
-- Administrador: consulta según permisos.
-- Paciente: no accede a la Web.
-
-## GraphQL
-
-- `anthropometryByPatient(patientId)`.
-- `latestSomatotype(patientId)`.
-- `createAnthropometryMeasurement(input)`.
-- `calculateSomatotype(input)`.
-
-## Criterios para wireframe
-
-- El formulario debe separar pliegues, diámetros y perímetros.
-- La somatocarta debe aparecer junto al resultado numérico.
-- Los campos deben mostrar unidades visibles.
-- El error por datos incompletos debe mostrarse cerca del botón de cálculo.
+- La accion `Actualizar medida` del tooltip crea una nueva medicion fechada al dia actual.
+- No sobrescribe la ultima medicion registrada; el historial se conserva para comparar avances por zona corporal.
+- La seccion `Perimetros corporales` muestra solo las zonas registradas en la medicion seleccionada desde el historial.
+- Las zonas sin dato en esa medicion se ocultan para evitar mezclar fechas distintas.
+- Las mediciones registradas dentro de una ventana de una hora se agrupan como una misma sesion para revisar el conjunto de perimetros tomado en ese momento.

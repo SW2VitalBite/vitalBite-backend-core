@@ -9,13 +9,16 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/Tenant.js'
+export type * from './models/AuditEvent.js'
 export type * from './models/User.js'
 export type * from './models/Patient.js'
 export type * from './models/Appointment.js'
 export type * from './models/BodyMeasurement.js'
 export type * from './models/BodyComposition.js'
-export type * from './models/Diet.js'
+export type * from './models/AnthropometryMeasurement.js'
+export type * from './models/DietPlan.js'
+export type * from './models/DietPlanDay.js'
 export type * from './models/DietMeal.js'
-export type * from './models/DietItem.js'
+export type * from './models/DietMealItem.js'
 export type * from './models/Notification.js'
 export type * from './commonInputTypes.js'

@@ -116,27 +116,27 @@ Input mínimo:
 
 ## Dietas
 
-| Mutation                                 | Descripción                         | Acceso        |
-| ---------------------------------------- | ----------------------------------- | ------------- |
-| `createDiet(input)`                      | Crea dieta                          | Nutricionista |
-| `updateDiet(id, input)`                  | Actualiza dieta                     | Nutricionista |
-| `assignDietToPatient(dietId, patientId)` | Asigna dieta a paciente             | Nutricionista |
-| `activateDiet(id)`                       | Activa dieta                        | Nutricionista |
-| `completeDiet(id)`                       | Finaliza dieta                      | Nutricionista |
-| `cancelDiet(id)`                         | Cancela dieta                       | Nutricionista |
-| `requestDietPdf(dietId)`                 | Solicita PDF al servicio Documental | Nutricionista |
+| Mutation                            | Descripción                     | Acceso                       |
+| ----------------------------------- | ------------------------------- | ---------------------------- |
+| `createDietPlan(input)`             | Crea plan alimenticio           | Administrador, nutricionista |
+| `updateDietPlan(id, input)`         | Actualiza datos generales       | Administrador, nutricionista |
+| `updateDietPlanStructure(id,input)` | Reemplaza días, comidas e ítems | Administrador, nutricionista |
+| `changeDietPlanStatus(id,status)`   | Cambia estado del plan          | Administrador, nutricionista |
+| `duplicateDietPlanDay(input)`       | Duplica un día dentro del plan  | Administrador, nutricionista |
 
 Input mínimo:
 
-- `CreateDietInput`: `patientId`, `name`, `objective`, `startDate`, `endDate`, `meals`
-- `CreateDietMealInput`: `name`, `time`, `order`, `items`
-- `CreateDietItemInput`: `sourceType`, `foodCatalogItemId`, `recipeId`, `manualFoodName`, `portion`, `nutritionSnapshot`, `notes`
+- `CreateDietPlanInput`: `patientId`, `nutritionistId?`, `name`, `objective`, `startDate`, `endDate`, `status`, `mealsPerDay`, `mainRestriction`, `notes`, `days`
+- `DietPlanDayInput`: `dayLabel`, `dayOrder`, `meals`
+- `DietMealInput`: `name`, `mealOrder`, `targetCalories`, `items`
+- `DietMealItemInput`: `name`, `portion`, `calories`, `itemOrder`
 
 Reglas:
 
-- Cada `DietItem` debe tener exactamente una fuente: `foodCatalogItemId`, `recipeId` o `manualFoodName`.
-- La dieta final debe guardar una foto nutricional (`nutritionSnapshot`) para conservar historial.
-- Cambios posteriores en catálogo o receta no deben modificar dietas ya creadas.
+- El MVP usa alimentos manuales con porción y calorías.
+- Catálogo nutricional, cálculo macro/micronutrientes y PDF real quedan para una fase posterior.
+- Todas las operaciones validan tenant, paciente y nutricionista.
+- `Vence pronto` se calcula desde `endDate`; no es un estado persistido.
 
 ## Catálogo nutricional
 

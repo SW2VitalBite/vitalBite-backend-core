@@ -1,18 +1,32 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { MealType } from '../../../prisma/generated-client';
-import { DietItemModel } from './diet-item.model';
+import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
+import { DietMealItemModel } from './diet-meal-item.model';
 
 @ObjectType('DietMeal')
 export class DietMealModel {
   @Field(() => ID)
   id: string;
 
-  @Field(() => MealType)
-  mealType: MealType;
+  @Field(() => ID)
+  dietPlanDayId: string;
+
+  @Field()
+  name: string;
+
+  @Field(() => Int)
+  mealOrder: number;
+
+  @Field(() => Int, { nullable: true })
+  targetCalories?: number | null;
 
   @Field(() => String, { nullable: true })
-  name?: string | null;
+  notes?: string | null;
 
-  @Field(() => [DietItemModel])
-  items: DietItemModel[];
+  @Field(() => [DietMealItemModel])
+  items: DietMealItemModel[];
+
+  @Field()
+  createdAt: Date;
+
+  @Field()
+  updatedAt: Date;
 }

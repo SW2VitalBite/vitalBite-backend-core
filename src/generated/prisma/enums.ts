@@ -66,14 +66,13 @@ export const AppointmentMode = {
 export type AppointmentMode = (typeof AppointmentMode)[keyof typeof AppointmentMode]
 
 
-export const MealType = {
-  DESAYUNO: 'DESAYUNO',
-  ALMUERZO: 'ALMUERZO',
-  CENA: 'CENA',
-  MERIENDA: 'MERIENDA'
+export const DietPlanStatus = {
+  ACTIVE: 'ACTIVE',
+  DRAFT: 'DRAFT',
+  NEEDS_ADJUSTMENT: 'NEEDS_ADJUSTMENT'
 } as const
 
-export type MealType = (typeof MealType)[keyof typeof MealType]
+export type DietPlanStatus = (typeof DietPlanStatus)[keyof typeof DietPlanStatus]
 
 
 export const NotificationType = {

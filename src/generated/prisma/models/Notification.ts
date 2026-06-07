@@ -489,6 +489,10 @@ export type EnumNotificationTypeFieldUpdateOperationsInput = {
   set?: $Enums.NotificationType
 }
 
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
+}
+
 export type NotificationCreateWithoutTenantInput = {
   id?: string
   type: $Enums.NotificationType

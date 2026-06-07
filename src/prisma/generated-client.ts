@@ -1,8 +1,8 @@
 export {
   AppointmentMode,
   AppointmentStatus,
+  DietPlanStatus,
   Gender,
-  MealType,
   NotificationType,
   PatientStatus,
   Prisma,
