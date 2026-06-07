@@ -391,6 +391,7 @@ export const ModelName = {
   Appointment: 'Appointment',
   BodyMeasurement: 'BodyMeasurement',
   BodyComposition: 'BodyComposition',
+  RiskPrediction: 'RiskPrediction',
   AnthropometryMeasurement: 'AnthropometryMeasurement',
   DietPlan: 'DietPlan',
   DietPlanDay: 'DietPlanDay',
@@ -412,7 +413,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "auditEvent" | "user" | "patient" | "appointment" | "bodyMeasurement" | "bodyComposition" | "anthropometryMeasurement" | "dietPlan" | "dietPlanDay" | "dietMeal" | "dietMealItem" | "notification"
+    modelProps: "tenant" | "auditEvent" | "user" | "patient" | "appointment" | "bodyMeasurement" | "bodyComposition" | "riskPrediction" | "anthropometryMeasurement" | "dietPlan" | "dietPlanDay" | "dietMeal" | "dietMealItem" | "notification"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -931,6 +932,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.BodyCompositionCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.BodyCompositionCountAggregateOutputType> | number
+        }
+      }
+    }
+    RiskPrediction: {
+      payload: Prisma.$RiskPredictionPayload<ExtArgs>
+      fields: Prisma.RiskPredictionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.RiskPredictionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RiskPredictionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.RiskPredictionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RiskPredictionPayload>
+        }
+        findFirst: {
+          args: Prisma.RiskPredictionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RiskPredictionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.RiskPredictionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RiskPredictionPayload>
+        }
+        findMany: {
+          args: Prisma.RiskPredictionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RiskPredictionPayload>[]
+        }
+        create: {
+          args: Prisma.RiskPredictionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RiskPredictionPayload>
+        }
+        createMany: {
+          args: Prisma.RiskPredictionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.RiskPredictionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RiskPredictionPayload>[]
+        }
+        delete: {
+          args: Prisma.RiskPredictionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RiskPredictionPayload>
+        }
+        update: {
+          args: Prisma.RiskPredictionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RiskPredictionPayload>
+        }
+        deleteMany: {
+          args: Prisma.RiskPredictionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.RiskPredictionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.RiskPredictionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RiskPredictionPayload>[]
+        }
+        upsert: {
+          args: Prisma.RiskPredictionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RiskPredictionPayload>
+        }
+        aggregate: {
+          args: Prisma.RiskPredictionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateRiskPrediction>
+        }
+        groupBy: {
+          args: Prisma.RiskPredictionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RiskPredictionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.RiskPredictionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RiskPredictionCountAggregateOutputType> | number
         }
       }
     }
@@ -1480,6 +1555,9 @@ export const PatientScalarFieldEnum = {
   phone: 'phone',
   birthDate: 'birthDate',
   gender: 'gender',
+  activityLevel: 'activityLevel',
+  dietQualityScore: 'dietQualityScore',
+  comorbiditiesCount: 'comorbiditiesCount',
   status: 'status',
   clinicalNotes: 'clinicalNotes',
   nutritionGoal: 'nutritionGoal',
@@ -1550,6 +1628,27 @@ export const BodyCompositionScalarFieldEnum = {
 } as const
 
 export type BodyCompositionScalarFieldEnum = (typeof BodyCompositionScalarFieldEnum)[keyof typeof BodyCompositionScalarFieldEnum]
+
+
+export const RiskPredictionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  patientId: 'patientId',
+  requestedById: 'requestedById',
+  features: 'features',
+  featuresFingerprint: 'featuresFingerprint',
+  modelVersion: 'modelVersion',
+  nivelRiesgo: 'nivelRiesgo',
+  probabilidad: 'probabilidad',
+  probabilidades: 'probabilidades',
+  factoresCriticos: 'factoresCriticos',
+  recomendacion: 'recomendacion',
+  sourceMeasurementId: 'sourceMeasurementId',
+  sourceCompositionId: 'sourceCompositionId',
+  createdAt: 'createdAt'
+} as const
+
+export type RiskPredictionScalarFieldEnum = (typeof RiskPredictionScalarFieldEnum)[keyof typeof RiskPredictionScalarFieldEnum]
 
 
 export const AnthropometryMeasurementScalarFieldEnum = {
@@ -1676,6 +1775,13 @@ export const NullableJsonNullValueInput = {
 export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
 export const QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -1792,16 +1898,16 @@ export type ListEnumGenderFieldRefInput<$PrismaModel> = FieldRefInputType<$Prism
 
 
 /**
- * Reference to a field of type 'PatientStatus'
+ * Reference to a field of type 'Int'
  */
-export type EnumPatientStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PatientStatus'>
+export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
     
 
 
 /**
- * Reference to a field of type 'PatientStatus[]'
+ * Reference to a field of type 'Int[]'
  */
-export type ListEnumPatientStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PatientStatus[]'>
+export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
 
 
@@ -1820,16 +1926,16 @@ export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMode
 
 
 /**
- * Reference to a field of type 'Int'
+ * Reference to a field of type 'PatientStatus'
  */
-export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+export type EnumPatientStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PatientStatus'>
     
 
 
 /**
- * Reference to a field of type 'Int[]'
+ * Reference to a field of type 'PatientStatus[]'
  */
-export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+export type ListEnumPatientStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PatientStatus[]'>
     
 
 
@@ -2012,6 +2118,7 @@ export type GlobalOmitConfig = {
   appointment?: Prisma.AppointmentOmit
   bodyMeasurement?: Prisma.BodyMeasurementOmit
   bodyComposition?: Prisma.BodyCompositionOmit
+  riskPrediction?: Prisma.RiskPredictionOmit
   anthropometryMeasurement?: Prisma.AnthropometryMeasurementOmit
   dietPlan?: Prisma.DietPlanOmit
   dietPlanDay?: Prisma.DietPlanDayOmit

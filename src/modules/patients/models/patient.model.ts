@@ -1,4 +1,4 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, Float, ID, Int, ObjectType } from '@nestjs/graphql';
 import { Gender, PatientStatus } from '../../../prisma/generated-client';
 
 @ObjectType('Patient')
@@ -32,6 +32,15 @@ export class PatientModel {
 
   @Field(() => Gender, { nullable: true })
   gender?: Gender | null;
+
+  @Field(() => Int, { nullable: true })
+  activityLevel?: number | null;
+
+  @Field(() => Float, { nullable: true })
+  dietQualityScore?: number | null;
+
+  @Field(() => Int, { nullable: true })
+  comorbiditiesCount?: number | null;
 
   @Field(() => PatientStatus)
   status: PatientStatus;

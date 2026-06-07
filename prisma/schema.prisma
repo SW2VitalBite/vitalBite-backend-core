@@ -73,6 +73,7 @@ model Tenant {
   appointments     Appointment[]
   bodyMeasurements BodyMeasurement[]
   bodyCompositions BodyComposition[]
+  riskPredictions  RiskPrediction[]
   anthropometryMeasurements AnthropometryMeasurement[]
   dietPlans        DietPlan[]
   notifications    Notification[]
@@ -121,6 +122,7 @@ model User {
   assignedPatients           Patient[]         @relation("NutritionistPatients")
   nutritionistAppointments   Appointment[]     @relation("NutritionistAppointments")
   registeredBodyMeasurements BodyMeasurement[] @relation("RegisteredBodyMeasurements")
+  requestedRiskPredictions    RiskPrediction[]  @relation("RequestedRiskPredictions")
   dietPlans                  DietPlan[]        @relation("NutritionistDietPlans")
   createdAt                  DateTime          @default(now()) @map("created_at")
   updatedAt                  DateTime          @updatedAt @map("updated_at")
@@ -143,6 +145,9 @@ model Patient {
   phone            String?
   birthDate        DateTime?         @map("birth_date")
   gender           Gender?
+  activityLevel    Int?              @map("activity_level")
+  dietQualityScore Float?            @map("diet_quality_score")
+  comorbiditiesCount Int?            @map("comorbidities_count")
   status           PatientStatus     @default(ACTIVE)
   clinicalNotes    String?           @map("clinical_notes")
   nutritionGoal    String?           @map("nutrition_goal")
@@ -153,6 +158,7 @@ model Patient {
   appointments     Appointment[]
   bodyMeasurements BodyMeasurement[]
   bodyCompositions BodyComposition[]
+  riskPredictions  RiskPrediction[]
   anthropometryMeasurements AnthropometryMeasurement[]
   dietPlans        DietPlan[]
   notifications    Notification[]
@@ -210,6 +216,7 @@ model BodyMeasurement {
   patient          Patient           @relation(fields: [patientId], references: [id])
   registeredBy     User              @relation("RegisteredBodyMeasurements", fields: [registeredById], references: [id])
   bodyCompositions BodyComposition[]
+  riskPredictions  RiskPrediction[]  @relation("RiskPredictionSourceMeasurement")
   anthropometryMeasurements AnthropometryMeasurement[]
   createdAt        DateTime          @default(now()) @map("created_at")
   updatedAt        DateTime          @updatedAt @map("updated_at")
@@ -236,6 +243,7 @@ model BodyComposition {
   tenant            Tenant           @relation(fields: [tenantId], references: [id])
   patient           Patient          @relation(fields: [patientId], references: [id])
   bodyMeasurement   BodyMeasurement? @relation(fields: [bodyMeasurementId], references: [id])
+  riskPredictions   RiskPrediction[] @relation("RiskPredictionSourceComposition")
   createdAt         DateTime         @default(now()) @map("created_at")
   updatedAt         DateTime         @updatedAt @map("updated_at")
   deletedAt         DateTime?        @map("deleted_at")
@@ -244,6 +252,35 @@ model BodyComposition {
   @@index([tenantId, patientId, measuredAt])
   @@index([bodyMeasurementId])
   @@map("body_compositions")
+}
+
+model RiskPrediction {
+  id                  String           @id @default(uuid())
+  tenantId            String           @map("tenant_id")
+  patientId           String           @map("patient_id")
+  requestedById       String           @map("requested_by_id")
+  features            Json
+  featuresFingerprint String           @map("features_fingerprint")
+  modelVersion        String           @map("model_version")
+  nivelRiesgo         String           @map("nivel_riesgo")
+  probabilidad        Float
+  probabilidades      Json
+  factoresCriticos    Json             @map("factores_criticos")
+  recomendacion       String
+  sourceMeasurementId String?          @map("source_measurement_id")
+  sourceCompositionId String?          @map("source_composition_id")
+  tenant              Tenant           @relation(fields: [tenantId], references: [id])
+  patient             Patient          @relation(fields: [patientId], references: [id])
+  requestedBy         User             @relation("RequestedRiskPredictions", fields: [requestedById], references: [id])
+  sourceMeasurement   BodyMeasurement? @relation("RiskPredictionSourceMeasurement", fields: [sourceMeasurementId], references: [id])
+  sourceComposition   BodyComposition? @relation("RiskPredictionSourceComposition", fields: [sourceCompositionId], references: [id])
+  createdAt           DateTime         @default(now()) @map("created_at")
+
+  @@index([tenantId, patientId, createdAt])
+  @@index([tenantId, patientId, featuresFingerprint, modelVersion])
+  @@index([sourceMeasurementId])
+  @@index([sourceCompositionId])
+  @@map("risk_predictions")
 }
 
 model AnthropometryMeasurement {

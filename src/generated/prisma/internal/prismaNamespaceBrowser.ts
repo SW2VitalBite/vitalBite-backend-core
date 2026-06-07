@@ -58,6 +58,7 @@ export const ModelName = {
   Appointment: 'Appointment',
   BodyMeasurement: 'BodyMeasurement',
   BodyComposition: 'BodyComposition',
+  RiskPrediction: 'RiskPrediction',
   AnthropometryMeasurement: 'AnthropometryMeasurement',
   DietPlan: 'DietPlan',
   DietPlanDay: 'DietPlanDay',
@@ -145,6 +146,9 @@ export const PatientScalarFieldEnum = {
   phone: 'phone',
   birthDate: 'birthDate',
   gender: 'gender',
+  activityLevel: 'activityLevel',
+  dietQualityScore: 'dietQualityScore',
+  comorbiditiesCount: 'comorbiditiesCount',
   status: 'status',
   clinicalNotes: 'clinicalNotes',
   nutritionGoal: 'nutritionGoal',
@@ -215,6 +219,27 @@ export const BodyCompositionScalarFieldEnum = {
 } as const
 
 export type BodyCompositionScalarFieldEnum = (typeof BodyCompositionScalarFieldEnum)[keyof typeof BodyCompositionScalarFieldEnum]
+
+
+export const RiskPredictionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  patientId: 'patientId',
+  requestedById: 'requestedById',
+  features: 'features',
+  featuresFingerprint: 'featuresFingerprint',
+  modelVersion: 'modelVersion',
+  nivelRiesgo: 'nivelRiesgo',
+  probabilidad: 'probabilidad',
+  probabilidades: 'probabilidades',
+  factoresCriticos: 'factoresCriticos',
+  recomendacion: 'recomendacion',
+  sourceMeasurementId: 'sourceMeasurementId',
+  sourceCompositionId: 'sourceCompositionId',
+  createdAt: 'createdAt'
+} as const
+
+export type RiskPredictionScalarFieldEnum = (typeof RiskPredictionScalarFieldEnum)[keyof typeof RiskPredictionScalarFieldEnum]
 
 
 export const AnthropometryMeasurementScalarFieldEnum = {
@@ -339,6 +364,13 @@ export const NullableJsonNullValueInput = {
 } as const
 
 export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {

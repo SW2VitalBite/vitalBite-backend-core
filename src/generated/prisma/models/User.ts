@@ -234,6 +234,7 @@ export type UserWhereInput = {
   assignedPatients?: Prisma.PatientListRelationFilter
   nutritionistAppointments?: Prisma.AppointmentListRelationFilter
   registeredBodyMeasurements?: Prisma.BodyMeasurementListRelationFilter
+  requestedRiskPredictions?: Prisma.RiskPredictionListRelationFilter
   dietPlans?: Prisma.DietPlanListRelationFilter
 }
 
@@ -253,6 +254,7 @@ export type UserOrderByWithRelationInput = {
   assignedPatients?: Prisma.PatientOrderByRelationAggregateInput
   nutritionistAppointments?: Prisma.AppointmentOrderByRelationAggregateInput
   registeredBodyMeasurements?: Prisma.BodyMeasurementOrderByRelationAggregateInput
+  requestedRiskPredictions?: Prisma.RiskPredictionOrderByRelationAggregateInput
   dietPlans?: Prisma.DietPlanOrderByRelationAggregateInput
 }
 
@@ -276,6 +278,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   assignedPatients?: Prisma.PatientListRelationFilter
   nutritionistAppointments?: Prisma.AppointmentListRelationFilter
   registeredBodyMeasurements?: Prisma.BodyMeasurementListRelationFilter
+  requestedRiskPredictions?: Prisma.RiskPredictionListRelationFilter
   dietPlans?: Prisma.DietPlanListRelationFilter
 }, "id" | "tenantId_email">
 
@@ -328,6 +331,7 @@ export type UserCreateInput = {
   assignedPatients?: Prisma.PatientCreateNestedManyWithoutNutritionistInput
   nutritionistAppointments?: Prisma.AppointmentCreateNestedManyWithoutNutritionistInput
   registeredBodyMeasurements?: Prisma.BodyMeasurementCreateNestedManyWithoutRegisteredByInput
+  requestedRiskPredictions?: Prisma.RiskPredictionCreateNestedManyWithoutRequestedByInput
   dietPlans?: Prisma.DietPlanCreateNestedManyWithoutNutritionistInput
 }
 
@@ -346,6 +350,7 @@ export type UserUncheckedCreateInput = {
   assignedPatients?: Prisma.PatientUncheckedCreateNestedManyWithoutNutritionistInput
   nutritionistAppointments?: Prisma.AppointmentUncheckedCreateNestedManyWithoutNutritionistInput
   registeredBodyMeasurements?: Prisma.BodyMeasurementUncheckedCreateNestedManyWithoutRegisteredByInput
+  requestedRiskPredictions?: Prisma.RiskPredictionUncheckedCreateNestedManyWithoutRequestedByInput
   dietPlans?: Prisma.DietPlanUncheckedCreateNestedManyWithoutNutritionistInput
 }
 
@@ -364,6 +369,7 @@ export type UserUpdateInput = {
   assignedPatients?: Prisma.PatientUpdateManyWithoutNutritionistNestedInput
   nutritionistAppointments?: Prisma.AppointmentUpdateManyWithoutNutritionistNestedInput
   registeredBodyMeasurements?: Prisma.BodyMeasurementUpdateManyWithoutRegisteredByNestedInput
+  requestedRiskPredictions?: Prisma.RiskPredictionUpdateManyWithoutRequestedByNestedInput
   dietPlans?: Prisma.DietPlanUpdateManyWithoutNutritionistNestedInput
 }
 
@@ -382,6 +388,7 @@ export type UserUncheckedUpdateInput = {
   assignedPatients?: Prisma.PatientUncheckedUpdateManyWithoutNutritionistNestedInput
   nutritionistAppointments?: Prisma.AppointmentUncheckedUpdateManyWithoutNutritionistNestedInput
   registeredBodyMeasurements?: Prisma.BodyMeasurementUncheckedUpdateManyWithoutRegisteredByNestedInput
+  requestedRiskPredictions?: Prisma.RiskPredictionUncheckedUpdateManyWithoutRequestedByNestedInput
   dietPlans?: Prisma.DietPlanUncheckedUpdateManyWithoutNutritionistNestedInput
 }
 
@@ -576,6 +583,20 @@ export type UserUpdateOneRequiredWithoutRegisteredBodyMeasurementsNestedInput = 
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutRegisteredBodyMeasurementsInput, Prisma.UserUpdateWithoutRegisteredBodyMeasurementsInput>, Prisma.UserUncheckedUpdateWithoutRegisteredBodyMeasurementsInput>
 }
 
+export type UserCreateNestedOneWithoutRequestedRiskPredictionsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutRequestedRiskPredictionsInput, Prisma.UserUncheckedCreateWithoutRequestedRiskPredictionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRequestedRiskPredictionsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutRequestedRiskPredictionsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutRequestedRiskPredictionsInput, Prisma.UserUncheckedCreateWithoutRequestedRiskPredictionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRequestedRiskPredictionsInput
+  upsert?: Prisma.UserUpsertWithoutRequestedRiskPredictionsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutRequestedRiskPredictionsInput, Prisma.UserUpdateWithoutRequestedRiskPredictionsInput>, Prisma.UserUncheckedUpdateWithoutRequestedRiskPredictionsInput>
+}
+
 export type UserCreateNestedOneWithoutDietPlansInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutDietPlansInput, Prisma.UserUncheckedCreateWithoutDietPlansInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutDietPlansInput
@@ -604,6 +625,7 @@ export type UserCreateWithoutTenantInput = {
   assignedPatients?: Prisma.PatientCreateNestedManyWithoutNutritionistInput
   nutritionistAppointments?: Prisma.AppointmentCreateNestedManyWithoutNutritionistInput
   registeredBodyMeasurements?: Prisma.BodyMeasurementCreateNestedManyWithoutRegisteredByInput
+  requestedRiskPredictions?: Prisma.RiskPredictionCreateNestedManyWithoutRequestedByInput
   dietPlans?: Prisma.DietPlanCreateNestedManyWithoutNutritionistInput
 }
 
@@ -621,6 +643,7 @@ export type UserUncheckedCreateWithoutTenantInput = {
   assignedPatients?: Prisma.PatientUncheckedCreateNestedManyWithoutNutritionistInput
   nutritionistAppointments?: Prisma.AppointmentUncheckedCreateNestedManyWithoutNutritionistInput
   registeredBodyMeasurements?: Prisma.BodyMeasurementUncheckedCreateNestedManyWithoutRegisteredByInput
+  requestedRiskPredictions?: Prisma.RiskPredictionUncheckedCreateNestedManyWithoutRequestedByInput
   dietPlans?: Prisma.DietPlanUncheckedCreateNestedManyWithoutNutritionistInput
 }
 
@@ -681,6 +704,7 @@ export type UserCreateWithoutAssignedPatientsInput = {
   tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
   nutritionistAppointments?: Prisma.AppointmentCreateNestedManyWithoutNutritionistInput
   registeredBodyMeasurements?: Prisma.BodyMeasurementCreateNestedManyWithoutRegisteredByInput
+  requestedRiskPredictions?: Prisma.RiskPredictionCreateNestedManyWithoutRequestedByInput
   dietPlans?: Prisma.DietPlanCreateNestedManyWithoutNutritionistInput
 }
 
@@ -698,6 +722,7 @@ export type UserUncheckedCreateWithoutAssignedPatientsInput = {
   deletedAt?: Date | string | null
   nutritionistAppointments?: Prisma.AppointmentUncheckedCreateNestedManyWithoutNutritionistInput
   registeredBodyMeasurements?: Prisma.BodyMeasurementUncheckedCreateNestedManyWithoutRegisteredByInput
+  requestedRiskPredictions?: Prisma.RiskPredictionUncheckedCreateNestedManyWithoutRequestedByInput
   dietPlans?: Prisma.DietPlanUncheckedCreateNestedManyWithoutNutritionistInput
 }
 
@@ -731,6 +756,7 @@ export type UserUpdateWithoutAssignedPatientsInput = {
   tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
   nutritionistAppointments?: Prisma.AppointmentUpdateManyWithoutNutritionistNestedInput
   registeredBodyMeasurements?: Prisma.BodyMeasurementUpdateManyWithoutRegisteredByNestedInput
+  requestedRiskPredictions?: Prisma.RiskPredictionUpdateManyWithoutRequestedByNestedInput
   dietPlans?: Prisma.DietPlanUpdateManyWithoutNutritionistNestedInput
 }
 
@@ -748,6 +774,7 @@ export type UserUncheckedUpdateWithoutAssignedPatientsInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   nutritionistAppointments?: Prisma.AppointmentUncheckedUpdateManyWithoutNutritionistNestedInput
   registeredBodyMeasurements?: Prisma.BodyMeasurementUncheckedUpdateManyWithoutRegisteredByNestedInput
+  requestedRiskPredictions?: Prisma.RiskPredictionUncheckedUpdateManyWithoutRequestedByNestedInput
   dietPlans?: Prisma.DietPlanUncheckedUpdateManyWithoutNutritionistNestedInput
 }
 
@@ -765,6 +792,7 @@ export type UserCreateWithoutNutritionistAppointmentsInput = {
   tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
   assignedPatients?: Prisma.PatientCreateNestedManyWithoutNutritionistInput
   registeredBodyMeasurements?: Prisma.BodyMeasurementCreateNestedManyWithoutRegisteredByInput
+  requestedRiskPredictions?: Prisma.RiskPredictionCreateNestedManyWithoutRequestedByInput
   dietPlans?: Prisma.DietPlanCreateNestedManyWithoutNutritionistInput
 }
 
@@ -782,6 +810,7 @@ export type UserUncheckedCreateWithoutNutritionistAppointmentsInput = {
   deletedAt?: Date | string | null
   assignedPatients?: Prisma.PatientUncheckedCreateNestedManyWithoutNutritionistInput
   registeredBodyMeasurements?: Prisma.BodyMeasurementUncheckedCreateNestedManyWithoutRegisteredByInput
+  requestedRiskPredictions?: Prisma.RiskPredictionUncheckedCreateNestedManyWithoutRequestedByInput
   dietPlans?: Prisma.DietPlanUncheckedCreateNestedManyWithoutNutritionistInput
 }
 
@@ -815,6 +844,7 @@ export type UserUpdateWithoutNutritionistAppointmentsInput = {
   tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
   assignedPatients?: Prisma.PatientUpdateManyWithoutNutritionistNestedInput
   registeredBodyMeasurements?: Prisma.BodyMeasurementUpdateManyWithoutRegisteredByNestedInput
+  requestedRiskPredictions?: Prisma.RiskPredictionUpdateManyWithoutRequestedByNestedInput
   dietPlans?: Prisma.DietPlanUpdateManyWithoutNutritionistNestedInput
 }
 
@@ -832,6 +862,7 @@ export type UserUncheckedUpdateWithoutNutritionistAppointmentsInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   assignedPatients?: Prisma.PatientUncheckedUpdateManyWithoutNutritionistNestedInput
   registeredBodyMeasurements?: Prisma.BodyMeasurementUncheckedUpdateManyWithoutRegisteredByNestedInput
+  requestedRiskPredictions?: Prisma.RiskPredictionUncheckedUpdateManyWithoutRequestedByNestedInput
   dietPlans?: Prisma.DietPlanUncheckedUpdateManyWithoutNutritionistNestedInput
 }
 
@@ -849,6 +880,7 @@ export type UserCreateWithoutRegisteredBodyMeasurementsInput = {
   tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
   assignedPatients?: Prisma.PatientCreateNestedManyWithoutNutritionistInput
   nutritionistAppointments?: Prisma.AppointmentCreateNestedManyWithoutNutritionistInput
+  requestedRiskPredictions?: Prisma.RiskPredictionCreateNestedManyWithoutRequestedByInput
   dietPlans?: Prisma.DietPlanCreateNestedManyWithoutNutritionistInput
 }
 
@@ -866,6 +898,7 @@ export type UserUncheckedCreateWithoutRegisteredBodyMeasurementsInput = {
   deletedAt?: Date | string | null
   assignedPatients?: Prisma.PatientUncheckedCreateNestedManyWithoutNutritionistInput
   nutritionistAppointments?: Prisma.AppointmentUncheckedCreateNestedManyWithoutNutritionistInput
+  requestedRiskPredictions?: Prisma.RiskPredictionUncheckedCreateNestedManyWithoutRequestedByInput
   dietPlans?: Prisma.DietPlanUncheckedCreateNestedManyWithoutNutritionistInput
 }
 
@@ -899,6 +932,7 @@ export type UserUpdateWithoutRegisteredBodyMeasurementsInput = {
   tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
   assignedPatients?: Prisma.PatientUpdateManyWithoutNutritionistNestedInput
   nutritionistAppointments?: Prisma.AppointmentUpdateManyWithoutNutritionistNestedInput
+  requestedRiskPredictions?: Prisma.RiskPredictionUpdateManyWithoutRequestedByNestedInput
   dietPlans?: Prisma.DietPlanUpdateManyWithoutNutritionistNestedInput
 }
 
@@ -916,6 +950,95 @@ export type UserUncheckedUpdateWithoutRegisteredBodyMeasurementsInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   assignedPatients?: Prisma.PatientUncheckedUpdateManyWithoutNutritionistNestedInput
   nutritionistAppointments?: Prisma.AppointmentUncheckedUpdateManyWithoutNutritionistNestedInput
+  requestedRiskPredictions?: Prisma.RiskPredictionUncheckedUpdateManyWithoutRequestedByNestedInput
+  dietPlans?: Prisma.DietPlanUncheckedUpdateManyWithoutNutritionistNestedInput
+}
+
+export type UserCreateWithoutRequestedRiskPredictionsInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  firstName: string
+  lastName: string
+  status?: $Enums.UserStatus
+  roleCode: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
+  assignedPatients?: Prisma.PatientCreateNestedManyWithoutNutritionistInput
+  nutritionistAppointments?: Prisma.AppointmentCreateNestedManyWithoutNutritionistInput
+  registeredBodyMeasurements?: Prisma.BodyMeasurementCreateNestedManyWithoutRegisteredByInput
+  dietPlans?: Prisma.DietPlanCreateNestedManyWithoutNutritionistInput
+}
+
+export type UserUncheckedCreateWithoutRequestedRiskPredictionsInput = {
+  id?: string
+  tenantId: string
+  email: string
+  passwordHash: string
+  firstName: string
+  lastName: string
+  status?: $Enums.UserStatus
+  roleCode: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  assignedPatients?: Prisma.PatientUncheckedCreateNestedManyWithoutNutritionistInput
+  nutritionistAppointments?: Prisma.AppointmentUncheckedCreateNestedManyWithoutNutritionistInput
+  registeredBodyMeasurements?: Prisma.BodyMeasurementUncheckedCreateNestedManyWithoutRegisteredByInput
+  dietPlans?: Prisma.DietPlanUncheckedCreateNestedManyWithoutNutritionistInput
+}
+
+export type UserCreateOrConnectWithoutRequestedRiskPredictionsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutRequestedRiskPredictionsInput, Prisma.UserUncheckedCreateWithoutRequestedRiskPredictionsInput>
+}
+
+export type UserUpsertWithoutRequestedRiskPredictionsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutRequestedRiskPredictionsInput, Prisma.UserUncheckedUpdateWithoutRequestedRiskPredictionsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutRequestedRiskPredictionsInput, Prisma.UserUncheckedCreateWithoutRequestedRiskPredictionsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutRequestedRiskPredictionsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutRequestedRiskPredictionsInput, Prisma.UserUncheckedUpdateWithoutRequestedRiskPredictionsInput>
+}
+
+export type UserUpdateWithoutRequestedRiskPredictionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  roleCode?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
+  assignedPatients?: Prisma.PatientUpdateManyWithoutNutritionistNestedInput
+  nutritionistAppointments?: Prisma.AppointmentUpdateManyWithoutNutritionistNestedInput
+  registeredBodyMeasurements?: Prisma.BodyMeasurementUpdateManyWithoutRegisteredByNestedInput
+  dietPlans?: Prisma.DietPlanUpdateManyWithoutNutritionistNestedInput
+}
+
+export type UserUncheckedUpdateWithoutRequestedRiskPredictionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  roleCode?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  assignedPatients?: Prisma.PatientUncheckedUpdateManyWithoutNutritionistNestedInput
+  nutritionistAppointments?: Prisma.AppointmentUncheckedUpdateManyWithoutNutritionistNestedInput
+  registeredBodyMeasurements?: Prisma.BodyMeasurementUncheckedUpdateManyWithoutRegisteredByNestedInput
   dietPlans?: Prisma.DietPlanUncheckedUpdateManyWithoutNutritionistNestedInput
 }
 
@@ -934,6 +1057,7 @@ export type UserCreateWithoutDietPlansInput = {
   assignedPatients?: Prisma.PatientCreateNestedManyWithoutNutritionistInput
   nutritionistAppointments?: Prisma.AppointmentCreateNestedManyWithoutNutritionistInput
   registeredBodyMeasurements?: Prisma.BodyMeasurementCreateNestedManyWithoutRegisteredByInput
+  requestedRiskPredictions?: Prisma.RiskPredictionCreateNestedManyWithoutRequestedByInput
 }
 
 export type UserUncheckedCreateWithoutDietPlansInput = {
@@ -951,6 +1075,7 @@ export type UserUncheckedCreateWithoutDietPlansInput = {
   assignedPatients?: Prisma.PatientUncheckedCreateNestedManyWithoutNutritionistInput
   nutritionistAppointments?: Prisma.AppointmentUncheckedCreateNestedManyWithoutNutritionistInput
   registeredBodyMeasurements?: Prisma.BodyMeasurementUncheckedCreateNestedManyWithoutRegisteredByInput
+  requestedRiskPredictions?: Prisma.RiskPredictionUncheckedCreateNestedManyWithoutRequestedByInput
 }
 
 export type UserCreateOrConnectWithoutDietPlansInput = {
@@ -984,6 +1109,7 @@ export type UserUpdateWithoutDietPlansInput = {
   assignedPatients?: Prisma.PatientUpdateManyWithoutNutritionistNestedInput
   nutritionistAppointments?: Prisma.AppointmentUpdateManyWithoutNutritionistNestedInput
   registeredBodyMeasurements?: Prisma.BodyMeasurementUpdateManyWithoutRegisteredByNestedInput
+  requestedRiskPredictions?: Prisma.RiskPredictionUpdateManyWithoutRequestedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutDietPlansInput = {
@@ -1001,6 +1127,7 @@ export type UserUncheckedUpdateWithoutDietPlansInput = {
   assignedPatients?: Prisma.PatientUncheckedUpdateManyWithoutNutritionistNestedInput
   nutritionistAppointments?: Prisma.AppointmentUncheckedUpdateManyWithoutNutritionistNestedInput
   registeredBodyMeasurements?: Prisma.BodyMeasurementUncheckedUpdateManyWithoutRegisteredByNestedInput
+  requestedRiskPredictions?: Prisma.RiskPredictionUncheckedUpdateManyWithoutRequestedByNestedInput
 }
 
 export type UserCreateManyTenantInput = {
@@ -1030,6 +1157,7 @@ export type UserUpdateWithoutTenantInput = {
   assignedPatients?: Prisma.PatientUpdateManyWithoutNutritionistNestedInput
   nutritionistAppointments?: Prisma.AppointmentUpdateManyWithoutNutritionistNestedInput
   registeredBodyMeasurements?: Prisma.BodyMeasurementUpdateManyWithoutRegisteredByNestedInput
+  requestedRiskPredictions?: Prisma.RiskPredictionUpdateManyWithoutRequestedByNestedInput
   dietPlans?: Prisma.DietPlanUpdateManyWithoutNutritionistNestedInput
 }
 
@@ -1047,6 +1175,7 @@ export type UserUncheckedUpdateWithoutTenantInput = {
   assignedPatients?: Prisma.PatientUncheckedUpdateManyWithoutNutritionistNestedInput
   nutritionistAppointments?: Prisma.AppointmentUncheckedUpdateManyWithoutNutritionistNestedInput
   registeredBodyMeasurements?: Prisma.BodyMeasurementUncheckedUpdateManyWithoutRegisteredByNestedInput
+  requestedRiskPredictions?: Prisma.RiskPredictionUncheckedUpdateManyWithoutRequestedByNestedInput
   dietPlans?: Prisma.DietPlanUncheckedUpdateManyWithoutNutritionistNestedInput
 }
 
@@ -1072,6 +1201,7 @@ export type UserCountOutputType = {
   assignedPatients: number
   nutritionistAppointments: number
   registeredBodyMeasurements: number
+  requestedRiskPredictions: number
   dietPlans: number
 }
 
@@ -1079,6 +1209,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   assignedPatients?: boolean | UserCountOutputTypeCountAssignedPatientsArgs
   nutritionistAppointments?: boolean | UserCountOutputTypeCountNutritionistAppointmentsArgs
   registeredBodyMeasurements?: boolean | UserCountOutputTypeCountRegisteredBodyMeasurementsArgs
+  requestedRiskPredictions?: boolean | UserCountOutputTypeCountRequestedRiskPredictionsArgs
   dietPlans?: boolean | UserCountOutputTypeCountDietPlansArgs
 }
 
@@ -1116,6 +1247,13 @@ export type UserCountOutputTypeCountRegisteredBodyMeasurementsArgs<ExtArgs exten
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountRequestedRiskPredictionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.RiskPredictionWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountDietPlansArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.DietPlanWhereInput
 }
@@ -1137,6 +1275,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   assignedPatients?: boolean | Prisma.User$assignedPatientsArgs<ExtArgs>
   nutritionistAppointments?: boolean | Prisma.User$nutritionistAppointmentsArgs<ExtArgs>
   registeredBodyMeasurements?: boolean | Prisma.User$registeredBodyMeasurementsArgs<ExtArgs>
+  requestedRiskPredictions?: boolean | Prisma.User$requestedRiskPredictionsArgs<ExtArgs>
   dietPlans?: boolean | Prisma.User$dietPlansArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
@@ -1191,6 +1330,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   assignedPatients?: boolean | Prisma.User$assignedPatientsArgs<ExtArgs>
   nutritionistAppointments?: boolean | Prisma.User$nutritionistAppointmentsArgs<ExtArgs>
   registeredBodyMeasurements?: boolean | Prisma.User$registeredBodyMeasurementsArgs<ExtArgs>
+  requestedRiskPredictions?: boolean | Prisma.User$requestedRiskPredictionsArgs<ExtArgs>
   dietPlans?: boolean | Prisma.User$dietPlansArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -1208,6 +1348,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     assignedPatients: Prisma.$PatientPayload<ExtArgs>[]
     nutritionistAppointments: Prisma.$AppointmentPayload<ExtArgs>[]
     registeredBodyMeasurements: Prisma.$BodyMeasurementPayload<ExtArgs>[]
+    requestedRiskPredictions: Prisma.$RiskPredictionPayload<ExtArgs>[]
     dietPlans: Prisma.$DietPlanPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1620,6 +1761,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   assignedPatients<T extends Prisma.User$assignedPatientsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$assignedPatientsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PatientPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   nutritionistAppointments<T extends Prisma.User$nutritionistAppointmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$nutritionistAppointmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AppointmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   registeredBodyMeasurements<T extends Prisma.User$registeredBodyMeasurementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$registeredBodyMeasurementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BodyMeasurementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  requestedRiskPredictions<T extends Prisma.User$requestedRiskPredictionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$requestedRiskPredictionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RiskPredictionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   dietPlans<T extends Prisma.User$dietPlansArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$dietPlansArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DietPlanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -2131,6 +2273,30 @@ export type User$registeredBodyMeasurementsArgs<ExtArgs extends runtime.Types.Ex
   take?: number
   skip?: number
   distinct?: Prisma.BodyMeasurementScalarFieldEnum | Prisma.BodyMeasurementScalarFieldEnum[]
+}
+
+/**
+ * User.requestedRiskPredictions
+ */
+export type User$requestedRiskPredictionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the RiskPrediction
+   */
+  select?: Prisma.RiskPredictionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the RiskPrediction
+   */
+  omit?: Prisma.RiskPredictionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RiskPredictionInclude<ExtArgs> | null
+  where?: Prisma.RiskPredictionWhereInput
+  orderBy?: Prisma.RiskPredictionOrderByWithRelationInput | Prisma.RiskPredictionOrderByWithRelationInput[]
+  cursor?: Prisma.RiskPredictionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.RiskPredictionScalarFieldEnum | Prisma.RiskPredictionScalarFieldEnum[]
 }
 
 /**

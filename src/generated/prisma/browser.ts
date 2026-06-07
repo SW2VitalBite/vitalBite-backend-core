@@ -53,6 +53,11 @@ export type BodyMeasurement = Prisma.BodyMeasurementModel
  */
 export type BodyComposition = Prisma.BodyCompositionModel
 /**
+ * Model RiskPrediction
+ * 
+ */
+export type RiskPrediction = Prisma.RiskPredictionModel
+/**
  * Model AnthropometryMeasurement
  * 
  */
