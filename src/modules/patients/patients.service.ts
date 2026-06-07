@@ -267,6 +267,13 @@ export class PatientsService {
     return this.update(currentUser, currentUser.id, input);
   }
 
+  async getDocuments(patientId: string) {
+    return this.prisma.documentMetadata.findMany({
+      where: { patientId },
+      orderBy: { createdAt: 'desc' },
+    });
+  }
+
   private async ensureNutritionistBelongsToTenant(
     tenantId: string,
     nutritionistId: string,

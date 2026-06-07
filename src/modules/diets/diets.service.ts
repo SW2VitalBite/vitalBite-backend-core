@@ -14,6 +14,7 @@ import { DietPlanDayInput } from './dto/diet-structure.input';
 import { DuplicateDietPlanDayInput } from './dto/duplicate-diet-plan-day.input';
 import { UpdateDietPlanStructureInput } from './dto/update-diet-plan-structure.input';
 import { UpdateDietPlanInput } from './dto/update-diet-plan.input';
+import { mapDietPlanToPdfPayload } from './diet-pdf.mapper';
 
 type DietPlanWithStructure = Prisma.DietPlanGetPayload<{
   include: {
@@ -287,6 +288,26 @@ export class DietsService {
     });
 
     return this.findById(currentUser, input.dietPlanId);
+  }
+
+  async generatePdf(currentUser: AuthenticatedUser, id: string) {
+    const diet = await this.findRecordById(currentUser, id);
+    const mappedDiet = this.mapDiet(diet);
+    const payload = mapDietPlanToPdfPayload(mappedDiet);
+
+    const documentsUrl = process.env.DOCUMENTS_SERVICE_URL || 'http://localhost:8082';
+    const response = await fetch(`${documentsUrl}/api/v1/documents/pdf/diet`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error generando PDF en el microservicio: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data.url;
   }
 
   private buildWhere(

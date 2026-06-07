@@ -14,6 +14,7 @@ import { UpdatePatientInput } from './dto/update-patient.input';
 import { PatientModel } from './models/patient.model';
 import { PatientsService } from './patients.service';
 import { UserModel } from '../users/models/user.model';
+import { DocumentMetadataModel } from './models/document-metadata.model';
 
 @Resolver(() => PatientModel)
 export class PatientsResolver {
@@ -105,5 +106,10 @@ export class PatientsResolver {
   @ResolveField(() => String)
   fullName(@Parent() patient: PatientModel) {
     return `${patient.firstName} ${patient.lastName}`;
+  }
+
+  @ResolveField(() => [DocumentMetadataModel])
+  async documents(@Parent() patient: PatientModel) {
+    return this.patientsService.getDocuments(patient.id);
   }
 }

@@ -22,6 +22,7 @@ import { PaymentsModule } from './modules/payments/payments.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
 import { AuditModule } from './modules/audit/audit.module';
 import { RiskPredictionsModule } from './modules/risk-predictions/risk-predictions.module';
+import { PatientSegmentationsModule } from './modules/patient-segmentations/patient-segmentations.module';
 
 @Module({
   imports: [
@@ -58,6 +59,7 @@ import { RiskPredictionsModule } from './modules/risk-predictions/risk-predictio
     NotificationsModule,
     AuditModule,
     RiskPredictionsModule,
+    PatientSegmentationsModule,
   ],
 })
 export class AppModule {}

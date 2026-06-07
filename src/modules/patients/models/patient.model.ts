@@ -1,5 +1,6 @@
 import { Field, Float, ID, Int, ObjectType } from '@nestjs/graphql';
 import { Gender, PatientStatus } from '../../../prisma/generated-client';
+import { DocumentMetadataModel } from './document-metadata.model';
 
 @ObjectType('Patient')
 export class PatientModel {
@@ -59,4 +60,7 @@ export class PatientModel {
 
   @Field()
   updatedAt: Date;
+
+  @Field(() => [DocumentMetadataModel], { nullable: 'itemsAndList' })
+  documents?: DocumentMetadataModel[];
 }

@@ -59,12 +59,14 @@ export const ModelName = {
   BodyMeasurement: 'BodyMeasurement',
   BodyComposition: 'BodyComposition',
   RiskPrediction: 'RiskPrediction',
+  PatientSegmentation: 'PatientSegmentation',
   AnthropometryMeasurement: 'AnthropometryMeasurement',
   DietPlan: 'DietPlan',
   DietPlanDay: 'DietPlanDay',
   DietMeal: 'DietMeal',
   DietMealItem: 'DietMealItem',
-  Notification: 'Notification'
+  Notification: 'Notification',
+  DocumentMetadata: 'DocumentMetadata'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -242,6 +244,22 @@ export const RiskPredictionScalarFieldEnum = {
 export type RiskPredictionScalarFieldEnum = (typeof RiskPredictionScalarFieldEnum)[keyof typeof RiskPredictionScalarFieldEnum]
 
 
+export const PatientSegmentationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  requestedById: 'requestedById',
+  kClusters: 'kClusters',
+  totalPatients: 'totalPatients',
+  silhouetteScore: 'silhouetteScore',
+  clusters: 'clusters',
+  pcaPoints: 'pcaPoints',
+  varianceExplained: 'varianceExplained',
+  createdAt: 'createdAt'
+} as const
+
+export type PatientSegmentationScalarFieldEnum = (typeof PatientSegmentationScalarFieldEnum)[keyof typeof PatientSegmentationScalarFieldEnum]
+
+
 export const AnthropometryMeasurementScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -348,6 +366,26 @@ export const NotificationScalarFieldEnum = {
 } as const
 
 export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
+
+
+export const DocumentMetadataScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  patientId: 'patientId',
+  nutritionistId: 'nutritionistId',
+  resourceId: 'resourceId',
+  tipoDocumento: 'tipoDocumento',
+  nombreArchivo: 'nombreArchivo',
+  pacienteNombre: 'pacienteNombre',
+  nutricionistaNombre: 'nutricionistaNombre',
+  s3Url: 's3Url',
+  hashDocumento: 'hashDocumento',
+  estado: 'estado',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DocumentMetadataScalarFieldEnum = (typeof DocumentMetadataScalarFieldEnum)[keyof typeof DocumentMetadataScalarFieldEnum]
 
 
 export const SortOrder = {

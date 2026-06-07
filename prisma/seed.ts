@@ -60,6 +60,18 @@ async function main() {
   await prisma.bodyComposition.deleteMany();
   await prisma.bodyMeasurement.deleteMany();
   await prisma.appointment.deleteMany();
+  
+  // Clean up risk predictions if they exist
+  try {
+    await (prisma as any).patientRiskPrediction.deleteMany();
+  } catch {}
+  try {
+    await (prisma as any).riskPrediction.deleteMany();
+  } catch {}
+  try {
+    await (prisma as any).patientSegmentation.deleteMany();
+  } catch {}
+
   await prisma.patient.deleteMany();
   await prisma.user.deleteMany();
   await prisma.tenant.deleteMany({
@@ -403,6 +415,22 @@ async function main() {
         hipCm: 100,
       },
       {
+        patient: patients[0],
+        measuredAt: new Date('2026-04-15T10:00:00.000Z'),
+        weightKg: 70.1,
+        heightCm: 164,
+        waistCm: 89,
+        hipCm: 102,
+      },
+      {
+        patient: patients[0],
+        measuredAt: new Date('2026-02-20T10:00:00.000Z'),
+        weightKg: 72.5,
+        heightCm: 164,
+        waistCm: 92,
+        hipCm: 105,
+      },
+      {
         patient: patients[1],
         measuredAt: new Date('2026-06-02T11:00:00.000Z'),
         weightKg: 74.2,
@@ -471,6 +499,48 @@ async function main() {
         leftThighCm: 56.7,
         rightCalfCm: 35.8,
         leftCalfCm: 35.3,
+      },
+    }),
+    prisma.anthropometryMeasurement.create({
+      data: {
+        tenantId: tenant.id,
+        patientId: patients[0].id,
+        bodyMeasurementId: bodyMeasurements[1].id,
+        measuredAt: new Date('2026-04-15T10:00:00.000Z'),
+        neckCm: 35.0,
+        chestThoraxCm: 94,
+        rightArmCm: 30.5,
+        leftArmCm: 30.0,
+        rightForearmCm: 25.0,
+        leftForearmCm: 24.8,
+        waistCm: 89,
+        abdomenCm: 92,
+        hipCm: 102,
+        rightThighCm: 58.5,
+        leftThighCm: 58.0,
+        rightCalfCm: 36.2,
+        leftCalfCm: 36.0,
+      },
+    }),
+    prisma.anthropometryMeasurement.create({
+      data: {
+        tenantId: tenant.id,
+        patientId: patients[0].id,
+        bodyMeasurementId: bodyMeasurements[2].id,
+        measuredAt: new Date('2026-02-20T10:00:00.000Z'),
+        neckCm: 35.5,
+        chestThoraxCm: 96,
+        rightArmCm: 31.2,
+        leftArmCm: 30.8,
+        rightForearmCm: 25.5,
+        leftForearmCm: 25.2,
+        waistCm: 92,
+        abdomenCm: 95,
+        hipCm: 105,
+        rightThighCm: 60.0,
+        leftThighCm: 59.5,
+        rightCalfCm: 37.0,
+        leftCalfCm: 36.8,
       },
     }),
     prisma.anthropometryMeasurement.create({
@@ -620,6 +690,35 @@ async function main() {
                   { name: 'Almuerzo', mealOrder: 2, targetCalories: 520 },
                   { name: 'Cena', mealOrder: 3, targetCalories: 360 },
                   { name: 'Colaciones', mealOrder: 4, targetCalories: 180 },
+                ],
+              },
+            },
+          ],
+        },
+      },
+    }),
+    prisma.dietPlan.create({
+      data: {
+        tenantId: tenant.id,
+        patientId: patients[0].id,
+        nutritionistId: nutritionist.id,
+        name: 'Plan intensivo',
+        objective: 'Definición',
+        phase: 'Fase final',
+        approach: 'Déficit calórico',
+        status: DietPlanStatus.ACTIVE,
+        mealsPerDay: 4,
+        notes: 'Plan intensivo para las últimas 4 semanas con el objetivo de alcanzar la definición final.',
+        days: {
+          create: [
+            {
+              dayLabel: 'Lunes',
+              dayOrder: 1,
+              meals: {
+                create: [
+                  { name: 'Desayuno', mealOrder: 1, targetCalories: 350 },
+                  { name: 'Almuerzo', mealOrder: 2, targetCalories: 500 },
+                  { name: 'Cena', mealOrder: 3, targetCalories: 350 },
                 ],
               },
             },
