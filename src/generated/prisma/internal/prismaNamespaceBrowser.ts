@@ -52,11 +52,17 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   Tenant: 'Tenant',
+  AuditEvent: 'AuditEvent',
   User: 'User',
   Patient: 'Patient',
   Appointment: 'Appointment',
   BodyMeasurement: 'BodyMeasurement',
-  BodyComposition: 'BodyComposition'
+  BodyComposition: 'BodyComposition',
+  AnthropometryMeasurement: 'AnthropometryMeasurement',
+  DietPlan: 'DietPlan',
+  DietPlanDay: 'DietPlanDay',
+  DietMeal: 'DietMeal',
+  DietMealItem: 'DietMealItem'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -86,6 +92,28 @@ export const TenantScalarFieldEnum = {
 } as const
 
 export type TenantScalarFieldEnum = (typeof TenantScalarFieldEnum)[keyof typeof TenantScalarFieldEnum]
+
+
+export const AuditEventScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  tenantName: 'tenantName',
+  tenantSlug: 'tenantSlug',
+  actorUserId: 'actorUserId',
+  actorTenantId: 'actorTenantId',
+  actorEmail: 'actorEmail',
+  actorRoleCode: 'actorRoleCode',
+  action: 'action',
+  resourceType: 'resourceType',
+  resourceId: 'resourceId',
+  summary: 'summary',
+  metadata: 'metadata',
+  previousHash: 'previousHash',
+  eventHash: 'eventHash',
+  createdAt: 'createdAt'
+} as const
+
+export type AuditEventScalarFieldEnum = (typeof AuditEventScalarFieldEnum)[keyof typeof AuditEventScalarFieldEnum]
 
 
 export const UserScalarFieldEnum = {
@@ -185,12 +213,113 @@ export const BodyCompositionScalarFieldEnum = {
 export type BodyCompositionScalarFieldEnum = (typeof BodyCompositionScalarFieldEnum)[keyof typeof BodyCompositionScalarFieldEnum]
 
 
+export const AnthropometryMeasurementScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  patientId: 'patientId',
+  bodyMeasurementId: 'bodyMeasurementId',
+  measuredAt: 'measuredAt',
+  neckCm: 'neckCm',
+  chestThoraxCm: 'chestThoraxCm',
+  rightArmCm: 'rightArmCm',
+  leftArmCm: 'leftArmCm',
+  rightForearmCm: 'rightForearmCm',
+  leftForearmCm: 'leftForearmCm',
+  waistCm: 'waistCm',
+  abdomenCm: 'abdomenCm',
+  hipCm: 'hipCm',
+  rightThighCm: 'rightThighCm',
+  leftThighCm: 'leftThighCm',
+  rightCalfCm: 'rightCalfCm',
+  leftCalfCm: 'leftCalfCm',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type AnthropometryMeasurementScalarFieldEnum = (typeof AnthropometryMeasurementScalarFieldEnum)[keyof typeof AnthropometryMeasurementScalarFieldEnum]
+
+
+export const DietPlanScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  patientId: 'patientId',
+  nutritionistId: 'nutritionistId',
+  name: 'name',
+  objective: 'objective',
+  phase: 'phase',
+  approach: 'approach',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  status: 'status',
+  mealsPerDay: 'mealsPerDay',
+  mainRestriction: 'mainRestriction',
+  notes: 'notes',
+  estimatedCalories: 'estimatedCalories',
+  adherencePercent: 'adherencePercent',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type DietPlanScalarFieldEnum = (typeof DietPlanScalarFieldEnum)[keyof typeof DietPlanScalarFieldEnum]
+
+
+export const DietPlanDayScalarFieldEnum = {
+  id: 'id',
+  dietPlanId: 'dietPlanId',
+  dayLabel: 'dayLabel',
+  dayOrder: 'dayOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DietPlanDayScalarFieldEnum = (typeof DietPlanDayScalarFieldEnum)[keyof typeof DietPlanDayScalarFieldEnum]
+
+
+export const DietMealScalarFieldEnum = {
+  id: 'id',
+  dietPlanDayId: 'dietPlanDayId',
+  name: 'name',
+  mealOrder: 'mealOrder',
+  targetCalories: 'targetCalories',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DietMealScalarFieldEnum = (typeof DietMealScalarFieldEnum)[keyof typeof DietMealScalarFieldEnum]
+
+
+export const DietMealItemScalarFieldEnum = {
+  id: 'id',
+  dietMealId: 'dietMealId',
+  name: 'name',
+  portion: 'portion',
+  calories: 'calories',
+  itemOrder: 'itemOrder',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DietMealItemScalarFieldEnum = (typeof DietMealItemScalarFieldEnum)[keyof typeof DietMealItemScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {
@@ -207,4 +336,13 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 

@@ -4,6 +4,7 @@ import {
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { AuditService } from '../audit/audit.service';
 import { AuthenticatedUser } from '../auth/auth.types';
 import { RequestPlanChangeInput } from './dto/request-plan-change.input';
 import { ResolvePlanChangeInput } from './dto/resolve-plan-change.input';
@@ -48,7 +49,10 @@ interface PaymentsPlanChangeRequestResponse {
 
 @Injectable()
 export class PaymentsIntegrationService {
-  constructor(private readonly configService: ConfigService) {}
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly auditService: AuditService,
+  ) {}
 
   async findPlans(currentUser: AuthenticatedUser) {
     this.ensureAdmin(currentUser);
@@ -71,6 +75,34 @@ export class PaymentsIntegrationService {
     const requests = await this.request<PaymentsPlanChangeRequestResponse[]>(
       `/tenants/${encodeURIComponent(tenantSlug)}/plan-change-requests`,
     );
+    return requests.map((request) => this.toPlanChangeRequestModel(request));
+  }
+
+  async findAllSubscriptions(currentUser: AuthenticatedUser) {
+    this.ensureSuperAdmin(currentUser);
+    const subscriptions = await this.request<PaymentsSubscriptionResponse[]>(
+      '/admin/subscriptions',
+    );
+    return subscriptions.map((subscription) =>
+      this.toSubscriptionModel(subscription),
+    );
+  }
+
+  async findAllPlanChangeRequests(
+    currentUser: AuthenticatedUser,
+    filters: { status?: string | null } = {},
+  ) {
+    this.ensureSuperAdmin(currentUser);
+    const params = new URLSearchParams();
+    if (filters.status) {
+      params.set('status', filters.status);
+    }
+
+    const path = params.size
+      ? `/admin/plan-change-requests?${params.toString()}`
+      : '/admin/plan-change-requests';
+    const requests =
+      await this.request<PaymentsPlanChangeRequestResponse[]>(path);
     return requests.map((request) => this.toPlanChangeRequestModel(request));
   }
 
@@ -97,14 +129,54 @@ export class PaymentsIntegrationService {
     currentUser: AuthenticatedUser,
     input: ResolvePlanChangeInput,
   ) {
-    return this.resolvePlanChange(currentUser, input, 'approve');
+    this.rejectTenantLocalResolution(currentUser, input);
   }
 
   async rejectPlanChange(
     currentUser: AuthenticatedUser,
     input: ResolvePlanChangeInput,
   ) {
-    return this.resolvePlanChange(currentUser, input, 'reject');
+    this.rejectTenantLocalResolution(currentUser, input);
+  }
+
+  async resolvePlanChangeForTenant(
+    currentUser: AuthenticatedUser,
+    tenantSlug: string,
+    input: ResolvePlanChangeInput,
+    action: 'approve' | 'reject',
+  ) {
+    this.ensureSuperAdmin(currentUser);
+    const request = await this.request<PaymentsPlanChangeRequestResponse>(
+      `/tenants/${encodeURIComponent(tenantSlug)}/plan-change-requests/${encodeURIComponent(input.requestId)}/${action}`,
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          comment: input.comment,
+        }),
+      },
+    );
+    const model = this.toPlanChangeRequestModel(request);
+
+    await this.auditService.recordEvent({
+      actor: currentUser,
+      tenantId: currentUser.tenantId,
+      tenantName: currentUser.tenant.name,
+      tenantSlug: currentUser.tenant.slug,
+      action: 'PLAN_CHANGE_REQUESTED',
+      resourceType: 'PLAN_CHANGE_REQUEST',
+      resourceId: model.requestId,
+      summary: `Cambio de plan solicitado de ${model.currentPlanCode} a ${model.requestedPlanCode}.`,
+      metadata: {
+        currentPlanCode: model.currentPlanCode,
+        requestedPlanCode: model.requestedPlanCode,
+        requestedPlanName: model.requestedPlanName,
+        status: model.status,
+        comment: model.comment,
+        requestedAt: model.requestedAt.toISOString(),
+      },
+    });
+
+    return model;
   }
 
   private ensureAdmin(currentUser: AuthenticatedUser) {
@@ -112,6 +184,15 @@ export class PaymentsIntegrationService {
     if (roleCode !== 'ADMINISTRADOR' && roleCode !== 'ADMIN') {
       throw new ForbiddenException(
         'Only administrators can access subscription information.',
+      );
+    }
+  }
+
+  private ensureSuperAdmin(currentUser: AuthenticatedUser) {
+    const roleCode = currentUser.roleCode.trim().toUpperCase();
+    if (roleCode !== 'SUPER_ADMIN') {
+      throw new ForbiddenException(
+        'Only super administrators can access global subscription information.',
       );
     }
   }
@@ -170,6 +251,16 @@ export class PaymentsIntegrationService {
       },
     );
     return this.toPlanChangeRequestModel(request);
+  }
+
+  private rejectTenantLocalResolution(
+    currentUser: AuthenticatedUser,
+    _input: ResolvePlanChangeInput,
+  ): never {
+    this.ensureAdmin(currentUser);
+    throw new ForbiddenException(
+      'Plan change requests must be resolved by a super administrator.',
+    );
   }
 
   private toPlanModel(plan: PaymentsPlanResponse): SubscriptionPlanModel {

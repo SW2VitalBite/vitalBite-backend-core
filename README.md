@@ -48,6 +48,20 @@ query {
 }
 ```
 
+Usuario demo Super Admin:
+
+- Email: `super.admin@vitalbite.com`
+- Password: `demo1234`
+- Ruta inicial: `/super-admin/tenants`
+
+Usuario demo plan individual:
+
+- Email: `andrea.morales@vitalbite.com`
+- Password: `demo1234`
+- Tenant: `Consulta Individual Andrea`
+- Plan: `Nutricionista individual` (`$15/mes`)
+- Regla: el plan individual permite solo 1 usuario activo total; no tiene administrador separado en la demo.
+
 ## Scripts
 
 | Comando | Descripción |

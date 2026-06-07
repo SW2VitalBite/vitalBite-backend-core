@@ -117,8 +117,13 @@ Filtros sugeridos:
 - `patientId`
 - `nutritionistId`
 - `status`
-- `startDate`
-- `endDate`
+- `search`
+
+Estado implementado:
+
+- `DietPlanStatus`: `ACTIVE`, `DRAFT`, `NEEDS_ADJUSTMENT`.
+- La query devuelve estructura anidada de días, comidas e ítems manuales.
+- `activeDietByPatient(patientId)` devuelve el plan activo más reciente del paciente.
 
 ## Catálogo nutricional
 

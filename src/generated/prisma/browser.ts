@@ -23,6 +23,11 @@ export * from './enums.js';
  */
 export type Tenant = Prisma.TenantModel
 /**
+ * Model AuditEvent
+ * 
+ */
+export type AuditEvent = Prisma.AuditEventModel
+/**
  * Model User
  * 
  */
@@ -47,3 +52,28 @@ export type BodyMeasurement = Prisma.BodyMeasurementModel
  * 
  */
 export type BodyComposition = Prisma.BodyCompositionModel
+/**
+ * Model AnthropometryMeasurement
+ * 
+ */
+export type AnthropometryMeasurement = Prisma.AnthropometryMeasurementModel
+/**
+ * Model DietPlan
+ * 
+ */
+export type DietPlan = Prisma.DietPlanModel
+/**
+ * Model DietPlanDay
+ * 
+ */
+export type DietPlanDay = Prisma.DietPlanDayModel
+/**
+ * Model DietMeal
+ * 
+ */
+export type DietMeal = Prisma.DietMealModel
+/**
+ * Model DietMealItem
+ * 
+ */
+export type DietMealItem = Prisma.DietMealItemModel

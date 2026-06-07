@@ -7,9 +7,11 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { CONTEXT } from '@nestjs/graphql';
 import { JwtService } from '@nestjs/jwt';
-import { UserStatus } from '../../prisma/generated-client';
+import { TenantStatus, UserStatus } from '../../prisma/generated-client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { AuthenticatedUser, AuthRequest, AuthTokenPayload } from './auth.types';
+
+const SYSTEM_TENANT_SLUG = 'vitalbite-system';
 
 @Injectable({ scope: Scope.REQUEST })
 export class AuthContextService {
@@ -57,6 +59,10 @@ export class AuthContextService {
       throw new UnauthorizedException('Authenticated user was not found.');
     }
 
+    if (!this.canAccessTenant(user)) {
+      throw new UnauthorizedException('Tenant is not active.');
+    }
+
     if (request) {
       request.currentUser = user;
     }
@@ -83,5 +89,14 @@ export class AuthContextService {
     }
 
     return secret;
+  }
+
+  private canAccessTenant(user: AuthenticatedUser) {
+    const roleCode = user.roleCode.trim().toUpperCase();
+    if (roleCode === 'SUPER_ADMIN' && user.tenant.slug === SYSTEM_TENANT_SLUG) {
+      return true;
+    }
+
+    return user.tenant.status === TenantStatus.ACTIVE;
   }
 }

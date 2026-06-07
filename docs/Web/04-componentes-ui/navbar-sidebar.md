@@ -2,20 +2,20 @@
 
 ## Sidebar
 
-Debe mostrar accesos según rol y permisos:
+Debe mostrar accesos segun rol y permisos:
 
 - Dashboard.
 - Pacientes.
 - Citas.
-- Medidas corporales.
 - Seguimiento nutricional.
-- Dietas.
-- Catálogo nutricional.
+- Catalogo nutricional.
 - Plantillas de dietas.
-- Antropometría.
+- Antropometria.
 - Documentos y reportes.
 - Pagos y suscripciones.
-- Configuración.
+- Configuracion.
+
+Dietas y Medidas no aparecen como opciones globales del sidebar. Ambos modulos se abren desde Pacientes y desde las tabs del expediente.
 
 ## Topbar
 
@@ -24,10 +24,11 @@ Debe mostrar:
 - Nombre del usuario.
 - Rol.
 - Tenant actual.
-- Acción de cierre de sesión.
+- Accion de cierre de sesion.
 
 ## Reglas
 
 - Ocultar opciones sin permiso.
-- Mantener navegación estable.
-- No mostrar módulos de paciente Web porque el paciente usa React Native.
+- Mantener navegacion estable.
+- Mostrar Dietas y Medidas solo dentro del expediente del paciente.
+- No mostrar modulos de paciente Web porque el paciente usa React Native.
