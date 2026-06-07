@@ -64,3 +64,26 @@ export const AppointmentMode = {
 } as const
 
 export type AppointmentMode = (typeof AppointmentMode)[keyof typeof AppointmentMode]
+
+
+export const MealType = {
+  DESAYUNO: 'DESAYUNO',
+  ALMUERZO: 'ALMUERZO',
+  CENA: 'CENA',
+  MERIENDA: 'MERIENDA'
+} as const
+
+export type MealType = (typeof MealType)[keyof typeof MealType]
+
+
+export const NotificationType = {
+  CITA_CREADA: 'CITA_CREADA',
+  CITA_CANCELADA: 'CITA_CANCELADA',
+  CITA_CONFIRMADA: 'CITA_CONFIRMADA',
+  CITA_REPROGRAMADA: 'CITA_REPROGRAMADA',
+  DIETA_ASIGNADA: 'DIETA_ASIGNADA',
+  MENSAJE: 'MENSAJE',
+  REPORTE: 'REPORTE'
+} as const
+
+export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]

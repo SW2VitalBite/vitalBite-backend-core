@@ -18,6 +18,7 @@ import { DietsModule } from './modules/diets/diets.module';
 import { BodyCompositionModule } from './modules/body-composition/body-composition.module';
 import { ReportsModule } from './modules/reports/reports.module';
 import { PaymentsModule } from './modules/payments/payments.module';
+import { NotificationsModule } from './modules/notifications/notifications.module';
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { PaymentsModule } from './modules/payments/payments.module';
     BodyCompositionModule,
     ReportsModule,
     PaymentsModule,
+    NotificationsModule,
   ],
 })
 export class AppModule {}

@@ -47,3 +47,23 @@ export type BodyMeasurement = Prisma.BodyMeasurementModel
  * 
  */
 export type BodyComposition = Prisma.BodyCompositionModel
+/**
+ * Model Diet
+ * 
+ */
+export type Diet = Prisma.DietModel
+/**
+ * Model DietMeal
+ * 
+ */
+export type DietMeal = Prisma.DietMealModel
+/**
+ * Model DietItem
+ * 
+ */
+export type DietItem = Prisma.DietItemModel
+/**
+ * Model Notification
+ * 
+ */
+export type Notification = Prisma.NotificationModel

@@ -13,6 +13,7 @@ import { PatientFilterInput } from './dto/patient-filter.input';
 import { UpdatePatientInput } from './dto/update-patient.input';
 import { PatientModel } from './models/patient.model';
 import { PatientsService } from './patients.service';
+import { UserModel } from '../users/models/user.model';
 
 @Resolver(() => PatientModel)
 export class PatientsResolver {
@@ -75,6 +76,30 @@ export class PatientsResolver {
       patientId,
       nutritionistId,
     );
+  }
+
+  @Query(() => PatientModel)
+  async myProfile() {
+    const currentUser = await this.authContext.getCurrentUser();
+    return this.patientsService.findMyProfile(currentUser);
+  }
+
+  @Query(() => UserModel)
+  async myNutritionist() {
+    const currentUser = await this.authContext.getCurrentUser();
+    return this.patientsService.findMyNutritionist(currentUser);
+  }
+
+  @Mutation(() => Boolean)
+  async registerPushToken(@Args('token') token: string) {
+    const currentUser = await this.authContext.getCurrentUser();
+    return this.patientsService.registerPushToken(currentUser, token);
+  }
+
+  @Mutation(() => PatientModel)
+  async updateMyProfile(@Args('input') input: UpdatePatientInput) {
+    const currentUser = await this.authContext.getCurrentUser();
+    return this.patientsService.updateHeightAndProfile(currentUser, input);
   }
 
   @ResolveField(() => String)

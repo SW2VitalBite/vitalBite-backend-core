@@ -203,6 +203,8 @@ export type TenantWhereInput = {
   appointments?: Prisma.AppointmentListRelationFilter
   bodyMeasurements?: Prisma.BodyMeasurementListRelationFilter
   bodyCompositions?: Prisma.BodyCompositionListRelationFilter
+  diets?: Prisma.DietListRelationFilter
+  notifications?: Prisma.NotificationListRelationFilter
 }
 
 export type TenantOrderByWithRelationInput = {
@@ -218,6 +220,8 @@ export type TenantOrderByWithRelationInput = {
   appointments?: Prisma.AppointmentOrderByRelationAggregateInput
   bodyMeasurements?: Prisma.BodyMeasurementOrderByRelationAggregateInput
   bodyCompositions?: Prisma.BodyCompositionOrderByRelationAggregateInput
+  diets?: Prisma.DietOrderByRelationAggregateInput
+  notifications?: Prisma.NotificationOrderByRelationAggregateInput
 }
 
 export type TenantWhereUniqueInput = Prisma.AtLeast<{
@@ -236,6 +240,8 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   appointments?: Prisma.AppointmentListRelationFilter
   bodyMeasurements?: Prisma.BodyMeasurementListRelationFilter
   bodyCompositions?: Prisma.BodyCompositionListRelationFilter
+  diets?: Prisma.DietListRelationFilter
+  notifications?: Prisma.NotificationListRelationFilter
 }, "id" | "slug">
 
 export type TenantOrderByWithAggregationInput = {
@@ -277,6 +283,8 @@ export type TenantCreateInput = {
   appointments?: Prisma.AppointmentCreateNestedManyWithoutTenantInput
   bodyMeasurements?: Prisma.BodyMeasurementCreateNestedManyWithoutTenantInput
   bodyCompositions?: Prisma.BodyCompositionCreateNestedManyWithoutTenantInput
+  diets?: Prisma.DietCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateInput = {
@@ -292,6 +300,8 @@ export type TenantUncheckedCreateInput = {
   appointments?: Prisma.AppointmentUncheckedCreateNestedManyWithoutTenantInput
   bodyMeasurements?: Prisma.BodyMeasurementUncheckedCreateNestedManyWithoutTenantInput
   bodyCompositions?: Prisma.BodyCompositionUncheckedCreateNestedManyWithoutTenantInput
+  diets?: Prisma.DietUncheckedCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUpdateInput = {
@@ -307,6 +317,8 @@ export type TenantUpdateInput = {
   appointments?: Prisma.AppointmentUpdateManyWithoutTenantNestedInput
   bodyMeasurements?: Prisma.BodyMeasurementUpdateManyWithoutTenantNestedInput
   bodyCompositions?: Prisma.BodyCompositionUpdateManyWithoutTenantNestedInput
+  diets?: Prisma.DietUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateInput = {
@@ -322,6 +334,8 @@ export type TenantUncheckedUpdateInput = {
   appointments?: Prisma.AppointmentUncheckedUpdateManyWithoutTenantNestedInput
   bodyMeasurements?: Prisma.BodyMeasurementUncheckedUpdateManyWithoutTenantNestedInput
   bodyCompositions?: Prisma.BodyCompositionUncheckedUpdateManyWithoutTenantNestedInput
+  diets?: Prisma.DietUncheckedUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateManyInput = {
@@ -475,6 +489,34 @@ export type TenantUpdateOneRequiredWithoutBodyCompositionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutBodyCompositionsInput, Prisma.TenantUpdateWithoutBodyCompositionsInput>, Prisma.TenantUncheckedUpdateWithoutBodyCompositionsInput>
 }
 
+export type TenantCreateNestedOneWithoutDietsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutDietsInput, Prisma.TenantUncheckedCreateWithoutDietsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutDietsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutDietsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutDietsInput, Prisma.TenantUncheckedCreateWithoutDietsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutDietsInput
+  upsert?: Prisma.TenantUpsertWithoutDietsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutDietsInput, Prisma.TenantUpdateWithoutDietsInput>, Prisma.TenantUncheckedUpdateWithoutDietsInput>
+}
+
+export type TenantCreateNestedOneWithoutNotificationsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutNotificationsInput, Prisma.TenantUncheckedCreateWithoutNotificationsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutNotificationsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutNotificationsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutNotificationsInput, Prisma.TenantUncheckedCreateWithoutNotificationsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutNotificationsInput
+  upsert?: Prisma.TenantUpsertWithoutNotificationsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutNotificationsInput, Prisma.TenantUpdateWithoutNotificationsInput>, Prisma.TenantUncheckedUpdateWithoutNotificationsInput>
+}
+
 export type TenantCreateWithoutUsersInput = {
   id?: string
   name: string
@@ -487,6 +529,8 @@ export type TenantCreateWithoutUsersInput = {
   appointments?: Prisma.AppointmentCreateNestedManyWithoutTenantInput
   bodyMeasurements?: Prisma.BodyMeasurementCreateNestedManyWithoutTenantInput
   bodyCompositions?: Prisma.BodyCompositionCreateNestedManyWithoutTenantInput
+  diets?: Prisma.DietCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutUsersInput = {
@@ -501,6 +545,8 @@ export type TenantUncheckedCreateWithoutUsersInput = {
   appointments?: Prisma.AppointmentUncheckedCreateNestedManyWithoutTenantInput
   bodyMeasurements?: Prisma.BodyMeasurementUncheckedCreateNestedManyWithoutTenantInput
   bodyCompositions?: Prisma.BodyCompositionUncheckedCreateNestedManyWithoutTenantInput
+  diets?: Prisma.DietUncheckedCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutUsersInput = {
@@ -531,6 +577,8 @@ export type TenantUpdateWithoutUsersInput = {
   appointments?: Prisma.AppointmentUpdateManyWithoutTenantNestedInput
   bodyMeasurements?: Prisma.BodyMeasurementUpdateManyWithoutTenantNestedInput
   bodyCompositions?: Prisma.BodyCompositionUpdateManyWithoutTenantNestedInput
+  diets?: Prisma.DietUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutUsersInput = {
@@ -545,6 +593,8 @@ export type TenantUncheckedUpdateWithoutUsersInput = {
   appointments?: Prisma.AppointmentUncheckedUpdateManyWithoutTenantNestedInput
   bodyMeasurements?: Prisma.BodyMeasurementUncheckedUpdateManyWithoutTenantNestedInput
   bodyCompositions?: Prisma.BodyCompositionUncheckedUpdateManyWithoutTenantNestedInput
+  diets?: Prisma.DietUncheckedUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutPatientsInput = {
@@ -559,6 +609,8 @@ export type TenantCreateWithoutPatientsInput = {
   appointments?: Prisma.AppointmentCreateNestedManyWithoutTenantInput
   bodyMeasurements?: Prisma.BodyMeasurementCreateNestedManyWithoutTenantInput
   bodyCompositions?: Prisma.BodyCompositionCreateNestedManyWithoutTenantInput
+  diets?: Prisma.DietCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutPatientsInput = {
@@ -573,6 +625,8 @@ export type TenantUncheckedCreateWithoutPatientsInput = {
   appointments?: Prisma.AppointmentUncheckedCreateNestedManyWithoutTenantInput
   bodyMeasurements?: Prisma.BodyMeasurementUncheckedCreateNestedManyWithoutTenantInput
   bodyCompositions?: Prisma.BodyCompositionUncheckedCreateNestedManyWithoutTenantInput
+  diets?: Prisma.DietUncheckedCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutPatientsInput = {
@@ -603,6 +657,8 @@ export type TenantUpdateWithoutPatientsInput = {
   appointments?: Prisma.AppointmentUpdateManyWithoutTenantNestedInput
   bodyMeasurements?: Prisma.BodyMeasurementUpdateManyWithoutTenantNestedInput
   bodyCompositions?: Prisma.BodyCompositionUpdateManyWithoutTenantNestedInput
+  diets?: Prisma.DietUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutPatientsInput = {
@@ -617,6 +673,8 @@ export type TenantUncheckedUpdateWithoutPatientsInput = {
   appointments?: Prisma.AppointmentUncheckedUpdateManyWithoutTenantNestedInput
   bodyMeasurements?: Prisma.BodyMeasurementUncheckedUpdateManyWithoutTenantNestedInput
   bodyCompositions?: Prisma.BodyCompositionUncheckedUpdateManyWithoutTenantNestedInput
+  diets?: Prisma.DietUncheckedUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutAppointmentsInput = {
@@ -631,6 +689,8 @@ export type TenantCreateWithoutAppointmentsInput = {
   patients?: Prisma.PatientCreateNestedManyWithoutTenantInput
   bodyMeasurements?: Prisma.BodyMeasurementCreateNestedManyWithoutTenantInput
   bodyCompositions?: Prisma.BodyCompositionCreateNestedManyWithoutTenantInput
+  diets?: Prisma.DietCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutAppointmentsInput = {
@@ -645,6 +705,8 @@ export type TenantUncheckedCreateWithoutAppointmentsInput = {
   patients?: Prisma.PatientUncheckedCreateNestedManyWithoutTenantInput
   bodyMeasurements?: Prisma.BodyMeasurementUncheckedCreateNestedManyWithoutTenantInput
   bodyCompositions?: Prisma.BodyCompositionUncheckedCreateNestedManyWithoutTenantInput
+  diets?: Prisma.DietUncheckedCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutAppointmentsInput = {
@@ -675,6 +737,8 @@ export type TenantUpdateWithoutAppointmentsInput = {
   patients?: Prisma.PatientUpdateManyWithoutTenantNestedInput
   bodyMeasurements?: Prisma.BodyMeasurementUpdateManyWithoutTenantNestedInput
   bodyCompositions?: Prisma.BodyCompositionUpdateManyWithoutTenantNestedInput
+  diets?: Prisma.DietUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutAppointmentsInput = {
@@ -689,6 +753,8 @@ export type TenantUncheckedUpdateWithoutAppointmentsInput = {
   patients?: Prisma.PatientUncheckedUpdateManyWithoutTenantNestedInput
   bodyMeasurements?: Prisma.BodyMeasurementUncheckedUpdateManyWithoutTenantNestedInput
   bodyCompositions?: Prisma.BodyCompositionUncheckedUpdateManyWithoutTenantNestedInput
+  diets?: Prisma.DietUncheckedUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutBodyMeasurementsInput = {
@@ -703,6 +769,8 @@ export type TenantCreateWithoutBodyMeasurementsInput = {
   patients?: Prisma.PatientCreateNestedManyWithoutTenantInput
   appointments?: Prisma.AppointmentCreateNestedManyWithoutTenantInput
   bodyCompositions?: Prisma.BodyCompositionCreateNestedManyWithoutTenantInput
+  diets?: Prisma.DietCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutBodyMeasurementsInput = {
@@ -717,6 +785,8 @@ export type TenantUncheckedCreateWithoutBodyMeasurementsInput = {
   patients?: Prisma.PatientUncheckedCreateNestedManyWithoutTenantInput
   appointments?: Prisma.AppointmentUncheckedCreateNestedManyWithoutTenantInput
   bodyCompositions?: Prisma.BodyCompositionUncheckedCreateNestedManyWithoutTenantInput
+  diets?: Prisma.DietUncheckedCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutBodyMeasurementsInput = {
@@ -747,6 +817,8 @@ export type TenantUpdateWithoutBodyMeasurementsInput = {
   patients?: Prisma.PatientUpdateManyWithoutTenantNestedInput
   appointments?: Prisma.AppointmentUpdateManyWithoutTenantNestedInput
   bodyCompositions?: Prisma.BodyCompositionUpdateManyWithoutTenantNestedInput
+  diets?: Prisma.DietUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutBodyMeasurementsInput = {
@@ -761,6 +833,8 @@ export type TenantUncheckedUpdateWithoutBodyMeasurementsInput = {
   patients?: Prisma.PatientUncheckedUpdateManyWithoutTenantNestedInput
   appointments?: Prisma.AppointmentUncheckedUpdateManyWithoutTenantNestedInput
   bodyCompositions?: Prisma.BodyCompositionUncheckedUpdateManyWithoutTenantNestedInput
+  diets?: Prisma.DietUncheckedUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutBodyCompositionsInput = {
@@ -775,6 +849,8 @@ export type TenantCreateWithoutBodyCompositionsInput = {
   patients?: Prisma.PatientCreateNestedManyWithoutTenantInput
   appointments?: Prisma.AppointmentCreateNestedManyWithoutTenantInput
   bodyMeasurements?: Prisma.BodyMeasurementCreateNestedManyWithoutTenantInput
+  diets?: Prisma.DietCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutBodyCompositionsInput = {
@@ -789,6 +865,8 @@ export type TenantUncheckedCreateWithoutBodyCompositionsInput = {
   patients?: Prisma.PatientUncheckedCreateNestedManyWithoutTenantInput
   appointments?: Prisma.AppointmentUncheckedCreateNestedManyWithoutTenantInput
   bodyMeasurements?: Prisma.BodyMeasurementUncheckedCreateNestedManyWithoutTenantInput
+  diets?: Prisma.DietUncheckedCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutBodyCompositionsInput = {
@@ -819,6 +897,8 @@ export type TenantUpdateWithoutBodyCompositionsInput = {
   patients?: Prisma.PatientUpdateManyWithoutTenantNestedInput
   appointments?: Prisma.AppointmentUpdateManyWithoutTenantNestedInput
   bodyMeasurements?: Prisma.BodyMeasurementUpdateManyWithoutTenantNestedInput
+  diets?: Prisma.DietUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutBodyCompositionsInput = {
@@ -833,6 +913,168 @@ export type TenantUncheckedUpdateWithoutBodyCompositionsInput = {
   patients?: Prisma.PatientUncheckedUpdateManyWithoutTenantNestedInput
   appointments?: Prisma.AppointmentUncheckedUpdateManyWithoutTenantNestedInput
   bodyMeasurements?: Prisma.BodyMeasurementUncheckedUpdateManyWithoutTenantNestedInput
+  diets?: Prisma.DietUncheckedUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutDietsInput = {
+  id?: string
+  name: string
+  slug: string
+  status?: $Enums.TenantStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  patients?: Prisma.PatientCreateNestedManyWithoutTenantInput
+  appointments?: Prisma.AppointmentCreateNestedManyWithoutTenantInput
+  bodyMeasurements?: Prisma.BodyMeasurementCreateNestedManyWithoutTenantInput
+  bodyCompositions?: Prisma.BodyCompositionCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutDietsInput = {
+  id?: string
+  name: string
+  slug: string
+  status?: $Enums.TenantStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  patients?: Prisma.PatientUncheckedCreateNestedManyWithoutTenantInput
+  appointments?: Prisma.AppointmentUncheckedCreateNestedManyWithoutTenantInput
+  bodyMeasurements?: Prisma.BodyMeasurementUncheckedCreateNestedManyWithoutTenantInput
+  bodyCompositions?: Prisma.BodyCompositionUncheckedCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutDietsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutDietsInput, Prisma.TenantUncheckedCreateWithoutDietsInput>
+}
+
+export type TenantUpsertWithoutDietsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutDietsInput, Prisma.TenantUncheckedUpdateWithoutDietsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutDietsInput, Prisma.TenantUncheckedCreateWithoutDietsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutDietsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutDietsInput, Prisma.TenantUncheckedUpdateWithoutDietsInput>
+}
+
+export type TenantUpdateWithoutDietsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  patients?: Prisma.PatientUpdateManyWithoutTenantNestedInput
+  appointments?: Prisma.AppointmentUpdateManyWithoutTenantNestedInput
+  bodyMeasurements?: Prisma.BodyMeasurementUpdateManyWithoutTenantNestedInput
+  bodyCompositions?: Prisma.BodyCompositionUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutDietsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  patients?: Prisma.PatientUncheckedUpdateManyWithoutTenantNestedInput
+  appointments?: Prisma.AppointmentUncheckedUpdateManyWithoutTenantNestedInput
+  bodyMeasurements?: Prisma.BodyMeasurementUncheckedUpdateManyWithoutTenantNestedInput
+  bodyCompositions?: Prisma.BodyCompositionUncheckedUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutNotificationsInput = {
+  id?: string
+  name: string
+  slug: string
+  status?: $Enums.TenantStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  patients?: Prisma.PatientCreateNestedManyWithoutTenantInput
+  appointments?: Prisma.AppointmentCreateNestedManyWithoutTenantInput
+  bodyMeasurements?: Prisma.BodyMeasurementCreateNestedManyWithoutTenantInput
+  bodyCompositions?: Prisma.BodyCompositionCreateNestedManyWithoutTenantInput
+  diets?: Prisma.DietCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutNotificationsInput = {
+  id?: string
+  name: string
+  slug: string
+  status?: $Enums.TenantStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  patients?: Prisma.PatientUncheckedCreateNestedManyWithoutTenantInput
+  appointments?: Prisma.AppointmentUncheckedCreateNestedManyWithoutTenantInput
+  bodyMeasurements?: Prisma.BodyMeasurementUncheckedCreateNestedManyWithoutTenantInput
+  bodyCompositions?: Prisma.BodyCompositionUncheckedCreateNestedManyWithoutTenantInput
+  diets?: Prisma.DietUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutNotificationsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutNotificationsInput, Prisma.TenantUncheckedCreateWithoutNotificationsInput>
+}
+
+export type TenantUpsertWithoutNotificationsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutNotificationsInput, Prisma.TenantUncheckedUpdateWithoutNotificationsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutNotificationsInput, Prisma.TenantUncheckedCreateWithoutNotificationsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutNotificationsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutNotificationsInput, Prisma.TenantUncheckedUpdateWithoutNotificationsInput>
+}
+
+export type TenantUpdateWithoutNotificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  patients?: Prisma.PatientUpdateManyWithoutTenantNestedInput
+  appointments?: Prisma.AppointmentUpdateManyWithoutTenantNestedInput
+  bodyMeasurements?: Prisma.BodyMeasurementUpdateManyWithoutTenantNestedInput
+  bodyCompositions?: Prisma.BodyCompositionUpdateManyWithoutTenantNestedInput
+  diets?: Prisma.DietUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutNotificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  patients?: Prisma.PatientUncheckedUpdateManyWithoutTenantNestedInput
+  appointments?: Prisma.AppointmentUncheckedUpdateManyWithoutTenantNestedInput
+  bodyMeasurements?: Prisma.BodyMeasurementUncheckedUpdateManyWithoutTenantNestedInput
+  bodyCompositions?: Prisma.BodyCompositionUncheckedUpdateManyWithoutTenantNestedInput
+  diets?: Prisma.DietUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 
@@ -846,6 +1088,8 @@ export type TenantCountOutputType = {
   appointments: number
   bodyMeasurements: number
   bodyCompositions: number
+  diets: number
+  notifications: number
 }
 
 export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -854,6 +1098,8 @@ export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   appointments?: boolean | TenantCountOutputTypeCountAppointmentsArgs
   bodyMeasurements?: boolean | TenantCountOutputTypeCountBodyMeasurementsArgs
   bodyCompositions?: boolean | TenantCountOutputTypeCountBodyCompositionsArgs
+  diets?: boolean | TenantCountOutputTypeCountDietsArgs
+  notifications?: boolean | TenantCountOutputTypeCountNotificationsArgs
 }
 
 /**
@@ -901,6 +1147,20 @@ export type TenantCountOutputTypeCountBodyCompositionsArgs<ExtArgs extends runti
   where?: Prisma.BodyCompositionWhereInput
 }
 
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountDietsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DietWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountNotificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NotificationWhereInput
+}
+
 
 export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -915,6 +1175,8 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   appointments?: boolean | Prisma.Tenant$appointmentsArgs<ExtArgs>
   bodyMeasurements?: boolean | Prisma.Tenant$bodyMeasurementsArgs<ExtArgs>
   bodyCompositions?: boolean | Prisma.Tenant$bodyCompositionsArgs<ExtArgs>
+  diets?: boolean | Prisma.Tenant$dietsArgs<ExtArgs>
+  notifications?: boolean | Prisma.Tenant$notificationsArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tenant"]>
 
@@ -955,6 +1217,8 @@ export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   appointments?: boolean | Prisma.Tenant$appointmentsArgs<ExtArgs>
   bodyMeasurements?: boolean | Prisma.Tenant$bodyMeasurementsArgs<ExtArgs>
   bodyCompositions?: boolean | Prisma.Tenant$bodyCompositionsArgs<ExtArgs>
+  diets?: boolean | Prisma.Tenant$dietsArgs<ExtArgs>
+  notifications?: boolean | Prisma.Tenant$notificationsArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type TenantIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -968,6 +1232,8 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     appointments: Prisma.$AppointmentPayload<ExtArgs>[]
     bodyMeasurements: Prisma.$BodyMeasurementPayload<ExtArgs>[]
     bodyCompositions: Prisma.$BodyCompositionPayload<ExtArgs>[]
+    diets: Prisma.$DietPayload<ExtArgs>[]
+    notifications: Prisma.$NotificationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1376,6 +1642,8 @@ export interface Prisma__TenantClient<T, Null = never, ExtArgs extends runtime.T
   appointments<T extends Prisma.Tenant$appointmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$appointmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AppointmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   bodyMeasurements<T extends Prisma.Tenant$bodyMeasurementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$bodyMeasurementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BodyMeasurementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   bodyCompositions<T extends Prisma.Tenant$bodyCompositionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$bodyCompositionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BodyCompositionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  diets<T extends Prisma.Tenant$dietsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$dietsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DietPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  notifications<T extends Prisma.Tenant$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1922,6 +2190,54 @@ export type Tenant$bodyCompositionsArgs<ExtArgs extends runtime.Types.Extensions
   take?: number
   skip?: number
   distinct?: Prisma.BodyCompositionScalarFieldEnum | Prisma.BodyCompositionScalarFieldEnum[]
+}
+
+/**
+ * Tenant.diets
+ */
+export type Tenant$dietsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Diet
+   */
+  select?: Prisma.DietSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Diet
+   */
+  omit?: Prisma.DietOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DietInclude<ExtArgs> | null
+  where?: Prisma.DietWhereInput
+  orderBy?: Prisma.DietOrderByWithRelationInput | Prisma.DietOrderByWithRelationInput[]
+  cursor?: Prisma.DietWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DietScalarFieldEnum | Prisma.DietScalarFieldEnum[]
+}
+
+/**
+ * Tenant.notifications
+ */
+export type Tenant$notificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Notification
+   */
+  select?: Prisma.NotificationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Notification
+   */
+  omit?: Prisma.NotificationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NotificationInclude<ExtArgs> | null
+  where?: Prisma.NotificationWhereInput
+  orderBy?: Prisma.NotificationOrderByWithRelationInput | Prisma.NotificationOrderByWithRelationInput[]
+  cursor?: Prisma.NotificationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[]
 }
 
 /**

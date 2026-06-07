@@ -718,14 +718,6 @@ export type FloatFieldUpdateOperationsInput = {
   divide?: number
 }
 
-export type NullableFloatFieldUpdateOperationsInput = {
-  set?: number | null
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type BodyMeasurementCreateNestedOneWithoutBodyCompositionsInput = {
   create?: Prisma.XOR<Prisma.BodyMeasurementCreateWithoutBodyCompositionsInput, Prisma.BodyMeasurementUncheckedCreateWithoutBodyCompositionsInput>
   connectOrCreate?: Prisma.BodyMeasurementCreateOrConnectWithoutBodyCompositionsInput

@@ -56,7 +56,11 @@ export const ModelName = {
   Patient: 'Patient',
   Appointment: 'Appointment',
   BodyMeasurement: 'BodyMeasurement',
-  BodyComposition: 'BodyComposition'
+  BodyComposition: 'BodyComposition',
+  Diet: 'Diet',
+  DietMeal: 'DietMeal',
+  DietItem: 'DietItem',
+  Notification: 'Notification'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -112,12 +116,15 @@ export const PatientScalarFieldEnum = {
   firstName: 'firstName',
   lastName: 'lastName',
   email: 'email',
+  passwordHash: 'passwordHash',
   phone: 'phone',
   birthDate: 'birthDate',
   gender: 'gender',
   status: 'status',
   clinicalNotes: 'clinicalNotes',
   nutritionGoal: 'nutritionGoal',
+  heightCm: 'heightCm',
+  expoPushToken: 'expoPushToken',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt'
@@ -185,12 +192,80 @@ export const BodyCompositionScalarFieldEnum = {
 export type BodyCompositionScalarFieldEnum = (typeof BodyCompositionScalarFieldEnum)[keyof typeof BodyCompositionScalarFieldEnum]
 
 
+export const DietScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  patientId: 'patientId',
+  nutritionistId: 'nutritionistId',
+  appointmentId: 'appointmentId',
+  name: 'name',
+  objective: 'objective',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  isActive: 'isActive',
+  pdfUrl: 'pdfUrl',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type DietScalarFieldEnum = (typeof DietScalarFieldEnum)[keyof typeof DietScalarFieldEnum]
+
+
+export const DietMealScalarFieldEnum = {
+  id: 'id',
+  dietId: 'dietId',
+  mealType: 'mealType',
+  name: 'name'
+} as const
+
+export type DietMealScalarFieldEnum = (typeof DietMealScalarFieldEnum)[keyof typeof DietMealScalarFieldEnum]
+
+
+export const DietItemScalarFieldEnum = {
+  id: 'id',
+  mealId: 'mealId',
+  name: 'name',
+  quantity: 'quantity',
+  unit: 'unit',
+  calories: 'calories',
+  protein: 'protein',
+  carbs: 'carbs',
+  fat: 'fat'
+} as const
+
+export type DietItemScalarFieldEnum = (typeof DietItemScalarFieldEnum)[keyof typeof DietItemScalarFieldEnum]
+
+
+export const NotificationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  patientId: 'patientId',
+  type: 'type',
+  title: 'title',
+  body: 'body',
+  data: 'data',
+  isRead: 'isRead',
+  createdAt: 'createdAt'
+} as const
+
+export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {
@@ -207,4 +282,13 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 

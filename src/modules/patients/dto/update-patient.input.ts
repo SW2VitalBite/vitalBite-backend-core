@@ -67,4 +67,8 @@ export class UpdatePatientInput {
   @IsOptional()
   @IsUUID()
   nutritionistId?: string;
+
+  @Field(() => Number, { nullable: true })
+  @IsOptional()
+  heightCm?: number;
 }

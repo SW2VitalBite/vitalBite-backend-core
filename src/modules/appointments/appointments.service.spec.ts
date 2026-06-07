@@ -91,9 +91,19 @@ describe('AppointmentsService', () => {
     },
   });
 
+  const createNotificationsMock = () => ({
+    createAndPush: jest.fn().mockResolvedValue(undefined),
+  });
+
+  const createService = (prisma: ReturnType<typeof createPrismaMock>) =>
+    new AppointmentsService(
+      prisma as any,
+      createNotificationsMock() as any,
+    );
+
   it('filters appointments by tenant, status, people, date range and search', async () => {
     const prisma = createPrismaMock();
-    const service = new AppointmentsService(prisma as any);
+    const service = createService(prisma);
     const dateFrom = new Date('2026-06-08T00:00:00.000Z');
     const dateTo = new Date('2026-06-12T23:59:59.000Z');
 
@@ -126,7 +136,7 @@ describe('AppointmentsService', () => {
 
   it('creates an appointment with valid patient and nutritionist', async () => {
     const prisma = createPrismaMock();
-    const service = new AppointmentsService(prisma as any);
+    const service = createService(prisma);
 
     const created = await service.create(currentUser, {
       patientId: patient.id,
@@ -161,7 +171,7 @@ describe('AppointmentsService', () => {
 
   it('rejects duration lower than or equal to zero', async () => {
     const prisma = createPrismaMock();
-    const service = new AppointmentsService(prisma as any);
+    const service = createService(prisma);
 
     await expect(
       service.create(currentUser, {
@@ -182,7 +192,7 @@ describe('AppointmentsService', () => {
         durationMinutes: 60,
       },
     ]);
-    const service = new AppointmentsService(prisma as any);
+    const service = createService(prisma);
 
     await expect(
       service.create(currentUser, {
@@ -196,7 +206,7 @@ describe('AppointmentsService', () => {
 
   it('updates status when confirming, rescheduling, cancelling, completing and marking no-show', async () => {
     const prisma = createPrismaMock();
-    const service = new AppointmentsService(prisma as any);
+    const service = createService(prisma);
 
     await service.confirm(currentUser, appointment.id);
     await service.reschedule(currentUser, appointment.id, {

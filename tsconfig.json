@@ -21,6 +21,5 @@
     "noImplicitAny": true,
     "strictBindCallApply": true,
     "noFallthroughCasesInSwitch": true
-  },
-  "extends": "expo/tsconfig.base"
+  }
 }

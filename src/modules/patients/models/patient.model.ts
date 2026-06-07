@@ -42,6 +42,9 @@ export class PatientModel {
   @Field(() => String, { nullable: true })
   nutritionGoal?: string | null;
 
+  @Field(() => Number, { nullable: true })
+  heightCm?: number | null;
+
   @Field()
   createdAt: Date;
 

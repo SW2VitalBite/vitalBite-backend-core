@@ -213,6 +213,54 @@ export class PatientsService {
     return where;
   }
 
+  async findMyProfile(currentUser: AuthenticatedUser) {
+    const patient = await this.prisma.patient.findFirst({
+      where: {
+        id: currentUser.id,
+        tenantId: currentUser.tenantId,
+        deletedAt: null,
+      },
+    });
+
+    if (!patient) {
+      throw new NotFoundException('Perfil de paciente no encontrado.');
+    }
+
+    return patient;
+  }
+
+  async findMyNutritionist(currentUser: AuthenticatedUser) {
+    const patient = await this.prisma.patient.findFirst({
+      where: {
+        id: currentUser.id,
+        tenantId: currentUser.tenantId,
+        deletedAt: null,
+      },
+      include: { nutritionist: true },
+    });
+
+    if (!patient) {
+      throw new NotFoundException('Paciente no encontrado.');
+    }
+
+    return patient.nutritionist;
+  }
+
+  async registerPushToken(currentUser: AuthenticatedUser, token: string) {
+    await this.prisma.patient.updateMany({
+      where: { id: currentUser.id, tenantId: currentUser.tenantId },
+      data: { expoPushToken: token },
+    });
+    return true;
+  }
+
+  async updateHeightAndProfile(
+    currentUser: AuthenticatedUser,
+    input: UpdatePatientInput,
+  ) {
+    return this.update(currentUser, currentUser.id, input);
+  }
+
   private async ensureNutritionistBelongsToTenant(
     tenantId: string,
     nutritionistId: string,

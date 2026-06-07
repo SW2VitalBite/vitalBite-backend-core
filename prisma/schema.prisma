@@ -47,6 +47,23 @@ enum AppointmentMode {
   VIRTUAL
 }
 
+enum MealType {
+  DESAYUNO
+  ALMUERZO
+  CENA
+  MERIENDA
+}
+
+enum NotificationType {
+  CITA_CREADA
+  CITA_CANCELADA
+  CITA_CONFIRMADA
+  CITA_REPROGRAMADA
+  DIETA_ASIGNADA
+  MENSAJE
+  REPORTE
+}
+
 model Tenant {
   id               String            @id @default(uuid())
   name             String
@@ -57,6 +74,8 @@ model Tenant {
   appointments     Appointment[]
   bodyMeasurements BodyMeasurement[]
   bodyCompositions BodyComposition[]
+  diets            Diet[]
+  notifications    Notification[]
   createdAt        DateTime          @default(now()) @map("created_at")
   updatedAt        DateTime          @updatedAt @map("updated_at")
   deletedAt        DateTime?         @map("deleted_at")
@@ -77,6 +96,7 @@ model User {
   assignedPatients           Patient[]         @relation("NutritionistPatients")
   nutritionistAppointments   Appointment[]     @relation("NutritionistAppointments")
   registeredBodyMeasurements BodyMeasurement[] @relation("RegisteredBodyMeasurements")
+  nutritionistDiets          Diet[]            @relation("NutritionistDiets")
   createdAt                  DateTime          @default(now()) @map("created_at")
   updatedAt                  DateTime          @updatedAt @map("updated_at")
   deletedAt                  DateTime?         @map("deleted_at")
@@ -94,17 +114,22 @@ model Patient {
   firstName        String            @map("first_name")
   lastName         String            @map("last_name")
   email            String?
+  passwordHash     String?           @map("password_hash")
   phone            String?
   birthDate        DateTime?         @map("birth_date")
   gender           Gender?
   status           PatientStatus     @default(ACTIVE)
   clinicalNotes    String?           @map("clinical_notes")
   nutritionGoal    String?           @map("nutrition_goal")
+  heightCm         Float?            @map("height_cm")
+  expoPushToken    String?           @map("expo_push_token")
   tenant           Tenant            @relation(fields: [tenantId], references: [id])
   nutritionist     User              @relation("NutritionistPatients", fields: [nutritionistId], references: [id])
   appointments     Appointment[]
   bodyMeasurements BodyMeasurement[]
   bodyCompositions BodyComposition[]
+  diets            Diet[]
+  notifications    Notification[]
   createdAt        DateTime          @default(now()) @map("created_at")
   updatedAt        DateTime          @updatedAt @map("updated_at")
   deletedAt        DateTime?         @map("deleted_at")
@@ -192,4 +217,73 @@ model BodyComposition {
   @@index([tenantId, patientId, measuredAt])
   @@index([bodyMeasurementId])
   @@map("body_compositions")
+}
+
+model Diet {
+  id             String     @id @default(uuid())
+  tenantId       String     @map("tenant_id")
+  patientId      String     @map("patient_id")
+  nutritionistId String     @map("nutritionist_id")
+  appointmentId  String?    @map("appointment_id")
+  name           String
+  objective      String?
+  startDate      DateTime   @map("start_date")
+  endDate        DateTime?  @map("end_date")
+  isActive       Boolean    @default(true) @map("is_active")
+  pdfUrl         String?    @map("pdf_url")
+  tenant         Tenant     @relation(fields: [tenantId], references: [id])
+  patient        Patient    @relation(fields: [patientId], references: [id])
+  nutritionist   User       @relation("NutritionistDiets", fields: [nutritionistId], references: [id])
+  meals          DietMeal[]
+  createdAt      DateTime   @default(now()) @map("created_at")
+  updatedAt      DateTime   @updatedAt @map("updated_at")
+  deletedAt      DateTime?  @map("deleted_at")
+
+  @@index([tenantId, patientId])
+  @@index([tenantId, patientId, isActive])
+  @@map("diets")
+}
+
+model DietMeal {
+  id       String     @id @default(uuid())
+  dietId   String     @map("diet_id")
+  mealType MealType   @map("meal_type")
+  name     String?
+  diet     Diet       @relation(fields: [dietId], references: [id])
+  items    DietItem[]
+
+  @@map("diet_meals")
+}
+
+model DietItem {
+  id       String   @id @default(uuid())
+  mealId   String   @map("meal_id")
+  name     String
+  quantity Float
+  unit     String
+  calories Float?
+  protein  Float?
+  carbs    Float?
+  fat      Float?
+  meal     DietMeal @relation(fields: [mealId], references: [id])
+
+  @@map("diet_items")
+}
+
+model Notification {
+  id        String           @id @default(uuid())
+  tenantId  String           @map("tenant_id")
+  patientId String           @map("patient_id")
+  type      NotificationType
+  title     String
+  body      String
+  data      Json?
+  isRead    Boolean          @default(false) @map("is_read")
+  tenant    Tenant           @relation(fields: [tenantId], references: [id])
+  patient   Patient          @relation(fields: [patientId], references: [id])
+  createdAt DateTime         @default(now()) @map("created_at")
+
+  @@index([tenantId, patientId, isRead])
+  @@index([tenantId, patientId, createdAt])
+  @@map("notifications")
 }
