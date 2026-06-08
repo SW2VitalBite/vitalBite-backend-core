@@ -97,3 +97,8 @@ export type Notification = Prisma.NotificationModel
  * 
  */
 export type DocumentMetadata = Prisma.DocumentMetadataModel
+/**
+ * Model NutritionistSchedule
+ * 
+ */
+export type NutritionistSchedule = Prisma.NutritionistScheduleModel

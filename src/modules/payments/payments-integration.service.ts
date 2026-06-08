@@ -14,6 +14,7 @@ import { RequestPlanChangeInput } from './dto/request-plan-change.input';
 import { ResolvePlanChangeInput } from './dto/resolve-plan-change.input';
 import { CheckoutSessionStatusModel } from './models/checkout-session-status.model';
 import { InitialCheckoutSessionModel } from './models/initial-checkout-session.model';
+import { PaymentHistoryModel } from './models/payment-history.model';
 import { PlanChangeRequestModel } from './models/plan-change-request.model';
 import { PaymentResponseModel } from './models/payment-response.model';
 import { SubscriptionPlanModel } from './models/subscription-plan.model';
@@ -56,7 +57,9 @@ interface PaymentsPlanChangeRequestResponse {
 
 interface PaymentsPayResponse {
   transactionHash: string;
-  invoiceUrl: string;
+  invoiceUrl?: string | null;
+  invoiceStatus: string;
+  invoiceError?: string | null;
   nextReviewAt: string;
 }
 
@@ -70,9 +73,31 @@ interface PaymentsCheckoutSessionStatusResponse {
   status: string;
   tenantId: string;
   planCode?: string | null;
+  transactionHash?: string | null;
+  invoiceStatus: string;
+  invoiceError?: string | null;
   invoiceUrl?: string | null;
   activatedAt?: string | null;
   nextReviewAt?: string | null;
+}
+
+interface PaymentsPaymentHistoryResponse {
+  recordId: string;
+  tenantId: string;
+  kind: string;
+  planCode: string;
+  planName: string;
+  status: string;
+  amountUsd: number;
+  transactionHash?: string | null;
+  invoiceUrl?: string | null;
+  invoiceStatus: string;
+  invoiceError?: string | null;
+  createdAt: string;
+  activatedAt?: string | null;
+  nextReviewAt?: string | null;
+  checkoutSessionId?: string | null;
+  stripeSubscriptionId?: string | null;
 }
 
 interface PaymentsRequestOptions {
@@ -181,6 +206,8 @@ export class PaymentsIntegrationService {
       metadata: {
         transactionHash: result.transactionHash,
         invoiceUrl: result.invoiceUrl,
+        invoiceStatus: result.invoiceStatus,
+        invoiceError: result.invoiceError,
         nextReviewAt: result.nextReviewAt,
       },
     });
@@ -188,8 +215,19 @@ export class PaymentsIntegrationService {
     return {
       transactionHash: result.transactionHash,
       invoiceUrl: result.invoiceUrl,
+      invoiceStatus: result.invoiceStatus,
+      invoiceError: result.invoiceError,
       nextReviewAt: new Date(result.nextReviewAt),
     };
+  }
+
+  async findPaymentHistory(currentUser: AuthenticatedUser): Promise<PaymentHistoryModel[]> {
+    this.ensureTenantBillingAccess(currentUser);
+    const tenantSlug = currentUser.tenant.slug;
+    const history = await this.request<PaymentsPaymentHistoryResponse[]>(
+      `/tenants/${encodeURIComponent(tenantSlug)}/payment-history`,
+    );
+    return history.map((item) => this.toPaymentHistoryModel(item));
   }
 
   async createInitialCheckoutSession(
@@ -227,6 +265,39 @@ export class PaymentsIntegrationService {
     });
 
     return result;
+  }
+
+  async retryInvoiceGeneration(
+    currentUser: AuthenticatedUser,
+    recordId: string,
+  ): Promise<PaymentHistoryModel> {
+    this.ensureTenantBillingAccess(currentUser);
+    const tenantSlug = currentUser.tenant.slug;
+    const result = await this.request<PaymentsPaymentHistoryResponse>(
+      `/tenants/${encodeURIComponent(tenantSlug)}/payments/${encodeURIComponent(recordId)}/retry-invoice`,
+      {
+        method: 'POST',
+        body: '{}',
+      },
+    );
+
+    await this.auditService.recordEvent({
+      actor: currentUser,
+      tenantId: currentUser.tenantId,
+      tenantName: currentUser.tenant.name,
+      tenantSlug: currentUser.tenant.slug,
+      action: 'INVOICE_REGENERATED',
+      resourceType: 'PAYMENT',
+      resourceId: result.recordId,
+      summary: `Factura regenerada para el movimiento ${result.recordId}.`,
+      metadata: {
+        recordId: result.recordId,
+        invoiceUrl: result.invoiceUrl,
+        invoiceStatus: result.invoiceStatus,
+      },
+    });
+
+    return this.toPaymentHistoryModel(result);
   }
 
   async getCheckoutSessionStatus(
@@ -277,6 +348,9 @@ export class PaymentsIntegrationService {
       sessionId: result.sessionId,
       status: result.status,
       planCode: result.planCode ?? null,
+      transactionHash: result.transactionHash ?? null,
+      invoiceStatus: result.invoiceStatus,
+      invoiceError: result.invoiceError ?? null,
       invoiceUrl: result.invoiceUrl ?? null,
       activatedAt: result.activatedAt ? new Date(result.activatedAt) : null,
       nextReviewAt: result.nextReviewAt ? new Date(result.nextReviewAt) : null,
@@ -553,6 +627,29 @@ export class PaymentsIntegrationService {
       requestedAt: new Date(request.requestedAt),
       resolutionComment: request.resolutionComment || null,
       resolvedAt: request.resolvedAt ? new Date(request.resolvedAt) : null,
+    };
+  }
+
+  private toPaymentHistoryModel(
+    item: PaymentsPaymentHistoryResponse,
+  ): PaymentHistoryModel {
+    return {
+      recordId: item.recordId,
+      tenantId: item.tenantId,
+      kind: item.kind,
+      planCode: item.planCode,
+      planName: item.planName,
+      status: item.status,
+      amountUsd: item.amountUsd,
+      transactionHash: item.transactionHash || null,
+      invoiceUrl: item.invoiceUrl || null,
+      invoiceStatus: item.invoiceStatus,
+      invoiceError: item.invoiceError || null,
+      createdAt: new Date(item.createdAt),
+      activatedAt: item.activatedAt ? new Date(item.activatedAt) : null,
+      nextReviewAt: item.nextReviewAt ? new Date(item.nextReviewAt) : null,
+      checkoutSessionId: item.checkoutSessionId || null,
+      stripeSubscriptionId: item.stripeSubscriptionId || null,
     };
   }
 

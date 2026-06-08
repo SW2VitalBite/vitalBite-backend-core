@@ -5,8 +5,14 @@ export class PaymentResponseModel {
   @Field()
   transactionHash: string;
 
+  @Field(() => String, { nullable: true })
+  invoiceUrl?: string | null;
+
   @Field()
-  invoiceUrl: string;
+  invoiceStatus: string;
+
+  @Field(() => String, { nullable: true })
+  invoiceError?: string | null;
 
   @Field()
   nextReviewAt: Date;

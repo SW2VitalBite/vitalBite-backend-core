@@ -34,6 +34,7 @@ enum Gender {
 }
 
 enum AppointmentStatus {
+  PENDING
   SCHEDULED
   CONFIRMED
   COMPLETED
@@ -78,6 +79,7 @@ model Tenant {
   anthropometryMeasurements AnthropometryMeasurement[]
   dietPlans                 DietPlan[]
   notifications             Notification[]
+  nutritionistSchedules     NutritionistSchedule[]
   createdAt                 DateTime                   @default(now()) @map("created_at")
   updatedAt                 DateTime                   @updatedAt @map("updated_at")
   deletedAt                 DateTime?                  @map("deleted_at")
@@ -126,6 +128,7 @@ model User {
   requestedRiskPredictions      RiskPrediction[]      @relation("RequestedRiskPredictions")
   requestedPatientSegmentations PatientSegmentation[] @relation("RequestedPatientSegmentations")
   dietPlans                     DietPlan[]            @relation("NutritionistDietPlans")
+  schedules                     NutritionistSchedule[] @relation("NutritionistSchedules")
   createdAt                     DateTime              @default(now()) @map("created_at")
   updatedAt                     DateTime              @updatedAt @map("updated_at")
   deletedAt                     DateTime?             @map("deleted_at")
@@ -447,4 +450,22 @@ model DocumentMetadata {
   updatedAt           DateTime @updatedAt @map("updated_at")
 
   @@map("document_metadata")
+}
+
+model NutritionistSchedule {
+  id              String   @id @default(uuid())
+  tenantId        String   @map("tenant_id")
+  nutritionistId  String   @map("nutritionist_id")
+  dayOfWeek       Int      @map("day_of_week") // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+  startTime       String   @map("start_time") // Format HH:mm
+  endTime         String   @map("end_time")   // Format HH:mm
+  isAvailable     Boolean  @default(true) @map("is_available")
+  tenant          Tenant   @relation(fields: [tenantId], references: [id])
+  nutritionist    User     @relation("NutritionistSchedules", fields: [nutritionistId], references: [id])
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@unique([tenantId, nutritionistId, dayOfWeek, startTime, endTime])
+  @@index([tenantId, nutritionistId])
+  @@map("nutritionist_schedules")
 }

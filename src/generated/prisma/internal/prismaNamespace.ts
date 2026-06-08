@@ -399,7 +399,8 @@ export const ModelName = {
   DietMeal: 'DietMeal',
   DietMealItem: 'DietMealItem',
   Notification: 'Notification',
-  DocumentMetadata: 'DocumentMetadata'
+  DocumentMetadata: 'DocumentMetadata',
+  NutritionistSchedule: 'NutritionistSchedule'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -415,7 +416,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "auditEvent" | "user" | "patient" | "appointment" | "bodyMeasurement" | "bodyComposition" | "riskPrediction" | "patientSegmentation" | "anthropometryMeasurement" | "dietPlan" | "dietPlanDay" | "dietMeal" | "dietMealItem" | "notification" | "documentMetadata"
+    modelProps: "tenant" | "auditEvent" | "user" | "patient" | "appointment" | "bodyMeasurement" | "bodyComposition" | "riskPrediction" | "patientSegmentation" | "anthropometryMeasurement" | "dietPlan" | "dietPlanDay" | "dietMeal" | "dietMealItem" | "notification" | "documentMetadata" | "nutritionistSchedule"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1603,6 +1604,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    NutritionistSchedule: {
+      payload: Prisma.$NutritionistSchedulePayload<ExtArgs>
+      fields: Prisma.NutritionistScheduleFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NutritionistScheduleFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NutritionistSchedulePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NutritionistScheduleFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NutritionistSchedulePayload>
+        }
+        findFirst: {
+          args: Prisma.NutritionistScheduleFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NutritionistSchedulePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NutritionistScheduleFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NutritionistSchedulePayload>
+        }
+        findMany: {
+          args: Prisma.NutritionistScheduleFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NutritionistSchedulePayload>[]
+        }
+        create: {
+          args: Prisma.NutritionistScheduleCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NutritionistSchedulePayload>
+        }
+        createMany: {
+          args: Prisma.NutritionistScheduleCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NutritionistScheduleCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NutritionistSchedulePayload>[]
+        }
+        delete: {
+          args: Prisma.NutritionistScheduleDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NutritionistSchedulePayload>
+        }
+        update: {
+          args: Prisma.NutritionistScheduleUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NutritionistSchedulePayload>
+        }
+        deleteMany: {
+          args: Prisma.NutritionistScheduleDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NutritionistScheduleUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NutritionistScheduleUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NutritionistSchedulePayload>[]
+        }
+        upsert: {
+          args: Prisma.NutritionistScheduleUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NutritionistSchedulePayload>
+        }
+        aggregate: {
+          args: Prisma.NutritionistScheduleAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNutritionistSchedule>
+        }
+        groupBy: {
+          args: Prisma.NutritionistScheduleGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NutritionistScheduleGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NutritionistScheduleCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NutritionistScheduleCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1943,6 +2018,21 @@ export const DocumentMetadataScalarFieldEnum = {
 } as const
 
 export type DocumentMetadataScalarFieldEnum = (typeof DocumentMetadataScalarFieldEnum)[keyof typeof DocumentMetadataScalarFieldEnum]
+
+
+export const NutritionistScheduleScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  nutritionistId: 'nutritionistId',
+  dayOfWeek: 'dayOfWeek',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  isAvailable: 'isAvailable',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NutritionistScheduleScalarFieldEnum = (typeof NutritionistScheduleScalarFieldEnum)[keyof typeof NutritionistScheduleScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -2313,6 +2403,7 @@ export type GlobalOmitConfig = {
   dietMealItem?: Prisma.DietMealItemOmit
   notification?: Prisma.NotificationOmit
   documentMetadata?: Prisma.DocumentMetadataOmit
+  nutritionistSchedule?: Prisma.NutritionistScheduleOmit
 }
 
 /* Types for Logging */

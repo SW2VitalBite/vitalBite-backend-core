@@ -5,6 +5,7 @@ import { RequestPlanChangeInput } from './dto/request-plan-change.input';
 import { ResolvePlanChangeInput } from './dto/resolve-plan-change.input';
 import { CheckoutSessionStatusModel } from './models/checkout-session-status.model';
 import { InitialCheckoutSessionModel } from './models/initial-checkout-session.model';
+import { PaymentHistoryModel } from './models/payment-history.model';
 import { PlanChangeRequestModel } from './models/plan-change-request.model';
 import { PaymentResponseModel } from './models/payment-response.model';
 import { SubscriptionPlanModel } from './models/subscription-plan.model';
@@ -37,6 +38,12 @@ export class PaymentsResolver {
       currentUser,
       sessionId,
     );
+  }
+
+  @Query(() => [PaymentHistoryModel])
+  async paymentHistory() {
+    const currentUser = await this.authContext.getCurrentUser();
+    return this.paymentsIntegration.findPaymentHistory(currentUser);
   }
 
   @Query(() => [PlanChangeRequestModel])
@@ -78,5 +85,11 @@ export class PaymentsResolver {
       currentUser,
       input,
     );
+  }
+
+  @Mutation(() => PaymentHistoryModel)
+  async retryInvoiceGeneration(@Args('recordId') recordId: string) {
+    const currentUser = await this.authContext.getCurrentUser();
+    return this.paymentsIntegration.retryInvoiceGeneration(currentUser, recordId);
   }
 }

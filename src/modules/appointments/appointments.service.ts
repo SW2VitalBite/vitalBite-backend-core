@@ -172,6 +172,8 @@ export class AppointmentsService {
       data: { appointmentId: appointment.id },
     });
 
+    void this.notifyN8n(appointment, 'APPROVED');
+
     return this.mapAppointment(appointment);
   }
 
@@ -257,6 +259,8 @@ export class AppointmentsService {
       body: `Tu cita ha sido cancelada. Motivo: ${input.reason.trim()}`,
       data: { appointmentId: appointment.id },
     });
+
+    void this.notifyN8n(appointment, 'REJECTED');
 
     return this.mapAppointment(appointment);
   }
@@ -482,5 +486,26 @@ export class AppointmentsService {
       patientFullName: `${appointment.patient.firstName} ${appointment.patient.lastName}`,
       nutritionistFullName: `${appointment.nutritionist.firstName} ${appointment.nutritionist.lastName}`,
     };
+  }
+
+  private async notifyN8n(appointment: AppointmentWithPeople, action: 'APPROVED' | 'REJECTED') {
+    const webhookUrl = process.env.N8N_WEBHOOK_URL;
+    if (!webhookUrl) return;
+
+    try {
+      await fetch(webhookUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action,
+          appointmentId: appointment.id,
+          patientPhone: appointment.patient?.phone,
+          patientName: appointment.patient?.firstName,
+          scheduledAt: appointment.scheduledAt,
+        }),
+      });
+    } catch (e) {
+      console.error('Failed to notify n8n webhook:', e);
+    }
   }
 }

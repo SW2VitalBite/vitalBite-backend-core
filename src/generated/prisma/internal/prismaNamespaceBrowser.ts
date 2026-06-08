@@ -66,7 +66,8 @@ export const ModelName = {
   DietMeal: 'DietMeal',
   DietMealItem: 'DietMealItem',
   Notification: 'Notification',
-  DocumentMetadata: 'DocumentMetadata'
+  DocumentMetadata: 'DocumentMetadata',
+  NutritionistSchedule: 'NutritionistSchedule'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -386,6 +387,21 @@ export const DocumentMetadataScalarFieldEnum = {
 } as const
 
 export type DocumentMetadataScalarFieldEnum = (typeof DocumentMetadataScalarFieldEnum)[keyof typeof DocumentMetadataScalarFieldEnum]
+
+
+export const NutritionistScheduleScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  nutritionistId: 'nutritionistId',
+  dayOfWeek: 'dayOfWeek',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  isAvailable: 'isAvailable',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NutritionistScheduleScalarFieldEnum = (typeof NutritionistScheduleScalarFieldEnum)[keyof typeof NutritionistScheduleScalarFieldEnum]
 
 
 export const SortOrder = {

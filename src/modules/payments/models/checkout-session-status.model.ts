@@ -14,6 +14,15 @@ export class CheckoutSessionStatusModel {
   @Field(() => String, { nullable: true })
   invoiceUrl?: string | null;
 
+  @Field(() => String, { nullable: true })
+  transactionHash?: string | null;
+
+  @Field()
+  invoiceStatus: string;
+
+  @Field(() => String, { nullable: true })
+  invoiceError?: string | null;
+
   @Field(() => Date, { nullable: true })
   activatedAt?: Date | null;
 

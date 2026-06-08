@@ -47,6 +47,7 @@ export type Gender = (typeof Gender)[keyof typeof Gender]
 
 
 export const AppointmentStatus = {
+  PENDING: 'PENDING',
   SCHEDULED: 'SCHEDULED',
   CONFIRMED: 'CONFIRMED',
   COMPLETED: 'COMPLETED',

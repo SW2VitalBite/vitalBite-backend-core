@@ -23,6 +23,8 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
 import { AuditModule } from './modules/audit/audit.module';
 import { RiskPredictionsModule } from './modules/risk-predictions/risk-predictions.module';
 import { PatientSegmentationsModule } from './modules/patient-segmentations/patient-segmentations.module';
+import { ChatbotModule } from './modules/chatbot/chatbot.module';
+import { SchedulesModule } from './modules/schedules/schedules.module';
 
 @Module({
   imports: [
@@ -60,6 +62,8 @@ import { PatientSegmentationsModule } from './modules/patient-segmentations/pati
     AuditModule,
     RiskPredictionsModule,
     PatientSegmentationsModule,
+    ChatbotModule,
+    SchedulesModule,
   ],
 })
 export class AppModule {}
