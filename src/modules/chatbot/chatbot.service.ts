@@ -60,38 +60,39 @@ export class ChatbotService {
 
     // Lógica básica: iteramos los próximos 7 días
     for (let i = 1; i <= 7; i++) {
-      const date = new Date(today);
-      date.setDate(today.getDate() + i);
+      const date = new Date(today.getFullYear(), today.getMonth(), today.getDate() + i);
       const dayOfWeek = date.getDay(); // 0 = Sun, 1 = Mon...
       
       const daySchedules = schedules.filter(s => s.dayOfWeek === dayOfWeek);
       for (const schedule of daySchedules) {
         // Asumiendo slots de 30 mins (simplificado para el ejemplo)
-        // Parsear startTime
         const [startHr, startMin] = schedule.startTime.split(':').map(Number);
         const [endHr, endMin] = schedule.endTime.split(':').map(Number);
         
-        let currentSlot = new Date(date);
-        currentSlot.setHours(startHr, startMin, 0, 0);
-        
-        const endSlot = new Date(date);
-        endSlot.setHours(endHr, endMin, 0, 0);
+        let currentSlot = new Date(date.getFullYear(), date.getMonth(), date.getDate(), startHr, startMin, 0, 0);
+        const endSlot = new Date(date.getFullYear(), date.getMonth(), date.getDate(), endHr, endMin, 0, 0);
         
         while (currentSlot.getTime() + 30 * 60000 <= endSlot.getTime()) {
-          // Verificar si ya hay una cita
+          // Verificar si ya hay una cita comparando el timestamp absoluto
           const isBooked = existingAppointments.some(appt => {
-            const apptTime = new Date(appt.scheduledAt).getTime();
-            return apptTime === currentSlot.getTime();
+            return new Date(appt.scheduledAt).getTime() === currentSlot.getTime();
           });
           
           if (!isBooked) {
-            const dateStr = currentSlot.toISOString().split('T')[0];
-            const timeStr = currentSlot.toTimeString().substring(0, 5);
+            const isoString = currentSlot.toISOString();
+            const dateStrUtc = isoString.split('T')[0];
+            const timeStrUtc = isoString.split('T')[1].substring(0, 5);
+            
+            // Textos para mostrar al usuario (Hora Local)
+            const localDateStr = `${currentSlot.getFullYear()}-${String(currentSlot.getMonth() + 1).padStart(2, '0')}-${String(currentSlot.getDate()).padStart(2, '0')}`;
+            const localTimeStr = currentSlot.toTimeString().substring(0, 5);
+            const localEndStr = new Date(currentSlot.getTime() + 30 * 60000).toTimeString().substring(0, 5);
+
             availableSlots.push({
-              id: `slot_${dateStr}_${timeStr}`,
-              date: dateStr,
-              startTime: timeStr,
-              endTime: new Date(currentSlot.getTime() + 30 * 60000).toTimeString().substring(0, 5),
+              id: `slot_${dateStrUtc}_${timeStrUtc}`, // ID en formato UTC para guardarlo correctamente luego
+              date: localDateStr,
+              startTime: localTimeStr,
+              endTime: localEndStr,
             });
           }
           currentSlot = new Date(currentSlot.getTime() + 30 * 60000);
@@ -133,6 +134,19 @@ export class ChatbotService {
     
     const scheduledAt = new Date(`${parts[1]}T${parts[2]}:00.000Z`);
 
+    // Validar que el paciente no tenga ya una cita en este mismo horario exacto
+    const existingAppointment = await this.prisma.appointment.findFirst({
+      where: {
+        tenantId: patient.tenantId,
+        patientId: patient.id,
+        scheduledAt,
+      },
+    });
+
+    if (existingAppointment) {
+      throw new Error('Ya has solicitado una cita en este horario exacto. Por favor, espera a que sea confirmada o elige otro horario.');
+    }
+
     const appointment = await this.prisma.appointment.create({
       data: {
         tenantId: patient.tenantId,
@@ -151,6 +165,7 @@ export class ChatbotService {
       ...appointment,
       patientFullName: `${appointment.patient.firstName} ${appointment.patient.lastName}`,
       nutritionistFullName: `${appointment.nutritionist.firstName} ${appointment.nutritionist.lastName}`,
+      nutritionistEmail: appointment.nutritionist.email,
     } as any;
   }
 }

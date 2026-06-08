@@ -46,6 +46,9 @@ export class AppointmentModel {
   nutritionistFullName: string;
 
   @Field()
+  nutritionistEmail: string;
+
+  @Field()
   createdAt: Date;
 
   @Field()
