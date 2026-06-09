@@ -278,6 +278,24 @@ export class AppointmentsService {
       include: this.includePeople(),
     });
 
+    const dateStr = new Date(appointment.scheduledAt).toLocaleDateString(
+      'es-ES',
+      {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+      },
+    );
+
+    void this.notificationsService.createAndPush({
+      tenantId: currentUser.tenantId,
+      patientId: appointment.patientId,
+      type: NotificationType.CITA_COMPLETADA,
+      title: 'Cita completada',
+      body: `Tu cita del ${dateStr} fue registrada como completada. ¡Gracias por asistir!`,
+      data: { appointmentId: appointment.id },
+    });
+
     return this.mapAppointment(appointment);
   }
 
@@ -291,6 +309,24 @@ export class AppointmentsService {
         deletedAt: null,
       },
       include: this.includePeople(),
+    });
+
+    const dateStr = new Date(appointment.scheduledAt).toLocaleDateString(
+      'es-ES',
+      {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+      },
+    );
+
+    void this.notificationsService.createAndPush({
+      tenantId: currentUser.tenantId,
+      patientId: appointment.patientId,
+      type: NotificationType.CITA_NO_ASISTIO,
+      title: 'No asististe a tu cita',
+      body: `Registramos que no asististe a tu cita del ${dateStr}. Reprograma cuando puedas para retomar tu seguimiento.`,
+      data: { appointmentId: appointment.id },
     });
 
     return this.mapAppointment(appointment);

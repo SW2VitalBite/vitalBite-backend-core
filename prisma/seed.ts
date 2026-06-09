@@ -907,6 +907,362 @@ async function main() {
               ],
             },
           },
+          {
+            dayLabel: 'Martes',
+            dayOrder: 2,
+            meals: {
+              create: [
+                {
+                  name: 'Desayuno',
+                  mealOrder: 1,
+                  targetCalories: 455,
+                  items: {
+                    create: [
+                      { name: 'Pan integral', portion: '2 rebanadas', calories: 160, itemOrder: 1 },
+                      { name: 'Huevos revueltos', portion: '2 unidades', calories: 156, itemOrder: 2 },
+                      { name: 'Palta', portion: '1/4 unidad', calories: 80, itemOrder: 3 },
+                      { name: 'Café con leche descremada', portion: '200 ml', calories: 59, itemOrder: 4 },
+                    ],
+                  },
+                },
+                {
+                  name: 'Almuerzo',
+                  mealOrder: 2,
+                  targetCalories: 544,
+                  items: {
+                    create: [
+                      { name: 'Carne magra de res a la plancha', portion: '130 g', calories: 250, itemOrder: 1 },
+                      { name: 'Quinua cocida', portion: '150 g', calories: 180, itemOrder: 2 },
+                      { name: 'Ensalada mixta', portion: '1 porción', calories: 70, itemOrder: 3 },
+                      { name: 'Aceite de oliva', portion: '5 ml', calories: 44, itemOrder: 4 },
+                    ],
+                  },
+                },
+                {
+                  name: 'Merienda',
+                  mealOrder: 3,
+                  targetCalories: 300,
+                  items: {
+                    create: [
+                      { name: 'Batido de proteína con agua', portion: '1 scoop', calories: 120, itemOrder: 1 },
+                      { name: 'Plátano', portion: '1 unidad', calories: 90, itemOrder: 2 },
+                      { name: 'Mantequilla de maní', portion: '10 g', calories: 90, itemOrder: 3 },
+                    ],
+                  },
+                },
+                {
+                  name: 'Cena',
+                  mealOrder: 4,
+                  targetCalories: 320,
+                  items: {
+                    create: [
+                      { name: 'Filete de merluza al horno', portion: '140 g', calories: 150, itemOrder: 1 },
+                      { name: 'Puré de calabaza', portion: '150 g', calories: 90, itemOrder: 2 },
+                      { name: 'Judías verdes salteadas', portion: '120 g', calories: 45, itemOrder: 3 },
+                      { name: 'Aceite de oliva', portion: '5 ml', calories: 35, itemOrder: 4 },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+          {
+            dayLabel: 'Miércoles',
+            dayOrder: 3,
+            meals: {
+              create: [
+                {
+                  name: 'Desayuno',
+                  mealOrder: 1,
+                  targetCalories: 443,
+                  items: {
+                    create: [
+                      { name: 'Yogur griego natural', portion: '200 g', calories: 130, itemOrder: 1 },
+                      { name: 'Avena en hojuelas', portion: '40 g', calories: 150, itemOrder: 2 },
+                      { name: 'Fresas', portion: '100 g', calories: 32, itemOrder: 3 },
+                      { name: 'Semillas de chía', portion: '15 g', calories: 73, itemOrder: 4 },
+                      { name: 'Almendras', portion: '10 g', calories: 58, itemOrder: 5 },
+                    ],
+                  },
+                },
+                {
+                  name: 'Almuerzo',
+                  mealOrder: 2,
+                  targetCalories: 530,
+                  items: {
+                    create: [
+                      { name: 'Lomo de cerdo magro a la plancha', portion: '130 g', calories: 230, itemOrder: 1 },
+                      { name: 'Camote al horno', portion: '150 g', calories: 130, itemOrder: 2 },
+                      { name: 'Ensalada de espinaca y zanahoria', portion: '1 porción', calories: 80, itemOrder: 3 },
+                      { name: 'Palta', portion: '1/4 unidad', calories: 80, itemOrder: 4 },
+                      { name: 'Aderezo de limón', portion: '1 cdita', calories: 10, itemOrder: 5 },
+                    ],
+                  },
+                },
+                {
+                  name: 'Merienda',
+                  mealOrder: 3,
+                  targetCalories: 308,
+                  items: {
+                    create: [
+                      { name: 'Queso cottage', portion: '150 g', calories: 130, itemOrder: 1 },
+                      { name: 'Tostadas integrales', portion: '2 unidades', calories: 120, itemOrder: 2 },
+                      { name: 'Tomate cherry', portion: '80 g', calories: 18, itemOrder: 3 },
+                      { name: 'Nueces', portion: '15 g', calories: 40, itemOrder: 4 },
+                    ],
+                  },
+                },
+                {
+                  name: 'Cena',
+                  mealOrder: 4,
+                  targetCalories: 330,
+                  items: {
+                    create: [
+                      { name: 'Pechuga de pavo a la plancha', portion: '140 g', calories: 200, itemOrder: 1 },
+                      { name: 'Calabacín y berenjena al horno', portion: '150 g', calories: 70, itemOrder: 2 },
+                      { name: 'Quinua cocida', portion: '60 g', calories: 60, itemOrder: 3 },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+          {
+            dayLabel: 'Jueves',
+            dayOrder: 4,
+            meals: {
+              create: [
+                {
+                  name: 'Desayuno',
+                  mealOrder: 1,
+                  targetCalories: 490,
+                  items: {
+                    create: [
+                      { name: 'Tortilla de claras y 1 huevo', portion: '3 claras + 1 huevo', calories: 160, itemOrder: 1 },
+                      { name: 'Pan integral', portion: '2 rebanadas', calories: 160, itemOrder: 2 },
+                      { name: 'Aguacate', portion: '1/4 unidad', calories: 80, itemOrder: 3 },
+                      { name: 'Jugo de naranja natural', portion: '200 ml', calories: 90, itemOrder: 4 },
+                    ],
+                  },
+                },
+                {
+                  name: 'Almuerzo',
+                  mealOrder: 2,
+                  targetCalories: 539,
+                  items: {
+                    create: [
+                      { name: 'Pollo al curry ligero', portion: '150 g', calories: 250, itemOrder: 1 },
+                      { name: 'Arroz integral cocido', portion: '150 g', calories: 165, itemOrder: 2 },
+                      { name: 'Vegetales salteados', portion: '150 g', calories: 80, itemOrder: 3 },
+                      { name: 'Aceite de oliva', portion: '5 ml', calories: 44, itemOrder: 4 },
+                    ],
+                  },
+                },
+                {
+                  name: 'Merienda',
+                  mealOrder: 3,
+                  targetCalories: 290,
+                  items: {
+                    create: [
+                      { name: 'Yogur griego sin azúcar', portion: '150 g', calories: 90, itemOrder: 1 },
+                      { name: 'Frutos rojos', portion: '100 g', calories: 50, itemOrder: 2 },
+                      { name: 'Granola sin azúcar', portion: '30 g', calories: 135, itemOrder: 3 },
+                      { name: 'Miel', portion: '5 g', calories: 15, itemOrder: 4 },
+                    ],
+                  },
+                },
+                {
+                  name: 'Cena',
+                  mealOrder: 4,
+                  targetCalories: 300,
+                  items: {
+                    create: [
+                      { name: 'Atún a la plancha', portion: '130 g', calories: 180, itemOrder: 1 },
+                      { name: 'Ensalada de garbanzos', portion: '80 g', calories: 90, itemOrder: 2 },
+                      { name: 'Tomate y pepino', portion: '1 porción', calories: 30, itemOrder: 3 },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+          {
+            dayLabel: 'Viernes',
+            dayOrder: 5,
+            meals: {
+              create: [
+                {
+                  name: 'Desayuno',
+                  mealOrder: 1,
+                  targetCalories: 473,
+                  items: {
+                    create: [
+                      { name: 'Leche descremada', portion: '200 ml', calories: 70, itemOrder: 1 },
+                      { name: 'Proteína whey', portion: '1 scoop', calories: 120, itemOrder: 2 },
+                      { name: 'Banana', portion: '1 unidad', calories: 90, itemOrder: 3 },
+                      { name: 'Avena en hojuelas', portion: '30 g', calories: 110, itemOrder: 4 },
+                      { name: 'Semillas de chía', portion: '15 g', calories: 73, itemOrder: 5 },
+                    ],
+                  },
+                },
+                {
+                  name: 'Almuerzo',
+                  mealOrder: 2,
+                  targetCalories: 520,
+                  items: {
+                    create: [
+                      { name: 'Salmón a la plancha', portion: '140 g', calories: 250, itemOrder: 1 },
+                      { name: 'Papa cocida', portion: '150 g', calories: 130, itemOrder: 2 },
+                      { name: 'Brócoli y coliflor al vapor', portion: '150 g', calories: 60, itemOrder: 3 },
+                      { name: 'Palta', portion: '1/4 unidad', calories: 80, itemOrder: 4 },
+                    ],
+                  },
+                },
+                {
+                  name: 'Merienda',
+                  mealOrder: 3,
+                  targetCalories: 328,
+                  items: {
+                    create: [
+                      { name: 'Tostadas integrales', portion: '2 unidades', calories: 120, itemOrder: 1 },
+                      { name: 'Hummus', portion: '40 g', calories: 90, itemOrder: 2 },
+                      { name: 'Bastones de zanahoria y apio', portion: '1 porción', calories: 40, itemOrder: 3 },
+                      { name: 'Huevo duro', portion: '1 unidad', calories: 78, itemOrder: 4 },
+                    ],
+                  },
+                },
+                {
+                  name: 'Cena',
+                  mealOrder: 4,
+                  targetCalories: 325,
+                  items: {
+                    create: [
+                      { name: 'Pechuga de pollo a la plancha', portion: '140 g', calories: 230, itemOrder: 1 },
+                      { name: 'Ensalada verde grande', portion: '1 porción', calories: 60, itemOrder: 2 },
+                      { name: 'Aceite de oliva', portion: '5 ml', calories: 35, itemOrder: 3 },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+          {
+            dayLabel: 'Sábado',
+            dayOrder: 6,
+            meals: {
+              create: [
+                {
+                  name: 'Desayuno',
+                  mealOrder: 1,
+                  targetCalories: 466,
+                  items: {
+                    create: [
+                      { name: 'Panqueques de avena y plátano', portion: '2 unidades', calories: 280, itemOrder: 1 },
+                      { name: 'Yogur griego sin azúcar', portion: '100 g', calories: 59, itemOrder: 2 },
+                      { name: 'Fresas', portion: '100 g', calories: 32, itemOrder: 3 },
+                      { name: 'Miel', portion: '10 g', calories: 30, itemOrder: 4 },
+                      { name: 'Nueces', portion: '10 g', calories: 65, itemOrder: 5 },
+                    ],
+                  },
+                },
+                {
+                  name: 'Almuerzo',
+                  mealOrder: 2,
+                  targetCalories: 529,
+                  items: {
+                    create: [
+                      { name: 'Estofado de carne magra', portion: '150 g', calories: 260, itemOrder: 1 },
+                      { name: 'Arroz integral cocido', portion: '150 g', calories: 165, itemOrder: 2 },
+                      { name: 'Ensalada criolla', portion: '1 porción', calories: 60, itemOrder: 3 },
+                      { name: 'Aceite de oliva', portion: '5 ml', calories: 44, itemOrder: 4 },
+                    ],
+                  },
+                },
+                {
+                  name: 'Merienda',
+                  mealOrder: 3,
+                  targetCalories: 305,
+                  items: {
+                    create: [
+                      { name: 'Batido de proteína con agua', portion: '1 scoop', calories: 120, itemOrder: 1 },
+                      { name: 'Manzana', portion: '1 unidad', calories: 78, itemOrder: 2 },
+                      { name: 'Almendras naturales', portion: '20 g', calories: 115, itemOrder: 3 },
+                    ],
+                  },
+                },
+                {
+                  name: 'Cena',
+                  mealOrder: 4,
+                  targetCalories: 320,
+                  items: {
+                    create: [
+                      { name: 'Tilapia al horno', portion: '150 g', calories: 160, itemOrder: 1 },
+                      { name: 'Camote asado', portion: '120 g', calories: 105, itemOrder: 2 },
+                      { name: 'Espárragos y zanahoria al vapor', portion: '150 g', calories: 55, itemOrder: 3 },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+          {
+            dayLabel: 'Domingo',
+            dayOrder: 7,
+            meals: {
+              create: [
+                {
+                  name: 'Desayuno',
+                  mealOrder: 1,
+                  targetCalories: 510,
+                  items: {
+                    create: [
+                      { name: 'Huevos rancheros', portion: '2 huevos + salsa', calories: 220, itemOrder: 1 },
+                      { name: 'Tortilla integral', portion: '1 unidad', calories: 120, itemOrder: 2 },
+                      { name: 'Frijoles', portion: '80 g', calories: 90, itemOrder: 3 },
+                      { name: 'Palta', portion: '1/4 unidad', calories: 80, itemOrder: 4 },
+                    ],
+                  },
+                },
+                {
+                  name: 'Almuerzo',
+                  mealOrder: 2,
+                  targetCalories: 540,
+                  items: {
+                    create: [
+                      { name: 'Pollo al horno con hierbas', portion: '160 g', calories: 270, itemOrder: 1 },
+                      { name: 'Puré de papa con leche descremada', portion: '150 g', calories: 150, itemOrder: 2 },
+                      { name: 'Ensalada mixta', portion: '1 porción', calories: 70, itemOrder: 3 },
+                      { name: 'Aceite de oliva', portion: '5 ml', calories: 44, itemOrder: 4 },
+                    ],
+                  },
+                },
+                {
+                  name: 'Merienda',
+                  mealOrder: 3,
+                  targetCalories: 280,
+                  items: {
+                    create: [
+                      { name: 'Yogur griego sin azúcar', portion: '150 g', calories: 90, itemOrder: 1 },
+                      { name: 'Granola sin azúcar', portion: '30 g', calories: 135, itemOrder: 2 },
+                      { name: 'Arándanos', portion: '80 g', calories: 46, itemOrder: 3 },
+                    ],
+                  },
+                },
+                {
+                  name: 'Cena',
+                  mealOrder: 4,
+                  targetCalories: 300,
+                  items: {
+                    create: [
+                      { name: 'Crema de verduras', portion: '1 bowl', calories: 120, itemOrder: 1 },
+                      { name: 'Filete de pescado al horno', portion: '120 g', calories: 150, itemOrder: 2 },
+                      { name: 'Ensalada verde', portion: '1 porción', calories: 40, itemOrder: 3 },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
         ],
       },
     },
@@ -968,6 +1324,242 @@ async function main() {
       },
     ],
   });
+
+  // ── 4b. Cohorte de pacientes para pruebas de IA (segmentación + riesgo) ──────
+  // Perfiles variados en el consultorio de Elena (clinica-nutrifit) para que el
+  // nutricionista pueda probar CU10 (Random Forest) y CU11 (K-means) con datos
+  // coherentes: distintos IMC, % grasa, masa muscular, variación de peso (3m) y
+  // adherencia. Cada paciente tiene una medición previa (~90 días) y otra actual
+  // (para calcular variacion_peso_3m_kg) + composición corporal y un plan activo.
+  console.log('🧪 Creando cohorte de pacientes para pruebas de IA...');
+
+  const iaCohort = [
+    {
+      firstName: 'Roberto',
+      lastName: 'Silva',
+      email: 'roberto.silva@nutrifit.com',
+      gender: Gender.MALE,
+      birthDate: new Date('1975-02-11T00:00:00.000Z'),
+      heightCm: 172,
+      nutritionGoal: 'Reducir peso y riesgo cardiovascular',
+      clinicalNotes: 'Estilo de vida sedentario, hipertensión y prediabetes. Riesgo alto.',
+      // peso sube (variación positiva) → mayor riesgo
+      prevWeightKg: 92.0,
+      weightKg: 95.0,
+      waistCm: 108,
+      hipCm: 110,
+      fat: 34.0,
+      muscle: 30.5,
+      water: 48.0,
+      bone: 3.4,
+      visceral: 15,
+      metabolicAge: 58,
+      adherence: 45,
+    },
+    {
+      firstName: 'Carmen',
+      lastName: 'Ortiz',
+      email: 'carmen.ortiz@nutrifit.com',
+      gender: Gender.FEMALE,
+      birthDate: new Date('1968-06-23T00:00:00.000Z'),
+      heightCm: 158,
+      nutritionGoal: 'Control de peso y glucosa',
+      clinicalNotes: 'Sobrepeso con baja actividad física. Diabetes tipo 2 controlada.',
+      prevWeightKg: 80.5,
+      weightKg: 82.0,
+      waistCm: 98,
+      hipCm: 112,
+      fat: 40.0,
+      muscle: 22.0,
+      water: 45.0,
+      bone: 2.5,
+      visceral: 12,
+      metabolicAge: 60,
+      adherence: 52,
+    },
+    {
+      firstName: 'Patricia',
+      lastName: 'Vega',
+      email: 'patricia.vega@nutrifit.com',
+      gender: Gender.FEMALE,
+      birthDate: new Date('1972-10-05T00:00:00.000Z'),
+      heightCm: 162,
+      nutritionGoal: 'Mejorar composición corporal',
+      clinicalNotes: 'Riesgo intermedio. Actividad física moderada e irregular.',
+      prevWeightKg: 75.0,
+      weightKg: 74.0,
+      waistCm: 92,
+      hipCm: 104,
+      fat: 33.0,
+      muscle: 23.5,
+      water: 50.0,
+      bone: 2.6,
+      visceral: 9,
+      metabolicAge: 50,
+      adherence: 70,
+    },
+    {
+      firstName: 'Andrés',
+      lastName: 'Castro',
+      email: 'andres.castro@nutrifit.com',
+      gender: Gender.MALE,
+      birthDate: new Date('1983-04-18T00:00:00.000Z'),
+      heightCm: 176,
+      nutritionGoal: 'Bajar grasa abdominal',
+      clinicalNotes: 'Sobrepeso moderado, sin comorbilidades. Trabajo de oficina.',
+      prevWeightKg: 86.0,
+      weightKg: 88.0,
+      waistCm: 95,
+      hipCm: 102,
+      fat: 26.0,
+      muscle: 35.0,
+      water: 53.0,
+      bone: 3.2,
+      visceral: 10,
+      metabolicAge: 42,
+      adherence: 68,
+    },
+    {
+      firstName: 'Lucía',
+      lastName: 'Romero',
+      email: 'lucia.romero@nutrifit.com',
+      gender: Gender.FEMALE,
+      birthDate: new Date('1998-12-02T00:00:00.000Z'),
+      heightCm: 166,
+      nutritionGoal: 'Tonificar y mantener peso',
+      clinicalNotes: 'Activa, entrena 4 veces por semana. Riesgo bajo.',
+      prevWeightKg: 61.0,
+      weightKg: 60.0,
+      waistCm: 70,
+      hipCm: 94,
+      fat: 22.0,
+      muscle: 24.5,
+      water: 56.0,
+      bone: 2.6,
+      visceral: 4,
+      metabolicAge: 24,
+      adherence: 92,
+    },
+    {
+      firstName: 'Diego',
+      lastName: 'Fuentes',
+      email: 'diego.fuentes@nutrifit.com',
+      gender: Gender.MALE,
+      birthDate: new Date('1990-07-09T00:00:00.000Z'),
+      heightCm: 180,
+      nutritionGoal: 'Ganar masa muscular',
+      clinicalNotes: 'Deportista, muy activo. Riesgo bajo, excelente adherencia.',
+      prevWeightKg: 79.0,
+      weightKg: 78.0,
+      waistCm: 82,
+      hipCm: 96,
+      fat: 15.0,
+      muscle: 38.5,
+      water: 60.0,
+      bone: 3.5,
+      visceral: 5,
+      metabolicAge: 26,
+      adherence: 95,
+    },
+  ];
+
+  await Promise.all(
+    iaCohort.map(async (p) => {
+      const patient = await prisma.patient.create({
+        data: {
+          tenantId: mobileTenant.id,
+          nutritionistId: mobileNutritionist.id,
+          firstName: p.firstName,
+          lastName: p.lastName,
+          email: p.email,
+          phone: null,
+          birthDate: p.birthDate,
+          gender: p.gender,
+          status: PatientStatus.ACTIVE,
+          heightCm: p.heightCm,
+          nutritionGoal: p.nutritionGoal,
+          clinicalNotes: p.clinicalNotes,
+        },
+      });
+
+      // Medición previa (~90 días) y actual → habilita variacion_peso_3m_kg.
+      await prisma.bodyMeasurement.create({
+        data: {
+          tenantId: mobileTenant.id,
+          patientId: patient.id,
+          registeredById: mobileNutritionist.id,
+          measuredAt: daysAgo(90, 9, 0),
+          weightKg: p.prevWeightKg,
+          heightCm: p.heightCm,
+          bmi: bmi(p.prevWeightKg, p.heightCm),
+          waistCm: p.waistCm,
+          hipCm: p.hipCm,
+        },
+      });
+
+      const currentMeasurement = await prisma.bodyMeasurement.create({
+        data: {
+          tenantId: mobileTenant.id,
+          patientId: patient.id,
+          registeredById: mobileNutritionist.id,
+          measuredAt: daysAgo(2, 9, 0),
+          weightKg: p.weightKg,
+          heightCm: p.heightCm,
+          bmi: bmi(p.weightKg, p.heightCm),
+          waistCm: p.waistCm,
+          hipCm: p.hipCm,
+        },
+      });
+
+      await prisma.bodyComposition.create({
+        data: {
+          tenantId: mobileTenant.id,
+          patientId: patient.id,
+          bodyMeasurementId: currentMeasurement.id,
+          measuredAt: daysAgo(2, 9, 0),
+          bodyFatPercentage: p.fat,
+          muscleMassKg: p.muscle,
+          waterPercentage: p.water,
+          boneMassKg: p.bone,
+          visceralFatLevel: p.visceral,
+          metabolicAge: p.metabolicAge,
+        },
+      });
+
+      // Plan activo con adherencia → habilita adherencia_dieta_pct en CU11.
+      await prisma.dietPlan.create({
+        data: {
+          tenantId: mobileTenant.id,
+          patientId: patient.id,
+          nutritionistId: mobileNutritionist.id,
+          name: `Plan ${p.firstName}`,
+          objective: p.nutritionGoal,
+          phase: 'Fase 1',
+          approach: 'Plan personalizado',
+          startDate: daysAgo(60),
+          status: DietPlanStatus.ACTIVE,
+          mealsPerDay: 4,
+          estimatedCalories: p.gender === Gender.MALE ? 2000 : 1600,
+          adherencePercent: p.adherence,
+        },
+      });
+
+      // Cita completada → habilita asistencia_citas_pct.
+      await prisma.appointment.create({
+        data: {
+          tenantId: mobileTenant.id,
+          patientId: patient.id,
+          nutritionistId: mobileNutritionist.id,
+          scheduledAt: daysAgo(2, 11, 0),
+          durationMinutes: 45,
+          status: AppointmentStatus.COMPLETED,
+          mode: AppointmentMode.IN_PERSON,
+          reason: 'Evaluación inicial y toma de medidas',
+          notes: 'Datos antropométricos registrados para análisis de IA.',
+        },
+      });
+    }),
+  );
 
   // ── 5. Resumen ──────────────────────────────────────────────────────────────
   console.log('\n✅ Seed completado exitosamente!\n');
