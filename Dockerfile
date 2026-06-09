@@ -50,8 +50,8 @@ COPY --from=builder /app/dist ./dist
 # Instalar solo las dependencias de producción
 RUN pnpm install --prod --frozen-lockfile
 
-# Generar el cliente de Prisma (necesario en producción también)
-RUN pnpm prisma:generate
+# Generar el cliente de Prisma usando dlx (ya que el CLI de prisma es devDependency)
+RUN pnpm dlx prisma generate
 
 # Exponer el puerto de la aplicación (asumiendo 3000 por defecto)
 EXPOSE 3000
