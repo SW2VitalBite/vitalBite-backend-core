@@ -90,6 +90,12 @@ importers:
       '@types/node':
         specifier: ^24.0.0
         version: 24.13.0
+      '@types/pg':
+        specifier: ^8.20.0
+        version: 8.20.0
+      '@types/react':
+        specifier: ~19.2.14
+        version: 19.2.16
       '@types/supertest':
         specifier: ^7.0.0
         version: 7.2.0

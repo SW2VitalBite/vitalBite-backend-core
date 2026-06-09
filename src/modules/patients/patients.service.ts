@@ -76,6 +76,9 @@ export class PatientsService {
         phone: input.phone?.trim(),
         birthDate: input.birthDate,
         gender: input.gender,
+        activityLevel: input.activityLevel,
+        dietQualityScore: input.dietQualityScore,
+        comorbiditiesCount: input.comorbiditiesCount,
         status: input.status ?? PatientStatus.ACTIVE,
         clinicalNotes: input.clinicalNotes?.trim(),
         nutritionGoal: input.nutritionGoal?.trim(),
@@ -104,6 +107,9 @@ export class PatientsService {
       phone: input.phone?.trim(),
       birthDate: input.birthDate,
       gender: input.gender,
+      activityLevel: input.activityLevel,
+      dietQualityScore: input.dietQualityScore,
+      comorbiditiesCount: input.comorbiditiesCount,
       status: input.status,
       clinicalNotes: input.clinicalNotes?.trim(),
       nutritionGoal: input.nutritionGoal?.trim(),
@@ -259,6 +265,13 @@ export class PatientsService {
     input: UpdatePatientInput,
   ) {
     return this.update(currentUser, currentUser.id, input);
+  }
+
+  async getDocuments(patientId: string) {
+    return this.prisma.documentMetadata.findMany({
+      where: { patientId },
+      orderBy: { createdAt: 'desc' },
+    });
   }
 
   private async ensureNutritionistBelongsToTenant(

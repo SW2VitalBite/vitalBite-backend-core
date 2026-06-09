@@ -34,6 +34,7 @@ enum Gender {
 }
 
 enum AppointmentStatus {
+  PENDING
   SCHEDULED
   CONFIRMED
   COMPLETED
@@ -66,21 +67,24 @@ enum NotificationType {
 }
 
 model Tenant {
-  id               String            @id @default(uuid())
-  name             String
-  slug             String            @unique
-  status           TenantStatus      @default(ACTIVE)
-  users            User[]
-  patients         Patient[]
-  appointments     Appointment[]
-  bodyMeasurements BodyMeasurement[]
-  bodyCompositions BodyComposition[]
+  id                        String                     @id @default(uuid())
+  name                      String
+  slug                      String                     @unique
+  status                    TenantStatus               @default(ACTIVE)
+  users                     User[]
+  patients                  Patient[]
+  appointments              Appointment[]
+  bodyMeasurements          BodyMeasurement[]
+  bodyCompositions          BodyComposition[]
+  riskPredictions           RiskPrediction[]
+  patientSegmentations      PatientSegmentation[]
   anthropometryMeasurements AnthropometryMeasurement[]
-  dietPlans        DietPlan[]
-  notifications    Notification[]
-  createdAt        DateTime          @default(now()) @map("created_at")
-  updatedAt        DateTime          @updatedAt @map("updated_at")
-  deletedAt        DateTime?         @map("deleted_at")
+  dietPlans                 DietPlan[]
+  notifications             Notification[]
+  nutritionistSchedules     NutritionistSchedule[]
+  createdAt                 DateTime                   @default(now()) @map("created_at")
+  updatedAt                 DateTime                   @updatedAt @map("updated_at")
+  deletedAt                 DateTime?                  @map("deleted_at")
 
   @@map("tenants")
 }
@@ -111,22 +115,25 @@ model AuditEvent {
 }
 
 model User {
-  id                         String            @id @default(uuid())
-  tenantId                   String            @map("tenant_id")
-  email                      String
-  passwordHash               String            @map("password_hash")
-  firstName                  String            @map("first_name")
-  lastName                   String            @map("last_name")
-  status                     UserStatus        @default(ACTIVE)
-  roleCode                   String            @map("role_code")
-  tenant                     Tenant            @relation(fields: [tenantId], references: [id])
-  assignedPatients           Patient[]         @relation("NutritionistPatients")
-  nutritionistAppointments   Appointment[]     @relation("NutritionistAppointments")
-  registeredBodyMeasurements BodyMeasurement[] @relation("RegisteredBodyMeasurements")
-  dietPlans                  DietPlan[]        @relation("NutritionistDietPlans")
-  createdAt                  DateTime          @default(now()) @map("created_at")
-  updatedAt                  DateTime          @updatedAt @map("updated_at")
-  deletedAt                  DateTime?         @map("deleted_at")
+  id                            String                @id @default(uuid())
+  tenantId                      String                @map("tenant_id")
+  email                         String
+  passwordHash                  String                @map("password_hash")
+  firstName                     String                @map("first_name")
+  lastName                      String                @map("last_name")
+  status                        UserStatus            @default(ACTIVE)
+  roleCode                      String                @map("role_code")
+  tenant                        Tenant                @relation(fields: [tenantId], references: [id])
+  assignedPatients              Patient[]             @relation("NutritionistPatients")
+  nutritionistAppointments      Appointment[]         @relation("NutritionistAppointments")
+  registeredBodyMeasurements    BodyMeasurement[]     @relation("RegisteredBodyMeasurements")
+  requestedRiskPredictions      RiskPrediction[]      @relation("RequestedRiskPredictions")
+  requestedPatientSegmentations PatientSegmentation[] @relation("RequestedPatientSegmentations")
+  dietPlans                     DietPlan[]            @relation("NutritionistDietPlans")
+  schedules                     NutritionistSchedule[] @relation("NutritionistSchedules")
+  createdAt                     DateTime              @default(now()) @map("created_at")
+  updatedAt                     DateTime              @updatedAt @map("updated_at")
+  deletedAt                     DateTime?             @map("deleted_at")
 
   @@unique([tenantId, email])
   @@index([tenantId])
@@ -135,32 +142,36 @@ model User {
 }
 
 model Patient {
-  id               String            @id @default(uuid())
-  tenantId         String            @map("tenant_id")
-  nutritionistId   String            @map("nutritionist_id")
-  firstName        String            @map("first_name")
-  lastName         String            @map("last_name")
-  email            String?
-  passwordHash     String?           @map("password_hash")
-  phone            String?
-  birthDate        DateTime?         @map("birth_date")
-  gender           Gender?
-  status           PatientStatus     @default(ACTIVE)
-  clinicalNotes    String?           @map("clinical_notes")
-  nutritionGoal    String?           @map("nutrition_goal")
-  heightCm         Float?            @map("height_cm")
-  expoPushToken    String?           @map("expo_push_token")
-  tenant           Tenant            @relation(fields: [tenantId], references: [id])
-  nutritionist     User              @relation("NutritionistPatients", fields: [nutritionistId], references: [id])
-  appointments     Appointment[]
-  bodyMeasurements BodyMeasurement[]
-  bodyCompositions BodyComposition[]
+  id                        String                     @id @default(uuid())
+  tenantId                  String                     @map("tenant_id")
+  nutritionistId            String                     @map("nutritionist_id")
+  firstName                 String                     @map("first_name")
+  lastName                  String                     @map("last_name")
+  email                     String?
+  passwordHash              String?                    @map("password_hash")
+  phone                     String?
+  birthDate                 DateTime?                  @map("birth_date")
+  gender                    Gender?
+  activityLevel             Int?                       @map("activity_level")
+  dietQualityScore          Float?                     @map("diet_quality_score")
+  comorbiditiesCount        Int?                       @map("comorbidities_count")
+  status                    PatientStatus              @default(ACTIVE)
+  clinicalNotes             String?                    @map("clinical_notes")
+  nutritionGoal             String?                    @map("nutrition_goal")
+  heightCm                  Float?                     @map("height_cm")
+  expoPushToken             String?                    @map("expo_push_token")
+  tenant                    Tenant                     @relation(fields: [tenantId], references: [id])
+  nutritionist              User                       @relation("NutritionistPatients", fields: [nutritionistId], references: [id])
+  appointments              Appointment[]
+  bodyMeasurements          BodyMeasurement[]
+  bodyCompositions          BodyComposition[]
+  riskPredictions           RiskPrediction[]
   anthropometryMeasurements AnthropometryMeasurement[]
-  dietPlans        DietPlan[]
-  notifications    Notification[]
-  createdAt        DateTime          @default(now()) @map("created_at")
-  updatedAt        DateTime          @updatedAt @map("updated_at")
-  deletedAt        DateTime?         @map("deleted_at")
+  dietPlans                 DietPlan[]
+  notifications             Notification[]
+  createdAt                 DateTime                   @default(now()) @map("created_at")
+  updatedAt                 DateTime                   @updatedAt @map("updated_at")
+  deletedAt                 DateTime?                  @map("deleted_at")
 
   @@unique([tenantId, email])
   @@index([tenantId])
@@ -198,24 +209,25 @@ model Appointment {
 }
 
 model BodyMeasurement {
-  id               String            @id @default(uuid())
-  tenantId         String            @map("tenant_id")
-  patientId        String            @map("patient_id")
-  registeredById   String            @map("registered_by_id")
-  measuredAt       DateTime          @map("measured_at")
-  weightKg         Float             @map("weight_kg")
-  heightCm         Float?            @map("height_cm")
-  bmi              Float?
-  waistCm          Float?            @map("waist_cm")
-  hipCm            Float?            @map("hip_cm")
-  tenant           Tenant            @relation(fields: [tenantId], references: [id])
-  patient          Patient           @relation(fields: [patientId], references: [id])
-  registeredBy     User              @relation("RegisteredBodyMeasurements", fields: [registeredById], references: [id])
-  bodyCompositions BodyComposition[]
+  id                        String                     @id @default(uuid())
+  tenantId                  String                     @map("tenant_id")
+  patientId                 String                     @map("patient_id")
+  registeredById            String                     @map("registered_by_id")
+  measuredAt                DateTime                   @map("measured_at")
+  weightKg                  Float                      @map("weight_kg")
+  heightCm                  Float?                     @map("height_cm")
+  bmi                       Float?
+  waistCm                   Float?                     @map("waist_cm")
+  hipCm                     Float?                     @map("hip_cm")
+  tenant                    Tenant                     @relation(fields: [tenantId], references: [id])
+  patient                   Patient                    @relation(fields: [patientId], references: [id])
+  registeredBy              User                       @relation("RegisteredBodyMeasurements", fields: [registeredById], references: [id])
+  bodyCompositions          BodyComposition[]
+  riskPredictions           RiskPrediction[]           @relation("RiskPredictionSourceMeasurement")
   anthropometryMeasurements AnthropometryMeasurement[]
-  createdAt        DateTime          @default(now()) @map("created_at")
-  updatedAt        DateTime          @updatedAt @map("updated_at")
-  deletedAt        DateTime?         @map("deleted_at")
+  createdAt                 DateTime                   @default(now()) @map("created_at")
+  updatedAt                 DateTime                   @updatedAt @map("updated_at")
+  deletedAt                 DateTime?                  @map("deleted_at")
 
   @@unique([tenantId, patientId, measuredAt])
   @@index([tenantId, patientId, measuredAt])
@@ -238,6 +250,7 @@ model BodyComposition {
   tenant            Tenant           @relation(fields: [tenantId], references: [id])
   patient           Patient          @relation(fields: [patientId], references: [id])
   bodyMeasurement   BodyMeasurement? @relation(fields: [bodyMeasurementId], references: [id])
+  riskPredictions   RiskPrediction[] @relation("RiskPredictionSourceComposition")
   createdAt         DateTime         @default(now()) @map("created_at")
   updatedAt         DateTime         @updatedAt @map("updated_at")
   deletedAt         DateTime?        @map("deleted_at")
@@ -248,31 +261,79 @@ model BodyComposition {
   @@map("body_compositions")
 }
 
+model RiskPrediction {
+  id                  String           @id @default(uuid())
+  tenantId            String           @map("tenant_id")
+  patientId           String           @map("patient_id")
+  requestedById       String           @map("requested_by_id")
+  features            Json
+  featuresFingerprint String           @map("features_fingerprint")
+  modelVersion        String           @map("model_version")
+  nivelRiesgo         String           @map("nivel_riesgo")
+  probabilidad        Float
+  probabilidades      Json
+  factoresCriticos    Json             @map("factores_criticos")
+  recomendacion       String
+  sourceMeasurementId String?          @map("source_measurement_id")
+  sourceCompositionId String?          @map("source_composition_id")
+  tenant              Tenant           @relation(fields: [tenantId], references: [id])
+  patient             Patient          @relation(fields: [patientId], references: [id])
+  requestedBy         User             @relation("RequestedRiskPredictions", fields: [requestedById], references: [id])
+  sourceMeasurement   BodyMeasurement? @relation("RiskPredictionSourceMeasurement", fields: [sourceMeasurementId], references: [id])
+  sourceComposition   BodyComposition? @relation("RiskPredictionSourceComposition", fields: [sourceCompositionId], references: [id])
+  createdAt           DateTime         @default(now()) @map("created_at")
+
+  @@index([tenantId, patientId, createdAt])
+  @@index([tenantId, patientId, featuresFingerprint, modelVersion])
+  @@index([sourceMeasurementId])
+  @@index([sourceCompositionId])
+  @@map("risk_predictions")
+}
+
+model PatientSegmentation {
+  id                String   @id @default(uuid())
+  tenantId          String   @map("tenant_id")
+  requestedById     String   @map("requested_by_id")
+  kClusters         Int      @map("k_clusters")
+  totalPatients     Int      @map("total_patients")
+  silhouetteScore   Float?   @map("silhouette_score")
+  clusters          Json
+  pcaPoints         Json     @map("pca_points")
+  varianceExplained Json     @map("variance_explained")
+  createdAt         DateTime @default(now()) @map("created_at")
+
+  tenant      Tenant @relation(fields: [tenantId], references: [id])
+  requestedBy User   @relation("RequestedPatientSegmentations", fields: [requestedById], references: [id])
+
+  @@index([tenantId, createdAt])
+  @@map("patient_segmentations")
+}
+
 model AnthropometryMeasurement {
-  id               String           @id @default(uuid())
-  tenantId         String           @map("tenant_id")
-  patientId        String           @map("patient_id")
-  bodyMeasurementId String?         @map("body_measurement_id")
-  measuredAt       DateTime         @map("measured_at")
-  neckCm           Float?           @map("neck_cm")
-  chestThoraxCm    Float?           @map("chest_thorax_cm")
-  rightArmCm       Float?           @map("right_arm_cm")
-  leftArmCm        Float?           @map("left_arm_cm")
-  rightForearmCm   Float?           @map("right_forearm_cm")
-  leftForearmCm    Float?           @map("left_forearm_cm")
-  waistCm          Float?           @map("waist_cm")
-  abdomenCm        Float?           @map("abdomen_cm")
-  hipCm            Float?           @map("hip_cm")
-  rightThighCm     Float?           @map("right_thigh_cm")
-  leftThighCm      Float?           @map("left_thigh_cm")
-  rightCalfCm      Float?           @map("right_calf_cm")
-  leftCalfCm       Float?           @map("left_calf_cm")
-  tenant           Tenant           @relation(fields: [tenantId], references: [id])
-  patient          Patient          @relation(fields: [patientId], references: [id])
-  bodyMeasurement  BodyMeasurement? @relation(fields: [bodyMeasurementId], references: [id])
-  createdAt        DateTime         @default(now()) @map("created_at")
-  updatedAt        DateTime         @updatedAt @map("updated_at")
-  deletedAt        DateTime?        @map("deleted_at")
+  id                String           @id @default(uuid())
+  tenantId          String           @map("tenant_id")
+  patientId         String           @map("patient_id")
+  bodyMeasurementId String?          @map("body_measurement_id")
+  measuredAt        DateTime         @map("measured_at")
+  neckCm            Float?           @map("neck_cm")
+  chestThoraxCm     Float?           @map("chest_thorax_cm")
+  rightArmCm        Float?           @map("right_arm_cm")
+  leftArmCm         Float?           @map("left_arm_cm")
+  rightForearmCm    Float?           @map("right_forearm_cm")
+  leftForearmCm     Float?           @map("left_forearm_cm")
+  waistCm           Float?           @map("waist_cm")
+  abdomenCm         Float?           @map("abdomen_cm")
+  hipCm             Float?           @map("hip_cm")
+  rightThighCm      Float?           @map("right_thigh_cm")
+  leftThighCm       Float?           @map("left_thigh_cm")
+  rightCalfCm       Float?           @map("right_calf_cm")
+  leftCalfCm        Float?           @map("left_calf_cm")
+  tenant            Tenant           @relation(fields: [tenantId], references: [id])
+  patient           Patient          @relation(fields: [patientId], references: [id])
+  bodyMeasurement   BodyMeasurement? @relation(fields: [bodyMeasurementId], references: [id])
+  createdAt         DateTime         @default(now()) @map("created_at")
+  updatedAt         DateTime         @updatedAt @map("updated_at")
+  deletedAt         DateTime?        @map("deleted_at")
 
   @@index([tenantId, patientId, measuredAt])
   @@index([bodyMeasurementId])
@@ -280,29 +341,29 @@ model AnthropometryMeasurement {
 }
 
 model DietPlan {
-  id                String           @id @default(uuid())
-  tenantId          String           @map("tenant_id")
-  patientId         String           @map("patient_id")
-  nutritionistId    String           @map("nutritionist_id")
+  id                String         @id @default(uuid())
+  tenantId          String         @map("tenant_id")
+  patientId         String         @map("patient_id")
+  nutritionistId    String         @map("nutritionist_id")
   name              String
   objective         String
   phase             String?
   approach          String?
-  startDate         DateTime?        @map("start_date")
-  endDate           DateTime?        @map("end_date")
-  status            DietPlanStatus   @default(DRAFT)
-  mealsPerDay       Int?             @map("meals_per_day")
-  mainRestriction   String?          @map("main_restriction")
+  startDate         DateTime?      @map("start_date")
+  endDate           DateTime?      @map("end_date")
+  status            DietPlanStatus @default(DRAFT)
+  mealsPerDay       Int?           @map("meals_per_day")
+  mainRestriction   String?        @map("main_restriction")
   notes             String?
-  estimatedCalories Int?             @map("estimated_calories")
-  adherencePercent  Int?             @map("adherence_percent")
-  tenant            Tenant           @relation(fields: [tenantId], references: [id])
-  patient           Patient          @relation(fields: [patientId], references: [id])
-  nutritionist      User             @relation("NutritionistDietPlans", fields: [nutritionistId], references: [id])
+  estimatedCalories Int?           @map("estimated_calories")
+  adherencePercent  Int?           @map("adherence_percent")
+  tenant            Tenant         @relation(fields: [tenantId], references: [id])
+  patient           Patient        @relation(fields: [patientId], references: [id])
+  nutritionist      User           @relation("NutritionistDietPlans", fields: [nutritionistId], references: [id])
   days              DietPlanDay[]
-  createdAt         DateTime         @default(now()) @map("created_at")
-  updatedAt         DateTime         @updatedAt @map("updated_at")
-  deletedAt         DateTime?        @map("deleted_at")
+  createdAt         DateTime       @default(now()) @map("created_at")
+  updatedAt         DateTime       @updatedAt @map("updated_at")
+  deletedAt         DateTime?      @map("deleted_at")
 
   @@index([tenantId, patientId, status])
   @@index([tenantId, nutritionistId])
@@ -341,16 +402,16 @@ model DietMeal {
 }
 
 model DietMealItem {
-  id          String   @id @default(uuid())
-  dietMealId  String   @map("diet_meal_id")
-  name        String
-  portion     String?
-  calories    Int?
-  itemOrder   Int      @map("item_order")
-  notes       String?
-  meal        DietMeal @relation(fields: [dietMealId], references: [id], onDelete: Cascade)
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  id         String   @id @default(uuid())
+  dietMealId String   @map("diet_meal_id")
+  name       String
+  portion    String?
+  calories   Int?
+  itemOrder  Int      @map("item_order")
+  notes      String?
+  meal       DietMeal @relation(fields: [dietMealId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
 
   @@unique([dietMealId, itemOrder])
   @@map("diet_meal_items")
@@ -372,4 +433,41 @@ model Notification {
   @@index([tenantId, patientId, isRead])
   @@index([tenantId, patientId, createdAt])
   @@map("notifications")
+}
+
+model DocumentMetadata {
+  id                  String   @id @default(uuid())
+  tenantId            String   @map("tenant_id")
+  patientId           String   @map("patient_id")
+  nutritionistId      String   @map("nutritionist_id")
+  resourceId          String?  @map("resource_id")
+  tipoDocumento       String   @map("tipo_documento")
+  nombreArchivo       String   @map("nombre_archivo")
+  pacienteNombre      String?  @map("paciente_nombre")
+  nutricionistaNombre String?  @map("nutricionista_nombre")
+  s3Url               String?  @map("s3_url")
+  hashDocumento       String?  @map("hash_documento")
+  estado              String?
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  @@map("document_metadata")
+}
+
+model NutritionistSchedule {
+  id              String   @id @default(uuid())
+  tenantId        String   @map("tenant_id")
+  nutritionistId  String   @map("nutritionist_id")
+  dayOfWeek       Int      @map("day_of_week") // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+  startTime       String   @map("start_time") // Format HH:mm
+  endTime         String   @map("end_time")   // Format HH:mm
+  isAvailable     Boolean  @default(true) @map("is_available")
+  tenant          Tenant   @relation(fields: [tenantId], references: [id])
+  nutritionist    User     @relation("NutritionistSchedules", fields: [nutritionistId], references: [id])
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@unique([tenantId, nutritionistId, dayOfWeek, startTime, endTime])
+  @@index([tenantId, nutritionistId])
+  @@map("nutritionist_schedules")
 }

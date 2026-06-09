@@ -14,22 +14,19 @@ Mostrar estado financiero y límites del tenant.
 - Consultar estado de suscripción.
 - Revisar límites del tenant.
 - Consultar historial de pagos o facturas si el Core lo expone.
+- Reintentar la generacion de factura cuando un cobro ya fue confirmado pero el PDF fallo.
 - Mostrar alertas de vencimiento o suspensión.
 
 ## Implementacion V1
 
 - Ruta Angular: `/payments-subscriptions`.
 - Acceso: solo administrador.
-- Consultas visibles:
-  - Plan actual del tenant.
-  - Estado de suscripcion demo.
-  - Limites comerciales del plan.
-  - Catalogo de planes disponibles.
-  - Historial basico de solicitudes de cambio.
-- El administrador puede solicitar cambio de plan desde un modal con comentario opcional.
-- El administrador puede aprobar o rechazar solicitudes pendientes.
-- Al aprobar, el plan activo se actualiza al plan solicitado.
-- No se habilitan pagos reales ni facturacion en este corte.
+- Si el tenant no tiene suscripcion activa, la app redirige a `/activate-plan`.
+- La activacion inicial usa Stripe Checkout en modo test.
+- La pantalla de compra inicial muestra los 2 planes disponibles y permite elegir cualquiera.
+- Tras confirmar el pago, el sistema activa la suscripcion, genera factura PDF y habilita el panel normal.
+- Si el PDF falla, la suscripcion sigue activa y la pantalla muestra el estado pendiente de factura hasta reintentarla.
+- La vista actual de pagos y suscripciones queda para tenants ya activos.
 
 ## Planes iniciales
 
@@ -45,16 +42,21 @@ Mostrar estado financiero y límites del tenant.
 - Queries V1:
   - `subscriptionPlans`
   - `currentTenantSubscription`
+  - `paymentHistory`
   - `planChangeRequests`
+  - `checkoutSessionStatus`
 - Mutations V1:
+  - `createInitialCheckoutSession(input)`
+  - `retryInvoiceGeneration(recordId)`
   - `requestPlanChange(input)`
   - `approvePlanChange(input)`
   - `rejectPlanChange(input)`
+  - `paySubscription`
 
 ## Reglas
 
 - La Web no registra pagos directamente en PostgreSQL.
 - Los datos financieros no pertenecen al modelo persistente del Core.
-- Nutricionista solo ve alertas operativas si el plan limita funciones.
+- Si no existe suscripcion activa, el acceso operativo queda bloqueado hasta completar la compra.
 - Las solicitudes pueden quedar `PENDING`, `APPROVED` o `REJECTED`.
 - El flujo futuro de Super Admin VitalBite se documenta como gestion global de tenants, no implementada aun.

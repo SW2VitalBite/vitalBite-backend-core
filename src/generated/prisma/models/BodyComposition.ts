@@ -311,6 +311,7 @@ export type BodyCompositionWhereInput = {
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   patient?: Prisma.XOR<Prisma.PatientScalarRelationFilter, Prisma.PatientWhereInput>
   bodyMeasurement?: Prisma.XOR<Prisma.BodyMeasurementNullableScalarRelationFilter, Prisma.BodyMeasurementWhereInput> | null
+  riskPredictions?: Prisma.RiskPredictionListRelationFilter
 }
 
 export type BodyCompositionOrderByWithRelationInput = {
@@ -331,6 +332,7 @@ export type BodyCompositionOrderByWithRelationInput = {
   tenant?: Prisma.TenantOrderByWithRelationInput
   patient?: Prisma.PatientOrderByWithRelationInput
   bodyMeasurement?: Prisma.BodyMeasurementOrderByWithRelationInput
+  riskPredictions?: Prisma.RiskPredictionOrderByRelationAggregateInput
 }
 
 export type BodyCompositionWhereUniqueInput = Prisma.AtLeast<{
@@ -355,6 +357,7 @@ export type BodyCompositionWhereUniqueInput = Prisma.AtLeast<{
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   patient?: Prisma.XOR<Prisma.PatientScalarRelationFilter, Prisma.PatientWhereInput>
   bodyMeasurement?: Prisma.XOR<Prisma.BodyMeasurementNullableScalarRelationFilter, Prisma.BodyMeasurementWhereInput> | null
+  riskPredictions?: Prisma.RiskPredictionListRelationFilter
 }, "id" | "tenantId_patientId_measuredAt">
 
 export type BodyCompositionOrderByWithAggregationInput = {
@@ -414,6 +417,7 @@ export type BodyCompositionCreateInput = {
   tenant: Prisma.TenantCreateNestedOneWithoutBodyCompositionsInput
   patient: Prisma.PatientCreateNestedOneWithoutBodyCompositionsInput
   bodyMeasurement?: Prisma.BodyMeasurementCreateNestedOneWithoutBodyCompositionsInput
+  riskPredictions?: Prisma.RiskPredictionCreateNestedManyWithoutSourceCompositionInput
 }
 
 export type BodyCompositionUncheckedCreateInput = {
@@ -431,6 +435,7 @@ export type BodyCompositionUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  riskPredictions?: Prisma.RiskPredictionUncheckedCreateNestedManyWithoutSourceCompositionInput
 }
 
 export type BodyCompositionUpdateInput = {
@@ -448,6 +453,7 @@ export type BodyCompositionUpdateInput = {
   tenant?: Prisma.TenantUpdateOneRequiredWithoutBodyCompositionsNestedInput
   patient?: Prisma.PatientUpdateOneRequiredWithoutBodyCompositionsNestedInput
   bodyMeasurement?: Prisma.BodyMeasurementUpdateOneWithoutBodyCompositionsNestedInput
+  riskPredictions?: Prisma.RiskPredictionUpdateManyWithoutSourceCompositionNestedInput
 }
 
 export type BodyCompositionUncheckedUpdateInput = {
@@ -465,6 +471,7 @@ export type BodyCompositionUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  riskPredictions?: Prisma.RiskPredictionUncheckedUpdateManyWithoutSourceCompositionNestedInput
 }
 
 export type BodyCompositionCreateManyInput = {
@@ -600,6 +607,11 @@ export type BodyCompositionSumOrderByAggregateInput = {
   metabolicAge?: Prisma.SortOrder
 }
 
+export type BodyCompositionNullableScalarRelationFilter = {
+  is?: Prisma.BodyCompositionWhereInput | null
+  isNot?: Prisma.BodyCompositionWhereInput | null
+}
+
 export type BodyCompositionCreateNestedManyWithoutTenantInput = {
   create?: Prisma.XOR<Prisma.BodyCompositionCreateWithoutTenantInput, Prisma.BodyCompositionUncheckedCreateWithoutTenantInput> | Prisma.BodyCompositionCreateWithoutTenantInput[] | Prisma.BodyCompositionUncheckedCreateWithoutTenantInput[]
   connectOrCreate?: Prisma.BodyCompositionCreateOrConnectWithoutTenantInput | Prisma.BodyCompositionCreateOrConnectWithoutTenantInput[]
@@ -726,12 +738,20 @@ export type BodyCompositionUncheckedUpdateManyWithoutBodyMeasurementNestedInput 
   deleteMany?: Prisma.BodyCompositionScalarWhereInput | Prisma.BodyCompositionScalarWhereInput[]
 }
 
-export type NullableIntFieldUpdateOperationsInput = {
-  set?: number | null
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
+export type BodyCompositionCreateNestedOneWithoutRiskPredictionsInput = {
+  create?: Prisma.XOR<Prisma.BodyCompositionCreateWithoutRiskPredictionsInput, Prisma.BodyCompositionUncheckedCreateWithoutRiskPredictionsInput>
+  connectOrCreate?: Prisma.BodyCompositionCreateOrConnectWithoutRiskPredictionsInput
+  connect?: Prisma.BodyCompositionWhereUniqueInput
+}
+
+export type BodyCompositionUpdateOneWithoutRiskPredictionsNestedInput = {
+  create?: Prisma.XOR<Prisma.BodyCompositionCreateWithoutRiskPredictionsInput, Prisma.BodyCompositionUncheckedCreateWithoutRiskPredictionsInput>
+  connectOrCreate?: Prisma.BodyCompositionCreateOrConnectWithoutRiskPredictionsInput
+  upsert?: Prisma.BodyCompositionUpsertWithoutRiskPredictionsInput
+  disconnect?: Prisma.BodyCompositionWhereInput | boolean
+  delete?: Prisma.BodyCompositionWhereInput | boolean
+  connect?: Prisma.BodyCompositionWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BodyCompositionUpdateToOneWithWhereWithoutRiskPredictionsInput, Prisma.BodyCompositionUpdateWithoutRiskPredictionsInput>, Prisma.BodyCompositionUncheckedUpdateWithoutRiskPredictionsInput>
 }
 
 export type BodyCompositionCreateWithoutTenantInput = {
@@ -748,6 +768,7 @@ export type BodyCompositionCreateWithoutTenantInput = {
   deletedAt?: Date | string | null
   patient: Prisma.PatientCreateNestedOneWithoutBodyCompositionsInput
   bodyMeasurement?: Prisma.BodyMeasurementCreateNestedOneWithoutBodyCompositionsInput
+  riskPredictions?: Prisma.RiskPredictionCreateNestedManyWithoutSourceCompositionInput
 }
 
 export type BodyCompositionUncheckedCreateWithoutTenantInput = {
@@ -764,6 +785,7 @@ export type BodyCompositionUncheckedCreateWithoutTenantInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  riskPredictions?: Prisma.RiskPredictionUncheckedCreateNestedManyWithoutSourceCompositionInput
 }
 
 export type BodyCompositionCreateOrConnectWithoutTenantInput = {
@@ -826,6 +848,7 @@ export type BodyCompositionCreateWithoutPatientInput = {
   deletedAt?: Date | string | null
   tenant: Prisma.TenantCreateNestedOneWithoutBodyCompositionsInput
   bodyMeasurement?: Prisma.BodyMeasurementCreateNestedOneWithoutBodyCompositionsInput
+  riskPredictions?: Prisma.RiskPredictionCreateNestedManyWithoutSourceCompositionInput
 }
 
 export type BodyCompositionUncheckedCreateWithoutPatientInput = {
@@ -842,6 +865,7 @@ export type BodyCompositionUncheckedCreateWithoutPatientInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  riskPredictions?: Prisma.RiskPredictionUncheckedCreateNestedManyWithoutSourceCompositionInput
 }
 
 export type BodyCompositionCreateOrConnectWithoutPatientInput = {
@@ -884,6 +908,7 @@ export type BodyCompositionCreateWithoutBodyMeasurementInput = {
   deletedAt?: Date | string | null
   tenant: Prisma.TenantCreateNestedOneWithoutBodyCompositionsInput
   patient: Prisma.PatientCreateNestedOneWithoutBodyCompositionsInput
+  riskPredictions?: Prisma.RiskPredictionCreateNestedManyWithoutSourceCompositionInput
 }
 
 export type BodyCompositionUncheckedCreateWithoutBodyMeasurementInput = {
@@ -900,6 +925,7 @@ export type BodyCompositionUncheckedCreateWithoutBodyMeasurementInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  riskPredictions?: Prisma.RiskPredictionUncheckedCreateNestedManyWithoutSourceCompositionInput
 }
 
 export type BodyCompositionCreateOrConnectWithoutBodyMeasurementInput = {
@@ -926,6 +952,90 @@ export type BodyCompositionUpdateWithWhereUniqueWithoutBodyMeasurementInput = {
 export type BodyCompositionUpdateManyWithWhereWithoutBodyMeasurementInput = {
   where: Prisma.BodyCompositionScalarWhereInput
   data: Prisma.XOR<Prisma.BodyCompositionUpdateManyMutationInput, Prisma.BodyCompositionUncheckedUpdateManyWithoutBodyMeasurementInput>
+}
+
+export type BodyCompositionCreateWithoutRiskPredictionsInput = {
+  id?: string
+  measuredAt: Date | string
+  bodyFatPercentage?: number | null
+  muscleMassKg?: number | null
+  waterPercentage?: number | null
+  visceralFatLevel?: number | null
+  boneMassKg?: number | null
+  metabolicAge?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  tenant: Prisma.TenantCreateNestedOneWithoutBodyCompositionsInput
+  patient: Prisma.PatientCreateNestedOneWithoutBodyCompositionsInput
+  bodyMeasurement?: Prisma.BodyMeasurementCreateNestedOneWithoutBodyCompositionsInput
+}
+
+export type BodyCompositionUncheckedCreateWithoutRiskPredictionsInput = {
+  id?: string
+  tenantId: string
+  patientId: string
+  bodyMeasurementId?: string | null
+  measuredAt: Date | string
+  bodyFatPercentage?: number | null
+  muscleMassKg?: number | null
+  waterPercentage?: number | null
+  visceralFatLevel?: number | null
+  boneMassKg?: number | null
+  metabolicAge?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+}
+
+export type BodyCompositionCreateOrConnectWithoutRiskPredictionsInput = {
+  where: Prisma.BodyCompositionWhereUniqueInput
+  create: Prisma.XOR<Prisma.BodyCompositionCreateWithoutRiskPredictionsInput, Prisma.BodyCompositionUncheckedCreateWithoutRiskPredictionsInput>
+}
+
+export type BodyCompositionUpsertWithoutRiskPredictionsInput = {
+  update: Prisma.XOR<Prisma.BodyCompositionUpdateWithoutRiskPredictionsInput, Prisma.BodyCompositionUncheckedUpdateWithoutRiskPredictionsInput>
+  create: Prisma.XOR<Prisma.BodyCompositionCreateWithoutRiskPredictionsInput, Prisma.BodyCompositionUncheckedCreateWithoutRiskPredictionsInput>
+  where?: Prisma.BodyCompositionWhereInput
+}
+
+export type BodyCompositionUpdateToOneWithWhereWithoutRiskPredictionsInput = {
+  where?: Prisma.BodyCompositionWhereInput
+  data: Prisma.XOR<Prisma.BodyCompositionUpdateWithoutRiskPredictionsInput, Prisma.BodyCompositionUncheckedUpdateWithoutRiskPredictionsInput>
+}
+
+export type BodyCompositionUpdateWithoutRiskPredictionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  measuredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bodyFatPercentage?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  muscleMassKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  waterPercentage?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  visceralFatLevel?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  boneMassKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  metabolicAge?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutBodyCompositionsNestedInput
+  patient?: Prisma.PatientUpdateOneRequiredWithoutBodyCompositionsNestedInput
+  bodyMeasurement?: Prisma.BodyMeasurementUpdateOneWithoutBodyCompositionsNestedInput
+}
+
+export type BodyCompositionUncheckedUpdateWithoutRiskPredictionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  patientId?: Prisma.StringFieldUpdateOperationsInput | string
+  bodyMeasurementId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  measuredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bodyFatPercentage?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  muscleMassKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  waterPercentage?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  visceralFatLevel?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  boneMassKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  metabolicAge?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type BodyCompositionCreateManyTenantInput = {
@@ -958,6 +1068,7 @@ export type BodyCompositionUpdateWithoutTenantInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   patient?: Prisma.PatientUpdateOneRequiredWithoutBodyCompositionsNestedInput
   bodyMeasurement?: Prisma.BodyMeasurementUpdateOneWithoutBodyCompositionsNestedInput
+  riskPredictions?: Prisma.RiskPredictionUpdateManyWithoutSourceCompositionNestedInput
 }
 
 export type BodyCompositionUncheckedUpdateWithoutTenantInput = {
@@ -974,6 +1085,7 @@ export type BodyCompositionUncheckedUpdateWithoutTenantInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  riskPredictions?: Prisma.RiskPredictionUncheckedUpdateManyWithoutSourceCompositionNestedInput
 }
 
 export type BodyCompositionUncheckedUpdateManyWithoutTenantInput = {
@@ -1022,6 +1134,7 @@ export type BodyCompositionUpdateWithoutPatientInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tenant?: Prisma.TenantUpdateOneRequiredWithoutBodyCompositionsNestedInput
   bodyMeasurement?: Prisma.BodyMeasurementUpdateOneWithoutBodyCompositionsNestedInput
+  riskPredictions?: Prisma.RiskPredictionUpdateManyWithoutSourceCompositionNestedInput
 }
 
 export type BodyCompositionUncheckedUpdateWithoutPatientInput = {
@@ -1038,6 +1151,7 @@ export type BodyCompositionUncheckedUpdateWithoutPatientInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  riskPredictions?: Prisma.RiskPredictionUncheckedUpdateManyWithoutSourceCompositionNestedInput
 }
 
 export type BodyCompositionUncheckedUpdateManyWithoutPatientInput = {
@@ -1086,6 +1200,7 @@ export type BodyCompositionUpdateWithoutBodyMeasurementInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tenant?: Prisma.TenantUpdateOneRequiredWithoutBodyCompositionsNestedInput
   patient?: Prisma.PatientUpdateOneRequiredWithoutBodyCompositionsNestedInput
+  riskPredictions?: Prisma.RiskPredictionUpdateManyWithoutSourceCompositionNestedInput
 }
 
 export type BodyCompositionUncheckedUpdateWithoutBodyMeasurementInput = {
@@ -1102,6 +1217,7 @@ export type BodyCompositionUncheckedUpdateWithoutBodyMeasurementInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  riskPredictions?: Prisma.RiskPredictionUncheckedUpdateManyWithoutSourceCompositionNestedInput
 }
 
 export type BodyCompositionUncheckedUpdateManyWithoutBodyMeasurementInput = {
@@ -1120,6 +1236,35 @@ export type BodyCompositionUncheckedUpdateManyWithoutBodyMeasurementInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
+
+/**
+ * Count Type BodyCompositionCountOutputType
+ */
+
+export type BodyCompositionCountOutputType = {
+  riskPredictions: number
+}
+
+export type BodyCompositionCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  riskPredictions?: boolean | BodyCompositionCountOutputTypeCountRiskPredictionsArgs
+}
+
+/**
+ * BodyCompositionCountOutputType without action
+ */
+export type BodyCompositionCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BodyCompositionCountOutputType
+   */
+  select?: Prisma.BodyCompositionCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * BodyCompositionCountOutputType without action
+ */
+export type BodyCompositionCountOutputTypeCountRiskPredictionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.RiskPredictionWhereInput
+}
 
 
 export type BodyCompositionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1140,6 +1285,8 @@ export type BodyCompositionSelect<ExtArgs extends runtime.Types.Extensions.Inter
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   patient?: boolean | Prisma.PatientDefaultArgs<ExtArgs>
   bodyMeasurement?: boolean | Prisma.BodyComposition$bodyMeasurementArgs<ExtArgs>
+  riskPredictions?: boolean | Prisma.BodyComposition$riskPredictionsArgs<ExtArgs>
+  _count?: boolean | Prisma.BodyCompositionCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["bodyComposition"]>
 
 export type BodyCompositionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1204,6 +1351,8 @@ export type BodyCompositionInclude<ExtArgs extends runtime.Types.Extensions.Inte
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   patient?: boolean | Prisma.PatientDefaultArgs<ExtArgs>
   bodyMeasurement?: boolean | Prisma.BodyComposition$bodyMeasurementArgs<ExtArgs>
+  riskPredictions?: boolean | Prisma.BodyComposition$riskPredictionsArgs<ExtArgs>
+  _count?: boolean | Prisma.BodyCompositionCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type BodyCompositionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -1222,6 +1371,7 @@ export type $BodyCompositionPayload<ExtArgs extends runtime.Types.Extensions.Int
     tenant: Prisma.$TenantPayload<ExtArgs>
     patient: Prisma.$PatientPayload<ExtArgs>
     bodyMeasurement: Prisma.$BodyMeasurementPayload<ExtArgs> | null
+    riskPredictions: Prisma.$RiskPredictionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1635,6 +1785,7 @@ export interface Prisma__BodyCompositionClient<T, Null = never, ExtArgs extends 
   tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   patient<T extends Prisma.PatientDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PatientDefaultArgs<ExtArgs>>): Prisma.Prisma__PatientClient<runtime.Types.Result.GetResult<Prisma.$PatientPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   bodyMeasurement<T extends Prisma.BodyComposition$bodyMeasurementArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BodyComposition$bodyMeasurementArgs<ExtArgs>>): Prisma.Prisma__BodyMeasurementClient<runtime.Types.Result.GetResult<Prisma.$BodyMeasurementPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  riskPredictions<T extends Prisma.BodyComposition$riskPredictionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BodyComposition$riskPredictionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RiskPredictionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2095,6 +2246,30 @@ export type BodyComposition$bodyMeasurementArgs<ExtArgs extends runtime.Types.Ex
    */
   include?: Prisma.BodyMeasurementInclude<ExtArgs> | null
   where?: Prisma.BodyMeasurementWhereInput
+}
+
+/**
+ * BodyComposition.riskPredictions
+ */
+export type BodyComposition$riskPredictionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the RiskPrediction
+   */
+  select?: Prisma.RiskPredictionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the RiskPrediction
+   */
+  omit?: Prisma.RiskPredictionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RiskPredictionInclude<ExtArgs> | null
+  where?: Prisma.RiskPredictionWhereInput
+  orderBy?: Prisma.RiskPredictionOrderByWithRelationInput | Prisma.RiskPredictionOrderByWithRelationInput[]
+  cursor?: Prisma.RiskPredictionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.RiskPredictionScalarFieldEnum | Prisma.RiskPredictionScalarFieldEnum[]
 }
 
 /**

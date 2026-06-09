@@ -75,6 +75,16 @@ export type BodyMeasurement = Prisma.BodyMeasurementModel
  */
 export type BodyComposition = Prisma.BodyCompositionModel
 /**
+ * Model RiskPrediction
+ * 
+ */
+export type RiskPrediction = Prisma.RiskPredictionModel
+/**
+ * Model PatientSegmentation
+ * 
+ */
+export type PatientSegmentation = Prisma.PatientSegmentationModel
+/**
  * Model AnthropometryMeasurement
  * 
  */
@@ -104,3 +114,13 @@ export type DietMealItem = Prisma.DietMealItemModel
  * 
  */
 export type Notification = Prisma.NotificationModel
+/**
+ * Model DocumentMetadata
+ * 
+ */
+export type DocumentMetadata = Prisma.DocumentMetadataModel
+/**
+ * Model NutritionistSchedule
+ * 
+ */
+export type NutritionistSchedule = Prisma.NutritionistScheduleModel

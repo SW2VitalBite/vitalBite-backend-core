@@ -98,17 +98,18 @@ Responsabilidades:
 El primer corte de pagos y suscripciones se implementa en el repositorio hermano
 `vitalBite-backend-payments-dotnet`.
 
-- Expone catalogo de planes y estado demo de suscripcion.
+- Expone catalogo de planes, compra inicial y estado de suscripcion.
 - Usa DynamoDB Local con tabla unica `VitalBitePayments`.
 - Mantiene dos planes mensuales: `Nutricionista individual` por 15 USD y `Clinica completa` por 30 USD.
-- No procesa cobros reales, facturas ni cambios de plan todavia.
+- Usa Stripe Checkout en modo test para la compra inicial.
+- Genera factura PDF y trazabilidad auditable al confirmar el pago.
 - El Core consulta este servicio y expone la informacion a Angular mediante GraphQL.
 
-### Flujo futuro: Super Admin VitalBite
+### Flujo de activacion comercial
 
-En una fase posterior, VitalBite debe contar con un rol `SUPER_ADMIN` para gestionar tenants de forma global. Este actor revisaria solicitudes comerciales de todas las clinicas, aprobaria o rechazaria cambios de plan, conciliaria cobros y consultaria auditoria financiera global.
+Un tenant nuevo crea su cuenta profesional y luego pasa por una pantalla de activacion comercial. Si no tiene suscripcion activa, solo puede elegir un plan y completar la compra inicial. Una vez confirmada, el sistema habilita el panel principal.
 
-La implementacion actual usa aprobacion simple por el administrador del tenant para cerrar el flujo academico sin incorporar todavia una pantalla global de tenants.
+El rol `SUPER_ADMIN` sigue disponible para gestion global de tenants, auditoria y solicitudes de cambio de plan entre clinicas.
 
 ## Comunicación
 

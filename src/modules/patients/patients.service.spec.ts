@@ -117,6 +117,52 @@ describe('PatientsService', () => {
     });
   });
 
+  it('stores structured risk feature fields when creating a patient', async () => {
+    const prisma = createPrismaMock();
+    const service = new PatientsService(prisma as any);
+
+    await service.create(currentUser, {
+      firstName: 'Ana',
+      lastName: 'Rojas',
+      gender: Gender.FEMALE,
+      activityLevel: 3,
+      dietQualityScore: 7.5,
+      comorbiditiesCount: 2,
+      nutritionistId: currentUser.id,
+    });
+
+    expect(prisma.patient.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          activityLevel: 3,
+          dietQualityScore: 7.5,
+          comorbiditiesCount: 2,
+        }),
+      }),
+    );
+  });
+
+  it('updates structured risk feature fields for a patient', async () => {
+    const prisma = createPrismaMock();
+    const service = new PatientsService(prisma as any);
+
+    await service.update(currentUser, '33333333-3333-3333-3333-333333333333', {
+      activityLevel: 1,
+      dietQualityScore: 4,
+      comorbiditiesCount: 3,
+    });
+
+    expect(prisma.patient.update).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          activityLevel: 1,
+          dietQualityScore: 4,
+          comorbiditiesCount: 3,
+        }),
+      }),
+    );
+  });
+
   it('rejects future birth dates at input validation level', async () => {
     const input = new CreatePatientInput();
     input.firstName = 'Maria';
