@@ -7,6 +7,7 @@ export default () => ({
   jwtSecret: process.env.JWT_SECRET,
   jwtExpiresIn: process.env.JWT_EXPIRES_IN ?? '8h',
   paymentsServiceUrl: process.env.PAYMENTS_SERVICE_URL,
+  documentalServiceUrl: process.env.DOCUMENTAL_SERVICE_URL,
   aiServiceUrl: process.env.AI_SERVICE_URL,
   aiApiKey: process.env.AI_API_KEY,
 });

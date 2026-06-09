@@ -102,11 +102,40 @@ export class NotificationsService {
           'Accept-encoding': 'gzip, deflate',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ to: token, title, body, data: data ?? {} }),
+        body: JSON.stringify({
+          to: token,
+          title,
+          body,
+          data: data ?? {},
+          sound: 'default',
+          priority: 'high',
+          channelId: 'default',
+        }),
       });
 
       if (!response.ok) {
-        this.logger.warn(`Expo push falló para token ${token.slice(0, 20)}…`);
+        this.logger.warn(
+          `Expo push HTTP ${response.status} para token ${token.slice(0, 20)}…`,
+        );
+        return;
+      }
+
+      // Expo responde 200 incluso cuando el ticket trae error (token inválido,
+      // dispositivo no registrado, credenciales FCM faltantes, …). Hay que
+      // revisar el ticket para saber si realmente se entregó.
+      const result = (await response.json()) as {
+        data?: { status: string; message?: string; details?: unknown };
+      };
+      const ticket = result?.data;
+      if (ticket?.status === 'error') {
+        this.logger.warn(
+          `Expo push rechazado: ${ticket.message ?? 'error desconocido'} ` +
+            `(${JSON.stringify(ticket.details ?? {})})`,
+        );
+      } else {
+        this.logger.log(
+          `Expo push aceptado para token ${token.slice(0, 20)}…`,
+        );
       }
     } catch (err) {
       this.logger.error('Error enviando push notification via Expo', err);
