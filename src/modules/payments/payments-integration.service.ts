@@ -114,7 +114,17 @@ export class PaymentsIntegrationService {
   ) {}
 
   async findPlans(currentUser: AuthenticatedUser) {
-    this.ensureTenantBillingAccess(currentUser);
+    const roleCode = currentUser.roleCode.trim().toUpperCase();
+    if (
+      roleCode !== 'ADMINISTRADOR' &&
+      roleCode !== 'ADMIN' &&
+      roleCode !== 'NUTRICIONISTA' &&
+      roleCode !== 'SUPER_ADMIN'
+    ) {
+      throw new ForbiddenException(
+        'Only staff or super admins can access subscription plans.',
+      );
+    }
     const plans = await this.request<PaymentsPlanResponse[]>('/plans');
     return plans.map((plan) => this.toPlanModel(plan));
   }
@@ -655,5 +665,45 @@ export class PaymentsIntegrationService {
 
   private toLimits(limits: Record<string, string>) {
     return Object.entries(limits).map(([key, value]) => ({ key, value }));
+  }
+
+  async getGlobalRevenueMetrics(currentUser: AuthenticatedUser) {
+    this.ensureSuperAdmin(currentUser);
+
+    const subscriptions = await this.findAllSubscriptions(currentUser);
+    const plansResponse = await this.request<PaymentsPlanResponse[]>('/plans');
+    const plans = plansResponse.map((p) => this.toPlanModel(p));
+
+    const activeSubscriptionsList = subscriptions.filter((s) => s.status === 'ACTIVE');
+    const activeSubscriptions = activeSubscriptionsList.length;
+    let mrr = 0;
+    const revenueByPlanMap: Record<string, { planName: string; mrr: number; count: number }> = {};
+
+    for (const sub of activeSubscriptionsList) {
+      const plan = plans.find((p) => p.code === sub.planCode);
+      if (!plan) continue;
+
+      const price = plan.priceUsd;
+      mrr += price;
+
+      if (!revenueByPlanMap[plan.code]) {
+        revenueByPlanMap[plan.code] = { planName: plan.name, mrr: 0, count: 0 };
+      }
+      revenueByPlanMap[plan.code].mrr += price;
+      revenueByPlanMap[plan.code].count += 1;
+    }
+
+    const revenueByPlan = Object.entries(revenueByPlanMap).map(([planCode, data]) => ({
+      planCode,
+      planName: data.planName,
+      mrr: data.mrr,
+      subscriptionsCount: data.count,
+    }));
+
+    return {
+      mrr,
+      activeSubscriptions,
+      revenueByPlan,
+    };
   }
 }

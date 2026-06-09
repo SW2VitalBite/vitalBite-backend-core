@@ -10,6 +10,7 @@ import { PlanChangeRequestModel } from './models/plan-change-request.model';
 import { PaymentResponseModel } from './models/payment-response.model';
 import { SubscriptionPlanModel } from './models/subscription-plan.model';
 import { TenantSubscriptionModel } from './models/tenant-subscription.model';
+import { SuperAdminRevenueMetricsModel } from './models/super-admin-revenue-metrics.model';
 import { PaymentsIntegrationService } from './payments-integration.service';
 
 @Resolver()
@@ -29,6 +30,12 @@ export class PaymentsResolver {
   async currentTenantSubscription() {
     const currentUser = await this.authContext.getCurrentUser();
     return this.paymentsIntegration.findCurrentTenantSubscription(currentUser);
+  }
+
+  @Query(() => SuperAdminRevenueMetricsModel)
+  async superAdminRevenueMetrics() {
+    const currentUser = await this.authContext.getCurrentUser();
+    return this.paymentsIntegration.getGlobalRevenueMetrics(currentUser);
   }
 
   @Query(() => CheckoutSessionStatusModel)
