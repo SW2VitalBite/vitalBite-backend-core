@@ -14,9 +14,8 @@ async function bootstrap() {
     }),
   );
 
-  // app.enableCors();
   app.enableCors({
-    origin: 'http://18.188.25.170:8080', // En producción, cámbialo por el dominio de tu frontend
+    origin: process.env.FRONTEND_URL || 'http://localhost:4200',
     credentials: true,
   });
 

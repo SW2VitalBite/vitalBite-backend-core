@@ -295,15 +295,25 @@ export class DietsService {
     const mappedDiet = this.mapDiet(diet);
     const payload = mapDietPlanToPdfPayload(mappedDiet);
 
-    const documentsUrl = process.env.DOCUMENTS_SERVICE_URL || 'http://localhost:8082';
-    const response = await fetch(`${documentsUrl}/api/v1/documents/pdf/diet`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
+    const baseUrl = process.env.DOCUMENTAL_SERVICE_URL?.replace(/\/$/, '') || 'http://localhost:8082/api/v1';
+    const url = `${baseUrl}/documents/pdf/diet`;
+
+    let response: Response;
+    try {
+      response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+    } catch (fetchError) {
+      console.error('[DietsService] Error de conexión al microservicio documental:', fetchError);
+      throw new Error(`No se pudo conectar al servicio documental: ${fetchError}`);
+    }
 
     if (!response.ok) {
-      throw new Error(`Error generando PDF en el microservicio: ${response.statusText}`);
+      const errorBody = await response.text().catch(() => 'Sin cuerpo');
+      console.error(`[DietsService] Microservicio documental respondió ${response.status}: ${errorBody}`);
+      throw new Error(`Error generando PDF en el microservicio: ${response.status} - ${errorBody}`);
     }
 
     const data = await response.json();

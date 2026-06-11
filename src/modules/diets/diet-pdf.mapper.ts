@@ -142,9 +142,10 @@ function buildFileName(dietPlan: DietPlanModel) {
   return slugify(`dieta-semanal-${dietPlan.patientFullName}-${dietPlan.phase ?? 'sin-fase'}.pdf`);
 }
 
-function toIsoDate(value?: Date | null) {
+function toIsoDate(value?: Date | string | null) {
   if (!value) return null;
-  return value.toISOString().slice(0, 10);
+  const date = value instanceof Date ? value : new Date(value);
+  return date.toISOString().slice(0, 10);
 }
 
 function numberOrZero(value?: number | null) {
